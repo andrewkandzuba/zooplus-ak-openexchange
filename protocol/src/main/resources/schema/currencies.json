@@ -4,12 +4,26 @@
   "type": "object",
   "id": "Currencies",
   "properties": {
-    "currencies": {
-      "type" : "array",
-      "items" : {
-        "$ref" : "currency.json"
-      },
+    "success": {
+      "type": "boolean",
       "required": true
+    },
+    "error" : {
+      "$ref" : "error.json",
+      "required": false
+    },
+    "terms": {
+      "type": "string",
+      "required": false
+    },
+    "privacy": {
+      "type": "string",
+      "required": false
+    },
+    "currencies": {
+      "javaType" : "java.util.Map",
+      "type" : "object",
+      "required": false
     }
   }
 }

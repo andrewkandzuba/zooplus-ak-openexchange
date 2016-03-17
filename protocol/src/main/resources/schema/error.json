@@ -1,14 +1,14 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema",
-  "description": "Currency details",
+  "description": "Error details",
   "type": "object",
-  "id": "Currency",
+  "id": "Error",
   "properties": {
-    "id": {
-      "type": "string",
+    "code": {
+      "type": "integer",
       "required": true
     },
-    "description": {
+    "info": {
       "type": "string",
       "required": true
     }
