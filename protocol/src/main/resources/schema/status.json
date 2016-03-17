@@ -1,0 +1,20 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "description": "Instance details",
+  "type": "object",
+  "id": "Status",
+  "properties": {
+    "id": {
+      "type": "string",
+      "required": true
+    },
+    "ip": {
+      "type": "string",
+      "required": true
+    },
+    "port": {
+      "type": "integer",
+      "required": true
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "description": "List of supported currencies",
+  "type": "object",
+  "id": "Currencies",
+  "properties": {
+    "currencies": {
+      "type" : "array",
+      "items" : {
+        "$ref" : "currency.json"
+      },
+      "required": true
+    }
+  }
+}
