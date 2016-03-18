@@ -1,14 +1,16 @@
 package com.zooplus.openexchange.protocol;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Assert;
+import com.zooplus.openexchange.protocol.v1.Currencies;
+import com.zooplus.openexchange.protocol.v1.Quotes;
 import org.apache.commons.io.IOUtils;
+import org.junit.Assert;
 import org.junit.Test;
 
 public class TestCurrencyApiProtocol {
     @Test
     public void testListSuccess() throws Exception {
-        String json = IOUtils.toString(this.getClass().getClassLoader().getResourceAsStream("responses/list.success.json"));
+        String json = IOUtils.toString(this.getClass().getClassLoader().getResourceAsStream("responses/v1/list.success.json"));
         Currencies ob = new ObjectMapper().readValue(json, Currencies.class);
 
         Assert.assertNotNull(ob);
@@ -22,7 +24,7 @@ public class TestCurrencyApiProtocol {
 
     @Test
     public void testLiveSuccess() throws Exception {
-        String json = IOUtils.toString(this.getClass().getClassLoader().getResourceAsStream("responses/live.success.json"));
+        String json = IOUtils.toString(this.getClass().getClassLoader().getResourceAsStream("responses/v1/live.success.json"));
         Quotes ob = new ObjectMapper().readValue(json, Quotes.class);
 
         Assert.assertNotNull(ob);
@@ -40,7 +42,7 @@ public class TestCurrencyApiProtocol {
 
     @Test
     public void testHistoricalSuccess() throws Exception {
-        String json = IOUtils.toString(this.getClass().getClassLoader().getResourceAsStream("responses/historical.success.json"));
+        String json = IOUtils.toString(this.getClass().getClassLoader().getResourceAsStream("responses/v1/historical.success.json"));
         Quotes ob = new ObjectMapper().readValue(json, Quotes.class);
 
         Assert.assertNotNull(ob);
@@ -58,7 +60,7 @@ public class TestCurrencyApiProtocol {
 
     @Test
     public void testListErrors() throws Exception {
-        String json = IOUtils.toString(this.getClass().getClassLoader().getResourceAsStream("responses/error.json"));
+        String json = IOUtils.toString(this.getClass().getClassLoader().getResourceAsStream("responses/v1/error.json"));
         Currencies ob = new ObjectMapper().readValue(json, Currencies.class);
         Assert.assertNotNull(ob);
         Assert.assertFalse(ob.getSuccess());
@@ -69,7 +71,7 @@ public class TestCurrencyApiProtocol {
 
     @Test
     public void testQuotesErrors() throws Exception {
-        String json = IOUtils.toString(this.getClass().getClassLoader().getResourceAsStream("responses/error.json"));
+        String json = IOUtils.toString(this.getClass().getClassLoader().getResourceAsStream("responses/v1/error.json"));
         Quotes ob = new ObjectMapper().readValue(json, Quotes.class);
         Assert.assertNotNull(ob);
         Assert.assertFalse(ob.getSuccess());

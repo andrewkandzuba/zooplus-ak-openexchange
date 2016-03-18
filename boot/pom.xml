@@ -58,6 +58,12 @@
             <artifactId>spring-cloud-cloudfoundry-connector</artifactId>
         </dependency>
 
+        <!-- spring persistence -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+        </dependency>
+
         <!-- testing -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

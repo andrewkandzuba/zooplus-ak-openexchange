@@ -1,7 +1,7 @@
 package com.zooplus.openexchange;
 
 import com.zooplus.openexchange.integrations.gateways.StatusGateway;
-import com.zooplus.openexchange.protocol.Status;
+import com.zooplus.openexchange.protocol.v1.Status;
 import com.zooplus.openexchange.services.StatusService;
 import org.junit.Assert;
 import org.junit.Test;
@@ -28,8 +28,8 @@ public class TestIntegrationFramework {
     public void testIntegration() {
         Status s = request.getStatus();
         Assert.assertNotNull(s);
-        Assert.assertTrue(s.getId().equals("id-1"));
-        Assert.assertTrue(s.getIp().equals("localhost"));
+        Assert.assertTrue(s.getInstanceId().equals("id-1"));
+        Assert.assertTrue(s.getHost().equals("localhost"));
         Assert.assertTrue(s.getPort() == 8888);
     }
 
@@ -37,8 +37,8 @@ public class TestIntegrationFramework {
     StatusService getStatusService() {
         return () -> {
             Status s = new Status();
-            s.setIp("localhost");
-            s.setId("id-1");
+            s.setHost("localhost");
+            s.setInstanceId("id-1");
             s.setPort(8888);
             return s;
         };

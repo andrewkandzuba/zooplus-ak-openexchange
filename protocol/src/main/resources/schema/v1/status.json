@@ -4,11 +4,12 @@
   "type": "object",
   "id": "Status",
   "properties": {
-    "id": {
+    "instance_id": {
+      "javaName": "instanceId",
       "type": "string",
       "required": true
     },
-    "ip": {
+    "host": {
       "type": "string",
       "required": true
     },

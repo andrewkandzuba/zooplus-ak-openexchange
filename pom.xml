@@ -88,6 +88,13 @@
                 <version>${spring.version}</version>
             </dependency>
 
+            <!-- spring persistancy -->
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-jdbc</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+
             <!-- code generation -->
             <dependency>
                 <groupId>commons-lang</groupId>

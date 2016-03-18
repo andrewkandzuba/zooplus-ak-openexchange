@@ -1,6 +1,6 @@
 package com.zooplus.openexchange.integrations.gateways;
 
-import com.zooplus.openexchange.protocol.Status;
+import com.zooplus.openexchange.protocol.v1.Status;
 import org.springframework.integration.annotation.Gateway;
 import org.springframework.integration.annotation.MessagingGateway;
 import org.springframework.messaging.handler.annotation.Payload;
