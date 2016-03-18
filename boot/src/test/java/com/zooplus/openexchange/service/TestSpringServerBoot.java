@@ -1,4 +1,4 @@
-package com.zooplus.openexchange;
+package com.zooplus.openexchange.service;
 
 import com.zooplus.openexchange.protocol.v1.Status;
 import org.junit.Assert;
@@ -13,8 +13,8 @@ import org.springframework.web.client.RestTemplate;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(Starter.class)
-@WebIntegrationTest("server.port=0")
-@ActiveProfiles("local")
+@WebIntegrationTest
+@ActiveProfiles("development")
 public class TestSpringServerBoot {
     @Value("${local.server.port}")
     int port;

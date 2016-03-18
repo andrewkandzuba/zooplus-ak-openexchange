@@ -1,4 +1,4 @@
-package com.zooplus.openexchange.web.controllers;
+package com.zooplus.openexchange.service.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zooplus.openexchange.protocol.v1.Status;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.io.IOException;
 
-import static com.zooplus.openexchange.configuration.ConfigurationConstants.VCAP_APPLICATION;
+import static com.zooplus.openexchange.service.configuration.ConfigurationConstants.VCAP_APPLICATION;
 
 @Controller
 public class StatusController {

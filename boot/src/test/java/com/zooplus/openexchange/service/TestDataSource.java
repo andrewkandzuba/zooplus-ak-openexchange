@@ -1,4 +1,4 @@
-package com.zooplus.openexchange;
+package com.zooplus.openexchange.service;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,12 +9,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(Starter.class)
-@WebIntegrationTest("server.port=0")
-@ActiveProfiles("local")
+@WebIntegrationTest
+@ActiveProfiles("development")
 public class TestDataSource {
-
-/*    @Autowired
-    private DataSource dataSource;*/
 
     @Test
     public void testDataSourceAccess() throws Exception {
