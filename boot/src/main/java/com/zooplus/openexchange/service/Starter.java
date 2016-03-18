@@ -6,7 +6,10 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
-@ComponentScan(basePackages = { "com.zooplus.openexchange.service.configuration", "com.zooplus.openexchange.service.controllers" })
+@ComponentScan(basePackages = {
+        "com.zooplus.openexchange.service.configuration",
+        "com.zooplus.openexchange.service.controllers",
+        "com.zooplus.openexchange.service.data"})
 public class Starter {
     public static void main(String... args) throws Exception {
         new SpringApplicationBuilder()

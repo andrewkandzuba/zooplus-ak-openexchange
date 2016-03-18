@@ -38,6 +38,8 @@
         <compile.target>1.8</compile.target>
         <maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
         <version.processor.plugin>2.2.4</version.processor.plugin>
+        <!-- db -->
+        <hsqldb.version>2.3.3</hsqldb.version>
     </properties>
 
     <dependencyManagement>
@@ -90,9 +92,9 @@
 
             <!-- spring persistancy -->
             <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-jdbc</artifactId>
-                <version>${spring.version}</version>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-data-jpa</artifactId>
+                <version>${spring-boot.version}</version>
             </dependency>
 
             <!-- code generation -->
@@ -146,6 +148,12 @@
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-io</artifactId>
                 <version>${apache.commons-io.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.hsqldb</groupId>
+                <artifactId>hsqldb</artifactId>
+                <version>${hsqldb.version}</version>
                 <scope>test</scope>
             </dependency>
         </dependencies>
