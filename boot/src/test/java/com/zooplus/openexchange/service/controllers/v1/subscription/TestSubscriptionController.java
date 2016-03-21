@@ -1,6 +1,6 @@
-package com.zooplus.openexchange.service.controllers.v1.app;
+package com.zooplus.openexchange.service.controllers.v1.subscription;
 
-import com.zooplus.openexchange.protocol.v1.Status;
+import com.zooplus.openexchange.service.data.domain.Subscriber;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,18 +12,23 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.client.RestTemplate;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(AppControllerStarter.class)
+@SpringApplicationConfiguration(SubscriptionControllerStater.class)
 @WebIntegrationTest("server.port:0")
 @ActiveProfiles("development")
-public class TestAppController {
+public class TestSubscriptionController {
     @Value("${local.server.port}")
     int port;
 
     @Test
-    public void testLifecycle() throws Throwable {
+    public void testSubscription() throws Exception {
         RestTemplate restTemplate = new RestTemplate();
-        Status response = restTemplate.getForObject(String.format("http://localhost:%s/v1/app/status", port), Status.class);
+        Subscriber subscriber = new Subscriber();
+        subscriber.setEmail("RS@AK.COM");
+        subscriber.setPassword("test1");
+        Subscriber response = restTemplate.postForObject(
+                String.format("http://localhost:%s/%s", port, SubscriptionController.SUBSCRIBES_PATH), subscriber, Subscriber.class);
         Assert.assertNotNull(response);
-        Assert.assertEquals(response.getInstanceId(), "7935a0789a204973ab70b6f01458b4f3");
+        Assert.assertEquals(response.getId().longValue(), 1L);
+
     }
 }

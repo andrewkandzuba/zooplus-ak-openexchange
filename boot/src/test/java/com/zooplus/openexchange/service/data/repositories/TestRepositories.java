@@ -1,6 +1,5 @@
 package com.zooplus.openexchange.service.data.repositories;
 
-import com.zooplus.openexchange.service.Starter;
 import com.zooplus.openexchange.service.data.domain.Subscriber;
 import org.junit.Assert;
 import org.junit.FixMethodOrder;
@@ -19,7 +18,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(Starter.class)
+@SpringApplicationConfiguration(RepositoriesStarter.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @ActiveProfiles("development")
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)

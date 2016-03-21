@@ -1,4 +1,4 @@
-package com.zooplus.openexchange.service.controllers.v1.subscribers;
+package com.zooplus.openexchange.service.controllers.v1.subscription;
 
 import com.zooplus.openexchange.service.data.domain.Subscriber;
 import com.zooplus.openexchange.service.data.repositories.SubscriberRepository;
@@ -11,14 +11,17 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 
 @RestController
-public class SubscribersControl {
+public class SubscriptionController {
+    public static final String SUBSCRIBES_PATH = "/v1/subscription/subscribes";
     @Autowired
     SubscriberRepository subscriberRepository;
 
-    @RequestMapping(value = "/v1/users/subscribes", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = SUBSCRIBES_PATH, method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<Subscriber> subscribes(@RequestBody Subscriber subscriber) throws IOException {
-
-        return new ResponseEntity<Subscriber>(HttpStatus.BAD_REQUEST);
+        if(subscriberRepository.findByEmail(subscriber.getEmail())!=null){
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+        return new ResponseEntity<>(subscriberRepository.saveAndFlush(subscriber), HttpStatus.OK);
     }
 
     @ResponseStatus(value= HttpStatus.INTERNAL_SERVER_ERROR, reason="Error occurred!")

@@ -8,5 +8,3 @@ spring:
     platform: h2
     schema: classpath:db/h2/schema-h2.sql
     data: classpath:db/h2/data-h2.sql
-server:
-  port: 1111

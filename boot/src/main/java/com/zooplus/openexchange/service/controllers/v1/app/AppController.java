@@ -11,12 +11,13 @@ import java.io.IOException;
 
 @RestController
 public class AppController {
+    public final static String STATUS_PATH = "/v1/app/status";
     private final static String VCAP_APPLICATION = "VCAP_APPLICATION";
 
     @Autowired
     Environment environment;
 
-    @RequestMapping("/v1/app/status")
+    @RequestMapping(STATUS_PATH)
     @ResponseBody
     Status get() throws IOException {
         return new ObjectMapper().readValue(environment.getProperty(VCAP_APPLICATION), Status.class);
