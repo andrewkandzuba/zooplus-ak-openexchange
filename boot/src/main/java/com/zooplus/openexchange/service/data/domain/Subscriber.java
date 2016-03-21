@@ -4,19 +4,19 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "persons")
-public class Person implements Serializable {
-    private static final long serialVersionUID = -8735487642834331320L;
+@Table(name = "SUBSCRIBERS")
+public class Subscriber implements Serializable {
+    private static final long serialVersionUID = 4616356482743882423L;
 
     @Id
-    @Column(name = "id")
-    @GeneratedValue
+    @Column(name = "ID")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
 
-    @Column(name = "name", unique=true)
+    @Column(name = "NAME", unique = true)
     String name;
 
-    @Column(name = "password")
+    @Column(name = "PASSWORD")
     String password;
 
     public Long getId() {

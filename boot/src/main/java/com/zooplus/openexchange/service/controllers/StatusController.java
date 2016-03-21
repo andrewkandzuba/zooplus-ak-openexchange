@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.io.IOException;
 
-import static com.zooplus.openexchange.service.configuration.ConfigurationConstants.VCAP_APPLICATION;
-
 @Controller
 public class StatusController {
+    private final static String VCAP_APPLICATION = "VCAP_APPLICATION";
+
     @Autowired
     Environment environment;
 
