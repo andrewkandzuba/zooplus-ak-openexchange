@@ -4,17 +4,17 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "SUBSCRIBERS")
+@Table(name = "OPENEXCHANGE.SUBSCRIBERS")
 public class Subscriber implements Serializable {
-    private static final long serialVersionUID = 4616356482743882423L;
+    private static final long serialVersionUID = -6125496563594902503L;
 
     @Id
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
 
-    @Column(name = "NAME", unique = true)
-    String name;
+    @Column(name = "EMAIL", unique = true)
+    String email;
 
     @Column(name = "PASSWORD")
     String password;
@@ -27,12 +27,12 @@ public class Subscriber implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getEmail() {
+        return email;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {

@@ -7,4 +7,5 @@ import javax.transaction.Transactional;
 
 @Transactional
 public interface SubscriberRepository extends JpaRepository<Subscriber, Long> {
+    Subscriber findByEmail(String email);
 }

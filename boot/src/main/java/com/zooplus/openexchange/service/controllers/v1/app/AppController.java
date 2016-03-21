@@ -1,26 +1,22 @@
-package com.zooplus.openexchange.service.controllers;
+package com.zooplus.openexchange.service.controllers.v1.app;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zooplus.openexchange.protocol.v1.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
-@Controller
-public class StatusController {
+@RestController
+public class AppController {
     private final static String VCAP_APPLICATION = "VCAP_APPLICATION";
 
     @Autowired
     Environment environment;
 
-    @RequestMapping("/status")
+    @RequestMapping("/v1/app/status")
     @ResponseBody
     Status get() throws IOException {
         return new ObjectMapper().readValue(environment.getProperty(VCAP_APPLICATION), Status.class);

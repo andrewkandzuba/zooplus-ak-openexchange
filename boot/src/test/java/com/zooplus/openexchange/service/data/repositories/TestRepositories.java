@@ -1,7 +1,7 @@
-package com.zooplus.openexchange.service;
+package com.zooplus.openexchange.service.data.repositories;
 
+import com.zooplus.openexchange.service.Starter;
 import com.zooplus.openexchange.service.data.domain.Subscriber;
-import com.zooplus.openexchange.service.data.repositories.SubscriberRepository;
 import org.junit.Assert;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -38,7 +38,7 @@ public class TestRepositories {
         Assert.assertEquals(subscriberses.size(), 1);
 
         Subscriber subscriber = new Subscriber();
-        subscriber.setName("RS");
+        subscriber.setEmail("RS@AK.COM");
         subscriber.setPassword("1234");
         Subscriber saved = subscriberRepository.save(subscriber);
         Assert.assertNotNull(saved);
@@ -71,12 +71,18 @@ public class TestRepositories {
         });
 
         Subscriber subscriber = new Subscriber();
-        subscriber.setName("RS");
+        subscriber.setEmail("RS@AK.COM");
         subscriber.setPassword("1234");
         beforeCommit.countDown();
         Subscriber saved = subscriberRepository.save(subscriber);
         afterCommit.countDown();
         Assert.assertNotNull(saved);
         Assert.assertNotNull(saved.getId());
+    }
+
+    @Test
+    public void testD_findSubscriberByEmail() throws Exception {
+        Assert.assertNotNull(subscriberRepository.findByEmail("AK@AK.COM"));
+        Assert.assertNull(subscriberRepository.findByEmail("NON@AK.COM"));
     }
 }
