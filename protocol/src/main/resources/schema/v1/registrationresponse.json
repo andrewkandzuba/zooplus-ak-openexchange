@@ -1,0 +1,13 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "description": "User registration response",
+  "type": "object",
+  "id": "RegistrationResponse",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "format":"utc-millisec",
+      "required": true
+    }
+  }
+}

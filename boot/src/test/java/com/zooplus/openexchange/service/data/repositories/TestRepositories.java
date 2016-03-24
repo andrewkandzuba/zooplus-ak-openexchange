@@ -1,6 +1,6 @@
 package com.zooplus.openexchange.service.data.repositories;
 
-import com.zooplus.openexchange.service.data.domain.Subscriber;
+import com.zooplus.openexchange.service.data.domain.User;
 import org.junit.Assert;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
@@ -33,13 +33,13 @@ public class TestRepositories {
     @Test
     public void testA_DataSourceAccess() throws Exception {
         Assert.assertNotNull(subscriberRepository);
-        List<Subscriber> subscriberses =  subscriberRepository.findAll();
-        Assert.assertEquals(subscriberses.size(), 1);
+        List<User> users =  subscriberRepository.findAll();
+        Assert.assertEquals(users.size(), 1);
 
-        Subscriber subscriber = new Subscriber();
-        subscriber.setEmail("RS@AK.COM");
-        subscriber.setPassword("1234");
-        Subscriber saved = subscriberRepository.save(subscriber);
+        User user = new User();
+        user.setEmail("RS@AK.COM");
+        user.setPassword("1234");
+        User saved = subscriberRepository.save(user);
         Assert.assertNotNull(saved);
         Assert.assertNotNull(saved.getId());
         Assert.assertEquals(subscriberRepository.findAll().size(), 2);
@@ -47,15 +47,14 @@ public class TestRepositories {
 
     @Test
     public void testB_ContextCleanUp() throws Exception {
-        List<Subscriber> subscriberses =  subscriberRepository.findAll();
-        Assert.assertEquals(subscriberses.size(), 1);
+        List<User> users =  subscriberRepository.findAll();
+        Assert.assertEquals(users.size(), 1);
     }
 
     @Test
     public void testC_Transactions() throws Exception {
         CountDownLatch beforeCommit = new CountDownLatch(1);
         CountDownLatch afterCommit = new CountDownLatch(1);
-
         Assert.assertEquals(subscriberRepository.findAll().size(), 1);
         executorService.submit(() -> {
             try {
@@ -69,11 +68,11 @@ public class TestRepositories {
             }
         });
 
-        Subscriber subscriber = new Subscriber();
-        subscriber.setEmail("RS@AK.COM");
-        subscriber.setPassword("1234");
+        User user = new User();
+        user.setEmail("RS@AK.COM");
+        user.setPassword("1234");
         beforeCommit.countDown();
-        Subscriber saved = subscriberRepository.save(subscriber);
+        User saved = subscriberRepository.save(user);
         afterCommit.countDown();
         Assert.assertNotNull(saved);
         Assert.assertNotNull(saved.getId());

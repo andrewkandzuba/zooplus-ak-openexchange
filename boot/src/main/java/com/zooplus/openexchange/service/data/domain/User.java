@@ -4,10 +4,9 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "OPENEXCHANGE.SUBSCRIBERS")
-public class Subscriber implements Serializable {
-    private static final long serialVersionUID = -6125496563594902503L;
-
+@Table(name = "OPENEXCHANGE.USERS")
+public class User implements Serializable {
+    private static final long serialVersionUID = -5277266119957501955L;
     @Id
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.AUTO)
