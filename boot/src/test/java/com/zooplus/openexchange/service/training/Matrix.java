@@ -23,7 +23,7 @@ public class Matrix {
         return new Matrix(size);
     }
 
-    public Matrix rotate90(){
+    public Matrix rotate2steps(){
         int N = m.length;
         for(int row = 0; row < (N/2); row++){
             for(int col = 0; col < N; col++){
@@ -38,6 +38,22 @@ public class Matrix {
                 int temp =  m[c][r];
                 m[c][r] = m[r][c];
                 m[r][c] = temp;
+            }
+        }
+        return this;
+    }
+
+    public Matrix rotate1step(){
+        int N = m.length;
+        for(int layer = 0; layer < N / 2; layer++){
+            int last = N - 1 - layer;
+            for(int offset = layer; offset < last; ++offset){
+                int tmp = m[offset][layer];
+                m[offset][layer] =  m[layer][last - offset];
+                m[offset][layer] = m[layer][last - offset];
+                m[layer][last - offset] = m[last - offset][last - offset];
+                m[last - offset][last - offset] = m[last - offset][layer];
+                m[last - offset][layer] = tmp;
             }
         }
         return this;

@@ -20,12 +20,25 @@ public class TestMatrixOperations {
     public void testMatrixRotation() throws Exception {
         Matrix m = Matrix.init(3);
         logger.info(m.toString());
-        Matrix m1 = m.rotate90();
+        Matrix m1 = m.rotate2steps();
         logger.info(m1.toString());
         logger.info(String.format("%-10s","-"));
         m = Matrix.init(4);
         logger.info(m.toString());
-        m1 = m.rotate90();
+        m1 = m.rotate2steps();
+        logger.info(m1.toString());
+    }
+
+    @Test
+    public void testMatrixRotationOptimized() throws Exception {
+        Matrix m = Matrix.init(3);
+        logger.info(m.toString());
+        Matrix m1 = m.rotate1step();
+        logger.info(m1.toString());
+        logger.info(String.format("%-10s","-"));
+        m = Matrix.init(4);
+        logger.info(m.toString());
+        m1 = m.rotate1step();
         logger.info(m1.toString());
     }
 }
