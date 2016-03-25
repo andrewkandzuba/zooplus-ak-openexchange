@@ -28,26 +28,26 @@ public class TestRepositories {
     ExecutorService executorService;
 
     @Autowired
-    SubscriberRepository subscriberRepository;
+    UserRepository userRepository;
 
     @Test
     public void testA_DataSourceAccess() throws Exception {
-        Assert.assertNotNull(subscriberRepository);
-        List<User> users =  subscriberRepository.findAll();
+        Assert.assertNotNull(userRepository);
+        List<User> users =  userRepository.findAll();
         Assert.assertEquals(users.size(), 1);
 
         User user = new User();
-        user.setEmail("RS@AK.COM");
-        user.setPassword("1234");
-        User saved = subscriberRepository.save(user);
+        user.setEmail("user1@zooplus.com");
+        user.setPassword("password1234");
+        User saved = userRepository.save(user);
         Assert.assertNotNull(saved);
         Assert.assertNotNull(saved.getId());
-        Assert.assertEquals(subscriberRepository.findAll().size(), 2);
+        Assert.assertEquals(userRepository.findAll().size(), 2);
     }
 
     @Test
     public void testB_ContextCleanUp() throws Exception {
-        List<User> users =  subscriberRepository.findAll();
+        List<User> users =  userRepository.findAll();
         Assert.assertEquals(users.size(), 1);
     }
 
@@ -55,13 +55,13 @@ public class TestRepositories {
     public void testC_Transactions() throws Exception {
         CountDownLatch beforeCommit = new CountDownLatch(1);
         CountDownLatch afterCommit = new CountDownLatch(1);
-        Assert.assertEquals(subscriberRepository.findAll().size(), 1);
+        Assert.assertEquals(userRepository.findAll().size(), 1);
         executorService.submit(() -> {
             try {
                 beforeCommit.await(5000L, TimeUnit.MILLISECONDS);
-                Assert.assertEquals(subscriberRepository.findAll().size(), 1);
+                Assert.assertEquals(userRepository.findAll().size(), 1);
                 beforeCommit.await(5000L, TimeUnit.MILLISECONDS);
-                Assert.assertEquals(subscriberRepository.findAll().size(), 2);
+                Assert.assertEquals(userRepository.findAll().size(), 2);
             } catch (InterruptedException e) {
                 e.printStackTrace();
                 Assert.assertTrue(false);
@@ -69,10 +69,10 @@ public class TestRepositories {
         });
 
         User user = new User();
-        user.setEmail("RS@AK.COM");
-        user.setPassword("1234");
+        user.setEmail("user1@zooplus.com");
+        user.setPassword("password1234");
         beforeCommit.countDown();
-        User saved = subscriberRepository.save(user);
+        User saved = userRepository.save(user);
         afterCommit.countDown();
         Assert.assertNotNull(saved);
         Assert.assertNotNull(saved.getId());
@@ -80,7 +80,7 @@ public class TestRepositories {
 
     @Test
     public void testD_findSubscriberByEmail() throws Exception {
-        Assert.assertNotNull(subscriberRepository.findByEmail("AK@AK.COM"));
-        Assert.assertNull(subscriberRepository.findByEmail("NON@AK.COM"));
+        Assert.assertNotNull(userRepository.findByEmail("admin@zooplus.com"));
+        Assert.assertNull(userRepository.findByEmail("none@zooplus.com"));
     }
 }

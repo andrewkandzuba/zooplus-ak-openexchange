@@ -2,12 +2,13 @@ spring:
   profiles: cloud
   jpa:
     show_sql: false
+    database: MYSQL
     hibernate:
       ddl-auto: none
   datasource:
     platform: mysql
-    url: jdbc:mysql://us-cdbr-iron-east-03.cleardb.net/ad_b54c92e6140b447?user=b9b9a27a69cceb&password=4318998d
-    username: b9b9a27a69cceb
-    password: 4318998d
+    #url: jdbc:mysql://us-cdbr-iron-east-03.cleardb.net/ad_b54c92e6140b447?user=b9b9a27a69cceb&password=4318998d
+    #username: b9b9a27a69cceb
+    #password: 4318998d
     #schema: classpath:db/h2/schema-h2.sql
     #data: classpath:db/h2/data-h2.sql

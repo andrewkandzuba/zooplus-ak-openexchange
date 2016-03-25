@@ -9,13 +9,15 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
+import static com.zooplus.openexchange.service.controllers.v1.Constants.*;
+
 @RestController
-public class AppController {
-    public final static String STATUS_PATH = "/v1/app/status";
+class AppController {
+    final static String STATUS_PATH = "/" + API  + "/" + VERSION_1 + "/" + MANAGEMENT + "/" + STATUS;
     private final static String VCAP_APPLICATION = "VCAP_APPLICATION";
 
     @Autowired
-    Environment environment;
+    private Environment environment;
 
     @RequestMapping(STATUS_PATH)
     @ResponseBody

@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "OPENEXCHANGE.USERS")
+@Table(name = "USERS")
 public class User implements Serializable {
     private static final long serialVersionUID = -5277266119957501955L;
     @Id

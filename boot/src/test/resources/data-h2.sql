@@ -1,0 +1,1 @@
+INSERT INTO USERS (EMAIL, PASSWORD) VALUES ('admin@zooplus.com', 'pwd12345');
