@@ -70,5 +70,20 @@ public class TestMatrixOperations {
                 {0, 4, 5},
                 {0, 6, 7}
         })));
+
+        Matrix m2 = Matrix.from(new int[][]{
+                {1,   0,  3},
+                {4,   0,  6},
+                {7,   8,  9},
+                {10, 11, 12}
+        });
+        logger.info(m2.toString());
+        logger.info(m2.mark().toString());
+        Assert.assertTrue(m2.equalsTo((new int[][]{
+                {0,   0,  0},
+                {0,   0,  0},
+                {7,   0,  9},
+                {10,  0, 12}
+        })));
     }
 }

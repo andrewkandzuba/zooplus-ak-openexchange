@@ -1,20 +1,18 @@
 package com.zooplus.openexchange.service.training;
 
-import org.apache.commons.lang.StringUtils;
-
-public class StringContent {
+class StringContent {
 
     private char[] intern;
 
-    public StringContent(String s) {
+    StringContent(String s) {
         this.intern = s.toCharArray();
     }
 
-    public static StringContent from(String s){
+    static StringContent from(String s){
         return new StringContent(s);
     }
 
-    public StringContent replace() {
+    StringContent replace() {
         final char[] replacement = {'%', '2', '0'};
 
         // 0. trim
@@ -59,18 +57,17 @@ public class StringContent {
         return this;
     }
 
-    public boolean isRotationOf(final String s){
-        if(s == null || s.length() != intern.length) return false;
-        char c = s.charAt(0);
-        for(int i = 0; i < intern.length; i++){
-            if(intern[i] == s.charAt(0)){
-                return StringUtils.contains(s, String.copyValueOf(intern, i, intern.length - i));
-            }
-        }
-        return false;
+    private static boolean isSubstring(String big, String small) {
+        return big.contains(small);
     }
 
-    public String get() {
+    boolean isRotationOf(final String s){
+        if(s == null || s.length() != intern.length) return false;
+        String s1s2 = String.copyValueOf(intern) + s;
+        return isSubstring(s1s2, s);
+    }
+
+    String get() {
         return String.copyValueOf(intern);
     }
 
