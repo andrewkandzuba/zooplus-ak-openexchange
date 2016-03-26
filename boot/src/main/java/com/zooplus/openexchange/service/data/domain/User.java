@@ -1,7 +1,11 @@
 package com.zooplus.openexchange.service.data.domain;
 
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenerationTime;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "USERS")
@@ -10,13 +14,21 @@ public class User implements Serializable {
     @Id
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    Long id;
+    private Long id;
 
     @Column(name = "EMAIL", unique = true)
-    String email;
+    private String email;
 
     @Column(name = "PASSWORD")
-    String password;
+    private String password;
+
+    @Generated(GenerationTime.INSERT)
+    @Column(name =  "CREATEDAT", insertable=false)
+    private Timestamp createdAt;
+
+    @Generated(GenerationTime.INSERT)
+    @Column(name =  "ENABLED", insertable=false)
+    private Boolean enabled;
 
     public Long getId() {
         return id;
@@ -40,5 +52,21 @@ public class User implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Timestamp getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Timestamp createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
     }
 }

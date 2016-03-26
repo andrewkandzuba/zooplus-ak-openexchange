@@ -2,10 +2,8 @@ package com.zooplus.openexchange.service.data.repositories;
 
 import com.zooplus.openexchange.service.data.domain.User;
 import org.junit.Assert;
-import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.MethodSorters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.annotation.DirtiesContext;
@@ -21,17 +19,16 @@ import java.util.concurrent.TimeUnit;
 @SpringApplicationConfiguration(RepositoriesStarter.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @ActiveProfiles("development")
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class TestRepositories {
+public class TestUserRepository {
 
     @Autowired
-    ExecutorService executorService;
+    private ExecutorService executorService;
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Test
-    public void testA_DataSourceAccess() throws Exception {
+    public void testAddNewUser() throws Exception {
         Assert.assertNotNull(userRepository);
         List<User> users =  userRepository.findAll();
         Assert.assertEquals(users.size(), 1);
@@ -39,20 +36,22 @@ public class TestRepositories {
         User user = new User();
         user.setEmail("user1@zooplus.com");
         user.setPassword("password1234");
-        User saved = userRepository.save(user);
+        User saved = userRepository.saveAndFlush(user);
         Assert.assertNotNull(saved);
         Assert.assertNotNull(saved.getId());
+        Assert.assertNotNull(saved.getCreatedAt());
+        Assert.assertTrue(saved.getEnabled());
         Assert.assertEquals(userRepository.findAll().size(), 2);
     }
 
     @Test
-    public void testB_ContextCleanUp() throws Exception {
+    public void testContextCleanUp() throws Exception {
         List<User> users =  userRepository.findAll();
         Assert.assertEquals(users.size(), 1);
     }
 
     @Test
-    public void testC_Transactions() throws Exception {
+    public void testTransactions() throws Exception {
         CountDownLatch beforeCommit = new CountDownLatch(1);
         CountDownLatch afterCommit = new CountDownLatch(1);
         Assert.assertEquals(userRepository.findAll().size(), 1);
@@ -76,11 +75,30 @@ public class TestRepositories {
         afterCommit.countDown();
         Assert.assertNotNull(saved);
         Assert.assertNotNull(saved.getId());
+        Assert.assertTrue(saved.getEnabled());
+        Assert.assertNotNull(saved.getCreatedAt());
+        Assert.assertNotNull(saved.getId());
     }
 
     @Test
-    public void testD_findSubscriberByEmail() throws Exception {
-        Assert.assertNotNull(userRepository.findByEmail("admin@zooplus.com"));
+    public void testfindSubscriberByEmail() throws Exception {
+        User user = userRepository.findByEmail("admin@zooplus.com");
+        Assert.assertNotNull(user);
+        Assert.assertEquals(user.getId().longValue(), 1L);
+        Assert.assertEquals(user.getEmail(), "admin@zooplus.com");
+        Assert.assertEquals(user.getPassword(), "pwd12345");
+        Assert.assertTrue(user.getEnabled());
+        Assert.assertNotNull(user.getCreatedAt());
+
         Assert.assertNull(userRepository.findByEmail("none@zooplus.com"));
+
+        user = new User();
+        user.setEmail("none@zooplus.com");
+        user.setPassword("querty");
+        user = userRepository.saveAndFlush(user);
+
+        User savedUser = userRepository.findOne(user.getId());
+        Assert.assertNotNull(savedUser.getCreatedAt());
+        Assert.assertTrue(savedUser.getEnabled());
     }
 }
