@@ -66,7 +66,7 @@ public class TestCurrencyApiProtocol {
         Assert.assertFalse(ob.getSuccess());
         Assert.assertNotNull(ob.getError());
         Assert.assertEquals(ob.getError().getCode().longValue(), 104);
-        Assert.assertEquals(ob.getError().getInfo(), "Your monthly usage limit has been reached. Please upgrade your registration plan.");
+        Assert.assertEquals(ob.getError().getInfo(), "Your monthly usage limit has been reached. Please upgrade your subscription plan.");
     }
 
     @Test
@@ -77,6 +77,6 @@ public class TestCurrencyApiProtocol {
         Assert.assertFalse(ob.getSuccess());
         Assert.assertNotNull(ob.getError());
         Assert.assertEquals(ob.getError().getCode().longValue(), 104);
-        Assert.assertEquals(ob.getError().getInfo(), "Your monthly usage limit has been reached. Please upgrade your registration plan.");
+        Assert.assertEquals(ob.getError().getInfo(), "Your monthly usage limit has been reached. Please upgrade your subscription plan.");
     }
 }
