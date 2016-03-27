@@ -1,11 +1,10 @@
-package com.zooplus.openexchange.service.controllers.v1.subscription;
+package com.zooplus.openexchange.service.controllers.v1.registration;
 
 import com.zooplus.openexchange.protocol.v1.Registrationrequest;
 import com.zooplus.openexchange.protocol.v1.Registrationresponse;
 import com.zooplus.openexchange.service.data.domain.User;
 import com.zooplus.openexchange.service.data.repositories.UserRepository;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -18,10 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.context.WebApplicationContext;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(RegistrationControllerStater.class)
@@ -31,23 +27,12 @@ public class TestSubscriptionController {
     private static final String TEST_ENDPOINT_TEMPLATE = "http://localhost:%s%s";
     @Value("${local.server.port}")
     private int port;
-
-    private MockMvc mockMvc;
-
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private WebApplicationContext webApplicationContext;
-
-    @Before
-    public void setUp() {
-        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-    }
-
     @Test
     public void testSubscription() throws Exception {
-        // 0. Mock repository
+        // 0. Mock data and repository
         User user = new User();
         user.setId(1L);
         user.setEmail("user1@zooplus.com");
@@ -56,13 +41,16 @@ public class TestSubscriptionController {
         Mockito.when(userRepository.findByEmail("user1@zooplus.com")).thenReturn(null);
         Mockito.when(userRepository.saveAndFlush(Mockito.any(User.class))).thenReturn(user);
 
-        // 1. Register for the first time
+        // 1. Make a request
         RestTemplate restTemplate = new RestTemplate();
-        Registrationrequest rr = new Registrationrequest();
-        rr.setEmail(user.getEmail());
-        rr.setPassword(user.getPassword());
+        Registrationrequest registrationrequest = new Registrationrequest();
+        registrationrequest.setEmail(user.getEmail());
+        registrationrequest.setPassword(user.getPassword());
+
+        // 2. Analyze response
         ResponseEntity<Registrationresponse> registrationResponse = restTemplate.postForEntity(
-                String.format(TEST_ENDPOINT_TEMPLATE, port, RegistrationController.REGISTRATION_REGISTER), rr, Registrationresponse.class);
+                String.format(TEST_ENDPOINT_TEMPLATE, port, RegistrationController.REGISTRATION_REGISTER),
+                registrationrequest, Registrationresponse.class);
         Assert.assertNotNull(registrationResponse);
         Assert.assertEquals(registrationResponse.getStatusCode(), HttpStatus.OK);
         Assert.assertEquals(registrationResponse.getBody().getId().longValue(), 1L);
@@ -70,6 +58,7 @@ public class TestSubscriptionController {
 
     @Test(expected = org.springframework.web.client.HttpClientErrorException.class)
     public void testRegisterTwice() throws Exception {
+        // 0. Mock data and repository
         User user = new User();
         user.setId(1L);
         user.setEmail("user1@zooplus.com");
@@ -77,14 +66,17 @@ public class TestSubscriptionController {
         MockitoAnnotations.initMocks(this);
         Mockito.when(userRepository.findByEmail("user1@zooplus.com")).thenReturn(user);
 
+        // 1. Make a request
         RestTemplate restTemplate = new RestTemplate();
-        Registrationrequest rr = new Registrationrequest();
-        rr.setEmail(user.getEmail());
-        rr.setPassword(user.getPassword());
+        Registrationrequest registrationrequest = new Registrationrequest();
+        registrationrequest.setEmail(user.getEmail());
+        registrationrequest.setPassword(user.getPassword());
 
+        // 2. Analyze response
         Mockito.when(userRepository.findByEmail("user1@zooplus.com")).thenReturn(user);
-        ResponseEntity<Registrationresponse>  registrationResponse = restTemplate.postForEntity(
-                String.format(TEST_ENDPOINT_TEMPLATE, port, RegistrationController.REGISTRATION_REGISTER), rr, Registrationresponse.class);
+        ResponseEntity<Registrationresponse> registrationResponse = restTemplate.postForEntity(
+                String.format(TEST_ENDPOINT_TEMPLATE, port, RegistrationController.REGISTRATION_REGISTER),
+                registrationrequest, Registrationresponse.class);
         Assert.assertNotNull(registrationResponse);
         Assert.assertEquals(registrationResponse.getStatusCode(), HttpStatus.CONFLICT);
     }

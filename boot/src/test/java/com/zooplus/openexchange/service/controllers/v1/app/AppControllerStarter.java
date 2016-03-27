@@ -7,5 +7,5 @@ import org.springframework.context.annotation.PropertySource;
 @SpringBootApplication(scanBasePackages = {"com.zooplus.openexchange.service.controllers.v1.app"})
 @PropertySource("classpath:config/environment-development.properties")
 @Profile("development")
-public class AppControllerStarter {
+class AppControllerStarter {
 }

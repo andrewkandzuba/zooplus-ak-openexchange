@@ -34,5 +34,6 @@ public class RepositoriesConfiguration {
         JpaTransactionManager txManager = new JpaTransactionManager();
         txManager.setEntityManagerFactory(entityManagerFactory(dataSource));
         return txManager;
+
     }
 }

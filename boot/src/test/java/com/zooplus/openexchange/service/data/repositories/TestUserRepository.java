@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -20,12 +21,12 @@ import java.util.concurrent.TimeUnit;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @ActiveProfiles("development")
 public class TestUserRepository {
-
     @Autowired
     private ExecutorService executorService;
-
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Test
     public void testAddNewUser() throws Exception {
@@ -35,12 +36,13 @@ public class TestUserRepository {
 
         User user = new User();
         user.setEmail("user1@zooplus.com");
-        user.setPassword("password1234");
+        user.setPassword(passwordEncoder.encode("password1234"));
         User saved = userRepository.saveAndFlush(user);
         Assert.assertNotNull(saved);
         Assert.assertNotNull(saved.getId());
         Assert.assertNotNull(saved.getCreatedAt());
         Assert.assertTrue(saved.getEnabled());
+        Assert.assertTrue(passwordEncoder.matches("password1234", saved.getPassword()));
         Assert.assertEquals(userRepository.findAll().size(), 2);
     }
 

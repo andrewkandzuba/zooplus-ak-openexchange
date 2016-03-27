@@ -7,9 +7,13 @@ import org.springframework.context.annotation.Profile;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@SpringBootApplication(scanBasePackages = {"com.zooplus.openexchange.service.data"})
+@SpringBootApplication(
+        scanBasePackages = {
+                "com.zooplus.openexchange.service.data",
+                "com.zooplus.openexchange.service.security"
+        })
 @Profile("development")
-public class RepositoriesStarter {
+class RepositoriesStarter {
     @Bean
     public ExecutorService executorService(){
         return Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2);
