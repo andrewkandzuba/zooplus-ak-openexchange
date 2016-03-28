@@ -20,7 +20,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.client.RestTemplate;
 
-import static com.zooplus.openexchange.service.controllers.v1.Constants.*;
+import static com.zooplus.openexchange.service.controllers.v1.ApiController.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(ControllerStarter.class)
@@ -52,7 +52,7 @@ public class TestRegistrationController {
 
         // 2. Analyze response
         ResponseEntity<Registrationresponse> registrationResponse = restTemplate.postForEntity(
-                String.format(TEST_ENDPOINT_TEMPLATE, port, "/" + API  + "/" + VERSION + "/" + REGISTRATION),
+                String.format(TEST_ENDPOINT_TEMPLATE, port, USER_REGISTRATION_PATH),
                 registrationrequest, Registrationresponse.class);
         Assert.assertNotNull(registrationResponse);
         Assert.assertEquals(registrationResponse.getStatusCode(), HttpStatus.OK);
@@ -78,7 +78,7 @@ public class TestRegistrationController {
         // 2. Analyze response
         Mockito.when(userRepository.findByEmail("user1@zooplus.com")).thenReturn(user);
         ResponseEntity<Registrationresponse> registrationResponse = restTemplate.postForEntity(
-                String.format(TEST_ENDPOINT_TEMPLATE, port, "/" + API  + "/" + VERSION + "/" + REGISTRATION),
+                String.format(TEST_ENDPOINT_TEMPLATE, port, USER_REGISTRATION_PATH),
                 registrationrequest, Registrationresponse.class);
         Assert.assertNotNull(registrationResponse);
         Assert.assertEquals(registrationResponse.getStatusCode(), HttpStatus.CONFLICT);

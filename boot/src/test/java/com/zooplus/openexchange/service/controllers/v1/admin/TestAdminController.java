@@ -1,4 +1,4 @@
-package com.zooplus.openexchange.service.controllers.v1.app;
+package com.zooplus.openexchange.service.controllers.v1.admin;
 
 import com.zooplus.openexchange.protocol.v1.Status;
 import com.zooplus.openexchange.service.controllers.v1.ControllerStarter;
@@ -19,7 +19,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Base64;
 
-import static com.zooplus.openexchange.service.controllers.v1.Constants.*;
+import static com.zooplus.openexchange.service.controllers.v1.ApiController.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(ControllerStarter.class)
@@ -40,7 +40,7 @@ public class TestAdminController {
         HttpEntity<String> request = new HttpEntity<>(headers);
         RestTemplate restTemplate = new RestTemplate();
         Status response = restTemplate.exchange(
-                String.format(TEST_ENDPOINT_TEMPLATE, port,  "/" + API + "/" + VERSION + "/" + ADMIN + "/" + STATUS),
+                String.format(TEST_ENDPOINT_TEMPLATE, port, STATUS_PATH),
                 HttpMethod.GET,
                 request,
                 Status.class).getBody();

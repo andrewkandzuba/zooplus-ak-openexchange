@@ -2,29 +2,29 @@ package com.zooplus.openexchange.service.controllers.v1.registration;
 
 import com.zooplus.openexchange.protocol.v1.Registrationrequest;
 import com.zooplus.openexchange.protocol.v1.Registrationresponse;
+import com.zooplus.openexchange.service.controllers.v1.ApiController;
 import com.zooplus.openexchange.service.data.domain.User;
 import com.zooplus.openexchange.service.data.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
-import static com.zooplus.openexchange.service.controllers.v1.Constants.*;
-
 @RestController
-@RequestMapping(value = "/" + API  + "/" + VERSION + "/" + REGISTRATION)
-class RegistrationController {
+@PreAuthorize("hasAuthority('ROLE_ADMIN')")
+class RegistrationController implements ApiController {
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, path = USER_REGISTRATION_PATH)
     ResponseEntity<Registrationresponse> register(@RequestBody Registrationrequest request) throws IOException {
         if(userRepository.findByEmail(request.getEmail())!=null){
             return new ResponseEntity<>(HttpStatus.CONFLICT);
