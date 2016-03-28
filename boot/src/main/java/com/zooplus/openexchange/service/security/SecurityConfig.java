@@ -10,6 +10,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
@@ -27,7 +29,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).
                 and().
                 authorizeRequests().
-                antMatchers(actuatorEndpoints()).hasRole("ROLE_ADMIN").
+                antMatchers(actuatorEndpoints()).hasRole("ADMIN").
                 anyRequest().authenticated().
                 and().
                 anonymous().disable().
@@ -47,27 +49,33 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    private TokenService tokenService() {
+    public TokenService tokenService() {
         return new TokenService();
     }
 
     @Bean
-    private AuthenticationProvider backendAdminUsernamePasswordAuthenticationProvider() {
-        return new BackendAdminUsernamePasswordAuthenticationProvider();
+    public  AuthenticationProvider backendAdminUsernamePasswordAuthenticationProvider() {
+        return new DbAuthenticationProvider();
     }
 
     @Bean
-    private AuthenticationProvider tokenAuthenticationProvider() {
+    public  AuthenticationProvider tokenAuthenticationProvider() {
         return new TokenAuthenticationProvider(tokenService());
     }
 
     @Bean
-    private AuthenticationEntryPoint unauthorizedEntryPoint() {
+    public  AuthenticationEntryPoint unauthorizedEntryPoint() {
         return (request, response, authException) -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
     }
 
-    private String[] actuatorEndpoints(){
-        return new String[]{ApiController.ADMIN_ENDPOINT, ApiController.USER_REGISTRATION_PATH}
-    };
+    @Bean(name = "passwordEncoder")
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    private String[] actuatorEndpoints() {
+        return new String[]{ApiController.ADMIN_ENDPOINT, ApiController.USER_REGISTRATION_PATH};
+    }
+
 
 }
