@@ -5,7 +5,7 @@ public interface Constants {
     String VERSION_1 = "v1";
 
     // Categories
-    String MANAGEMENT = "management";
+    String ADMIN = "admin";
     String REGISTRATION  = "registration";
 
     // Methods

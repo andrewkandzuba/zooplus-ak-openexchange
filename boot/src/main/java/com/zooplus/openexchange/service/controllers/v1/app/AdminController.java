@@ -12,14 +12,14 @@ import java.io.IOException;
 import static com.zooplus.openexchange.service.controllers.v1.Constants.*;
 
 @RestController
-class AppController {
-    final static String STATUS_PATH = "/" + API  + "/" + VERSION_1 + "/" + MANAGEMENT + "/" + STATUS;
+@RequestMapping("/" + API  + "/" + VERSION_1 + "/" + ADMIN + "/" + STATUS)
+class AdminController {
     private final static String VCAP_APPLICATION = "VCAP_APPLICATION";
 
     @Autowired
     private Environment environment;
 
-    @RequestMapping(STATUS_PATH)
+    @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     Status get() throws IOException {
         return new ObjectMapper().readValue(environment.getProperty(VCAP_APPLICATION), Status.class);

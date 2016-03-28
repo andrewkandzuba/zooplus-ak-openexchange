@@ -16,16 +16,15 @@ import java.io.IOException;
 import static com.zooplus.openexchange.service.controllers.v1.Constants.*;
 
 @RestController
+@RequestMapping(value = "/" + API  + "/" + VERSION_1 + "/" + REGISTRATION)
 class RegistrationController {
-    static final String REGISTRATION_REGISTER = "/" + API  + "/" + VERSION_1 + "/" + REGISTRATION + "/" + REGISTER;
-
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @RequestMapping(value = REGISTRATION_REGISTER, method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<Registrationresponse> register(@RequestBody Registrationrequest request) throws IOException {
         if(userRepository.findByEmail(request.getEmail())!=null){
             return new ResponseEntity<>(HttpStatus.CONFLICT);
