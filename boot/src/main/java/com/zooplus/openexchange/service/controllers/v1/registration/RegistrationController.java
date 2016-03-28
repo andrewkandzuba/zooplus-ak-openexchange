@@ -16,7 +16,7 @@ import java.io.IOException;
 import static com.zooplus.openexchange.service.controllers.v1.Constants.*;
 
 @RestController
-@RequestMapping(value = "/" + API  + "/" + VERSION_1 + "/" + REGISTRATION)
+@RequestMapping(value = "/" + API  + "/" + VERSION + "/" + REGISTRATION)
 class RegistrationController {
     @Autowired
     private UserRepository userRepository;

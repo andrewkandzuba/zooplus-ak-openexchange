@@ -1,5 +1,6 @@
 package com.zooplus.openexchange.service.data.repositories;
 
+import com.zooplus.openexchange.service.data.domain.Role;
 import com.zooplus.openexchange.service.data.domain.User;
 import org.junit.Assert;
 import org.junit.Test;
@@ -11,7 +12,9 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -83,7 +86,7 @@ public class TestUserRepository {
     }
 
     @Test
-    public void testfindSubscriberByEmail() throws Exception {
+    public void testFindUserByEmail() throws Exception {
         User user = userRepository.findByEmail("admin@zooplus.com");
         Assert.assertNotNull(user);
         Assert.assertEquals(user.getId().longValue(), 1L);
@@ -91,16 +94,25 @@ public class TestUserRepository {
         Assert.assertEquals(user.getPassword(), "pwd12345");
         Assert.assertTrue(user.getEnabled());
         Assert.assertNotNull(user.getCreatedAt());
+        Assert.assertNotNull(user.getRoles());
+        Assert.assertTrue(user.getRoles().stream().anyMatch(role -> role.getAuthority().equalsIgnoreCase("ADMIN")));
+        Assert.assertTrue(user.getRoles().stream().anyMatch(role -> role.getAuthority().equalsIgnoreCase("USER")));
 
         Assert.assertNull(userRepository.findByEmail("none@zooplus.com"));
-
+        Set<Role> roles = new HashSet<>();
+        Role role = new Role();
+        role.setId(2);
+        role.setName("USER");
+        roles.add(role);
         user = new User();
         user.setEmail("none@zooplus.com");
         user.setPassword("querty");
+        user.setRoles(roles);
         user = userRepository.saveAndFlush(user);
-
         User savedUser = userRepository.findOne(user.getId());
         Assert.assertNotNull(savedUser.getCreatedAt());
         Assert.assertTrue(savedUser.getEnabled());
+        Assert.assertTrue(savedUser.getRoles().stream().anyMatch(r -> r.getAuthority().equalsIgnoreCase("USER")));
+        Assert.assertFalse(user.getRoles().stream().anyMatch(r -> r.getAuthority().equalsIgnoreCase("ADMIN")));
     }
 }

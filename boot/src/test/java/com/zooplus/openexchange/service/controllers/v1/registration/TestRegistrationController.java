@@ -2,6 +2,7 @@ package com.zooplus.openexchange.service.controllers.v1.registration;
 
 import com.zooplus.openexchange.protocol.v1.Registrationrequest;
 import com.zooplus.openexchange.protocol.v1.Registrationresponse;
+import com.zooplus.openexchange.service.controllers.v1.ControllerStarter;
 import com.zooplus.openexchange.service.data.domain.User;
 import com.zooplus.openexchange.service.data.repositories.UserRepository;
 import org.junit.Assert;
@@ -19,15 +20,13 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.web.client.RestTemplate;
 
-import static com.zooplus.openexchange.service.controllers.v1.Constants.API;
-import static com.zooplus.openexchange.service.controllers.v1.Constants.REGISTRATION;
-import static com.zooplus.openexchange.service.controllers.v1.Constants.VERSION_1;
+import static com.zooplus.openexchange.service.controllers.v1.Constants.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(RegistrationControllerStater.class)
+@SpringApplicationConfiguration(ControllerStarter.class)
 @WebIntegrationTest("server.port:0")
-@ActiveProfiles("development")
-public class TestSubscriptionController {
+@ActiveProfiles("test")
+public class TestRegistrationController {
     private static final String TEST_ENDPOINT_TEMPLATE = "http://localhost:%s%s";
     @Value("${local.server.port}")
     private int port;
@@ -35,7 +34,7 @@ public class TestSubscriptionController {
     private UserRepository userRepository;
 
     @Test
-    public void testSubscription() throws Exception {
+    public void testUserRegistration() throws Exception {
         // 0. Mock data and repository
         User user = new User();
         user.setId(1L);
@@ -53,7 +52,7 @@ public class TestSubscriptionController {
 
         // 2. Analyze response
         ResponseEntity<Registrationresponse> registrationResponse = restTemplate.postForEntity(
-                String.format(TEST_ENDPOINT_TEMPLATE, port, "/" + API  + "/" + VERSION_1 + "/" + REGISTRATION),
+                String.format(TEST_ENDPOINT_TEMPLATE, port, "/" + API  + "/" + VERSION + "/" + REGISTRATION),
                 registrationrequest, Registrationresponse.class);
         Assert.assertNotNull(registrationResponse);
         Assert.assertEquals(registrationResponse.getStatusCode(), HttpStatus.OK);
@@ -79,7 +78,7 @@ public class TestSubscriptionController {
         // 2. Analyze response
         Mockito.when(userRepository.findByEmail("user1@zooplus.com")).thenReturn(user);
         ResponseEntity<Registrationresponse> registrationResponse = restTemplate.postForEntity(
-                String.format(TEST_ENDPOINT_TEMPLATE, port, "/" + API  + "/" + VERSION_1 + "/" + REGISTRATION),
+                String.format(TEST_ENDPOINT_TEMPLATE, port, "/" + API  + "/" + VERSION + "/" + REGISTRATION),
                 registrationrequest, Registrationresponse.class);
         Assert.assertNotNull(registrationResponse);
         Assert.assertEquals(registrationResponse.getStatusCode(), HttpStatus.CONFLICT);

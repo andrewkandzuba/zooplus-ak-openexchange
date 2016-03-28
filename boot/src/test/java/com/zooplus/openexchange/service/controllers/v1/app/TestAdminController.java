@@ -1,9 +1,12 @@
 package com.zooplus.openexchange.service.controllers.v1.app;
 
 import com.zooplus.openexchange.protocol.v1.Status;
+import com.zooplus.openexchange.service.controllers.v1.ControllerStarter;
+import com.zooplus.openexchange.service.data.repositories.UserRepository;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
@@ -19,13 +22,15 @@ import java.util.Base64;
 import static com.zooplus.openexchange.service.controllers.v1.Constants.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(AdminControllerStarter.class)
+@SpringApplicationConfiguration(ControllerStarter.class)
 @WebIntegrationTest("server.port:0")
-@ActiveProfiles("development")
-public class TestAdminAppController {
+@ActiveProfiles("test")
+public class TestAdminController {
     private static final String TEST_ENDPOINT_TEMPLATE = "http://localhost:%s%s";
     @Value("${local.server.port}")
     private int port;
+    @Autowired
+    private UserRepository userRepository;
 
     @Test
     public void testLifecycle() throws Throwable {
@@ -33,10 +38,9 @@ public class TestAdminAppController {
         headers.add("Authorization", "Basic " +
                 Base64.getEncoder().encodeToString(("andrewka" + ":" + "bestadmin").getBytes()));
         HttpEntity<String> request = new HttpEntity<>(headers);
-
         RestTemplate restTemplate = new RestTemplate();
         Status response = restTemplate.exchange(
-                String.format(TEST_ENDPOINT_TEMPLATE, port,  "/" + API + "/" + VERSION_1 + "/" + ADMIN + "/" + STATUS),
+                String.format(TEST_ENDPOINT_TEMPLATE, port,  "/" + API + "/" + VERSION + "/" + ADMIN + "/" + STATUS),
                 HttpMethod.GET,
                 request,
                 Status.class).getBody();

@@ -12,7 +12,7 @@ import java.io.IOException;
 import static com.zooplus.openexchange.service.controllers.v1.Constants.*;
 
 @RestController
-@RequestMapping("/" + API  + "/" + VERSION_1 + "/" + ADMIN + "/" + STATUS)
+@RequestMapping("/" + API  + "/" + VERSION + "/" + ADMIN + "/" + STATUS)
 class AdminController {
     private final static String VCAP_APPLICATION = "VCAP_APPLICATION";
 
