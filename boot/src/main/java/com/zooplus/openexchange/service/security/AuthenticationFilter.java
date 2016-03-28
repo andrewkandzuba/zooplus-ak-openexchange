@@ -102,7 +102,7 @@ class AuthenticationFilter extends GenericFilterBean {
     }
 
     private boolean postToAuthenticate(HttpServletRequest httpRequest, String resourcePath) {
-        return ApiController.AUTHENTICATE_ENDPOINT.equalsIgnoreCase(resourcePath) && httpRequest.getMethod().equals("POST");
+        return ApiController.USER_AUTHENTICATE_PATH.equalsIgnoreCase(resourcePath) && httpRequest.getMethod().equals("POST");
     }
 
     private void processUsernamePasswordAuthentication(HttpServletResponse httpResponse, Optional<String> username, Optional<String> password) throws IOException {

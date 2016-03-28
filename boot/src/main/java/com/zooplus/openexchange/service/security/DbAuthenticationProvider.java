@@ -2,6 +2,7 @@ package com.zooplus.openexchange.service.security;
 
 import com.zooplus.openexchange.service.data.domain.User;
 import com.zooplus.openexchange.service.data.repositories.UserRepository;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -10,8 +11,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
-
 @Component
 public class DbAuthenticationProvider implements AuthenticationProvider {
     @Autowired
@@ -19,13 +18,13 @@ public class DbAuthenticationProvider implements AuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        Optional<String> username = (Optional) authentication.getPrincipal();
-        Optional<String> password = (Optional) authentication.getCredentials();
+        String username = (String) authentication.getPrincipal();
+        String password = (String) authentication.getCredentials();
 
-        if(!username.isPresent() && !password.isPresent()){
-            throw new BadCredentialsException("Invalid credentials");
+        if(StringUtils.isEmpty(username) && StringUtils.isEmpty(password)){
+            throw new BadCredentialsException("Empty credentials");
         }
-        User user = userRepository.findByEmailAndPassword(username.get(), password.get());
+        User user = userRepository.findByEmailAndPassword(username, password);
         if(user == null){
             throw new BadCredentialsException("Invalid credentials");
         }

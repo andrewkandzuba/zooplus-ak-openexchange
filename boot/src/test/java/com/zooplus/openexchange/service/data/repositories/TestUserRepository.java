@@ -12,9 +12,8 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.HashSet;
+import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -99,15 +98,10 @@ public class TestUserRepository {
         Assert.assertTrue(user.getRoles().stream().anyMatch(role -> role.getAuthority().equalsIgnoreCase("USER")));
 
         Assert.assertNull(userRepository.findByEmail("none@zooplus.com"));
-        Set<Role> roles = new HashSet<>();
-        Role role = new Role();
-        role.setId(2);
-        role.setName("USER");
-        roles.add(role);
         user = new User();
         user.setEmail("none@zooplus.com");
         user.setPassword("querty");
-        user.setRoles(roles);
+        user.setRoles(Collections.singleton(new Role(2, "USER")));
         user = userRepository.saveAndFlush(user);
         User savedUser = userRepository.findOne(user.getId());
         Assert.assertNotNull(savedUser.getCreatedAt());

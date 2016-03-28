@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 
 @RestController
-@PreAuthorize("hasAuthority('ROLE_ADMIN')")
+@PreAuthorize("hasAuthority('ADMIN')")
 class AdminController implements ApiController{
     private final static String VCAP_APPLICATION = "VCAP_APPLICATION";
 

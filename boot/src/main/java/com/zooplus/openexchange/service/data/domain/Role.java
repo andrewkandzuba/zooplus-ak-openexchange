@@ -13,6 +13,14 @@ import java.util.Set;
 public class Role implements GrantedAuthority {
     private static final long serialVersionUID = 1L;
 
+    public Role() {
+    }
+
+    public Role(Integer id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     @Id
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.AUTO)

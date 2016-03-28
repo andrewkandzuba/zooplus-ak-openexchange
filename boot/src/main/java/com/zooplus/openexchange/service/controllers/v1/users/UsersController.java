@@ -1,4 +1,4 @@
-package com.zooplus.openexchange.service.controllers.v1.registration;
+package com.zooplus.openexchange.service.controllers.v1.users;
 
 import com.zooplus.openexchange.protocol.v1.Registrationrequest;
 import com.zooplus.openexchange.protocol.v1.Registrationresponse;
@@ -16,8 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 
 @RestController
-@PreAuthorize("hasAuthority('ROLE_ADMIN')")
-class RegistrationController implements ApiController {
+class UsersController implements ApiController {
     @Autowired
     private UserRepository userRepository;
 
@@ -25,6 +24,7 @@ class RegistrationController implements ApiController {
     private PasswordEncoder passwordEncoder;
 
     @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, path = USER_REGISTRATION_PATH)
+    @PreAuthorize("hasAuthority('ADMIN')")
     ResponseEntity<Registrationresponse> register(@RequestBody Registrationrequest request) throws IOException {
         if(userRepository.findByEmail(request.getEmail())!=null){
             return new ResponseEntity<>(HttpStatus.CONFLICT);
@@ -37,6 +37,11 @@ class RegistrationController implements ApiController {
         Registrationresponse response = new Registrationresponse();
         response.setId(user.getId());
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, path = USER_AUTHENTICATE_PATH)
+    ResponseEntity<String> authenticate(){
+        return new ResponseEntity<String>("", HttpStatus.OK);
     }
 
     @ResponseStatus(value= HttpStatus.INTERNAL_SERVER_ERROR, reason="Error occurred!")
