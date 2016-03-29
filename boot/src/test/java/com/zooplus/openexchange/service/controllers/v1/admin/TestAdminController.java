@@ -4,6 +4,7 @@ import com.zooplus.openexchange.protocol.v1.Status;
 import com.zooplus.openexchange.service.controllers.v1.ControllerStarter;
 import com.zooplus.openexchange.service.controllers.v1.TestApiController;
 import com.zooplus.openexchange.service.data.repositories.UserRepository;
+import com.zooplus.openexchange.service.utils.SequenceGenerator;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,15 +26,16 @@ import static com.zooplus.openexchange.service.controllers.v1.ApiController.STAT
 @ActiveProfiles("test")
 public class TestAdminController extends TestApiController {
     private static final String TEST_ENDPOINT_TEMPLATE = "http://localhost:%s%s";
-
     @Value("${local.server.port}")
     private int port;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private SequenceGenerator generator;
 
     @Before
     public void setUp() throws Exception {
-        mockAdminAccess(userRepository);
+        mockAdminAccess(userRepository,generator);
     }
 
     @Test

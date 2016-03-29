@@ -10,7 +10,8 @@ import java.util.concurrent.Executors;
 @SpringBootApplication(
         scanBasePackages = {
                 "com.zooplus.openexchange.service.data",
-                "com.zooplus.openexchange.service.security"
+                "com.zooplus.openexchange.service.security",
+                "com.zooplus.openexchange.service.utils"
         })
 @Profile("development")
 class RepositoriesStarter {

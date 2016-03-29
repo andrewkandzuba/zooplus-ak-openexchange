@@ -38,13 +38,13 @@ public class TestUserRepository {
 
         User user = new User();
         user.setEmail("user1@zooplus.com");
-        user.setPassword(passwordEncoder.encode("password1234"));
+        user.setPassword(passwordEncoder.encode("someuserpassword"));
         User saved = userRepository.saveAndFlush(user);
         Assert.assertNotNull(saved);
         Assert.assertNotNull(saved.getId());
         Assert.assertNotNull(saved.getCreatedAt());
         Assert.assertTrue(saved.getEnabled());
-        Assert.assertTrue(passwordEncoder.matches("password1234", saved.getPassword()));
+        Assert.assertTrue(passwordEncoder.matches("someuserpassword", saved.getPassword()));
         Assert.assertEquals(userRepository.findAll().size(), 2);
     }
 
@@ -73,7 +73,7 @@ public class TestUserRepository {
 
         User user = new User();
         user.setEmail("user1@zooplus.com");
-        user.setPassword("password1234");
+        user.setPassword("someuserpassword");
         beforeCommit.countDown();
         User saved = userRepository.save(user);
         afterCommit.countDown();
@@ -86,27 +86,30 @@ public class TestUserRepository {
 
     @Test
     public void testFindUserByEmail() throws Exception {
-        User user = userRepository.findByEmail("admin@zooplus.com");
+        final String adminUserName = "admin@zooplus.com";
+        final String adminPassword = "pwd12345";
+
+        User user = userRepository.findByEmail(adminUserName);
         Assert.assertNotNull(user);
-        Assert.assertEquals(user.getId().longValue(), 1L);
-        Assert.assertEquals(user.getEmail(), "admin@zooplus.com");
-        Assert.assertEquals(user.getPassword(), "pwd12345");
+        Assert.assertNotNull(user.getId());
+        Assert.assertEquals(user.getEmail(), adminUserName);
+        Assert.assertEquals(user.getPassword(), adminPassword);
         Assert.assertTrue(user.getEnabled());
         Assert.assertNotNull(user.getCreatedAt());
         Assert.assertNotNull(user.getRoles());
-        Assert.assertTrue(user.getRoles().stream().anyMatch(role -> role.getAuthority().equalsIgnoreCase("ADMIN")));
-        Assert.assertTrue(user.getRoles().stream().anyMatch(role -> role.getAuthority().equalsIgnoreCase("USER")));
+        Assert.assertTrue(user.getRoles().stream().anyMatch(role -> role.getName().equalsIgnoreCase("ADMIN")));
+        Assert.assertTrue(user.getRoles().stream().anyMatch(role -> role.getName().equalsIgnoreCase("USER")));
 
         Assert.assertNull(userRepository.findByEmail("none@zooplus.com"));
         user = new User();
         user.setEmail("none@zooplus.com");
         user.setPassword("querty");
-        user.setRoles(Collections.singleton(new Role(2, "USER")));
+        user.setRoles(Collections.singleton(new Role(2L, "USER")));
         user = userRepository.saveAndFlush(user);
         User savedUser = userRepository.findOne(user.getId());
         Assert.assertNotNull(savedUser.getCreatedAt());
         Assert.assertTrue(savedUser.getEnabled());
-        Assert.assertTrue(savedUser.getRoles().stream().anyMatch(r -> r.getAuthority().equalsIgnoreCase("USER")));
-        Assert.assertFalse(user.getRoles().stream().anyMatch(r -> r.getAuthority().equalsIgnoreCase("ADMIN")));
+        Assert.assertTrue(savedUser.getRoles().stream().anyMatch(r -> r.getName().equalsIgnoreCase("USER")));
+        Assert.assertFalse(user.getRoles().stream().anyMatch(r -> r.getName().equalsIgnoreCase("ADMIN")));
     }
 }

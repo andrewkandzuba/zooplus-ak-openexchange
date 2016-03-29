@@ -24,7 +24,7 @@ class UsersController implements ApiController {
     private PasswordEncoder passwordEncoder;
 
     @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, path = USER_REGISTRATION_PATH)
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     ResponseEntity<Registrationresponse> register(@RequestBody Registrationrequest request) throws IOException {
         if(userRepository.findByEmail(request.getEmail())!=null){
             return new ResponseEntity<>(HttpStatus.CONFLICT);
@@ -32,16 +32,16 @@ class UsersController implements ApiController {
         User user = new User();
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user = userRepository.saveAndFlush(user);
+        User addedUser = userRepository.saveAndFlush(user);
 
         Registrationresponse response = new Registrationresponse();
-        response.setId(user.getId());
+        response.setId(addedUser.getId());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, path = USER_AUTHENTICATE_PATH)
     ResponseEntity<String> authenticate(){
-        return new ResponseEntity<String>("", HttpStatus.OK);
+        return new ResponseEntity<>("", HttpStatus.OK);
     }
 
     @ResponseStatus(value= HttpStatus.INTERNAL_SERVER_ERROR, reason="Error occurred!")
