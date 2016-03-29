@@ -15,19 +15,33 @@ import java.util.Set;
 @Table(name = "USERS")
 public class User implements Serializable {
     private static final long serialVersionUID = -5277266119957501955L;
+
+    public User() {
+    }
+
+    public User(String name, String password, String email) {
+        this.name = name;
+        this.password = password;
+        this.email = email;
+    }
+
     @Id
     @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "EMAIL", unique = true)
+    @Column(name = "NAME", unique = true)
     @NotEmpty
-    private String email;
+    private String name;
 
     @Column(name = "PASSWORD")
     @NotEmpty
     @JsonIgnore
     private String password;
+
+    @Column(name = "EMAIL")
+    @NotEmpty
+    private String email;
 
     @Generated(GenerationTime.INSERT)
     @Column(name =  "CREATEDAT", insertable=false)
@@ -48,6 +62,14 @@ public class User implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getEmail() {

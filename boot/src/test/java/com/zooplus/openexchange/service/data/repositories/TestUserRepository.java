@@ -6,6 +6,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.DirtiesContext;
@@ -29,22 +30,26 @@ public class TestUserRepository {
     private UserRepository userRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Value("${admin.name}")
+    private String adminName;
+    @Value("${admin.password}")
+    private String adminPassword;
+    @Value("${admin.email}")
+    private String adminEmail;
 
     @Test
     public void testAddNewUser() throws Exception {
         Assert.assertNotNull(userRepository);
         List<User> users =  userRepository.findAll();
         Assert.assertEquals(users.size(), 1);
-
-        User user = new User();
-        user.setEmail("user1@zooplus.com");
-        user.setPassword(passwordEncoder.encode("someuserpassword"));
+        User user = new User("user1", passwordEncoder.encode("someuserpassword"), "user1@zooplus.com");
         User saved = userRepository.saveAndFlush(user);
+
         Assert.assertNotNull(saved);
         Assert.assertNotNull(saved.getId());
         Assert.assertNotNull(saved.getCreatedAt());
         Assert.assertTrue(saved.getEnabled());
-        Assert.assertTrue(passwordEncoder.matches("someuserpassword", saved.getPassword()));
+        Assert.assertEquals(saved.getPassword(), user.getPassword());
         Assert.assertEquals(userRepository.findAll().size(), 2);
     }
 
@@ -70,29 +75,23 @@ public class TestUserRepository {
                 Assert.assertTrue(false);
             }
         });
-
-        User user = new User();
-        user.setEmail("user1@zooplus.com");
-        user.setPassword("someuserpassword");
+        User user = new User("user1", passwordEncoder.encode("someuserpassword"), "user1@zooplus.com");
         beforeCommit.countDown();
-        User saved = userRepository.save(user);
+        User savedUser = userRepository.save(user);
         afterCommit.countDown();
-        Assert.assertNotNull(saved);
-        Assert.assertNotNull(saved.getId());
-        Assert.assertTrue(saved.getEnabled());
-        Assert.assertNotNull(saved.getCreatedAt());
-        Assert.assertNotNull(saved.getId());
+        Assert.assertNotNull(savedUser);
+        Assert.assertNotNull(savedUser.getId());
+        Assert.assertTrue(savedUser.getEnabled());
+        Assert.assertNotNull(savedUser.getCreatedAt());
+        Assert.assertNotNull(savedUser.getId());
     }
 
     @Test
     public void testFindUserByEmail() throws Exception {
-        final String adminUserName = "admin@zooplus.com";
-        final String adminPassword = "pwd12345";
-
-        User user = userRepository.findByEmail(adminUserName);
+        User user = userRepository.findByName(adminName);
         Assert.assertNotNull(user);
         Assert.assertNotNull(user.getId());
-        Assert.assertEquals(user.getEmail(), adminUserName);
+        Assert.assertEquals(user.getEmail(), adminEmail);
         Assert.assertEquals(user.getPassword(), adminPassword);
         Assert.assertTrue(user.getEnabled());
         Assert.assertNotNull(user.getCreatedAt());
@@ -100,10 +99,8 @@ public class TestUserRepository {
         Assert.assertTrue(user.getRoles().stream().anyMatch(role -> role.getName().equalsIgnoreCase("ADMIN")));
         Assert.assertTrue(user.getRoles().stream().anyMatch(role -> role.getName().equalsIgnoreCase("USER")));
 
-        Assert.assertNull(userRepository.findByEmail("none@zooplus.com"));
-        user = new User();
-        user.setEmail("none@zooplus.com");
-        user.setPassword("querty");
+        Assert.assertNull(userRepository.findByName("none@zooplus.com"));
+        user = new User("none", passwordEncoder.encode("someuserpassword"), "none@zooplus.com");
         user.setRoles(Collections.singleton(new Role(2L, "USER")));
         user = userRepository.saveAndFlush(user);
         User savedUser = userRepository.findOne(user.getId());

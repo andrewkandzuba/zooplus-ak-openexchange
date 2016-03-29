@@ -20,13 +20,11 @@ public class RepositoriesConfiguration {
     public EntityManagerFactory entityManagerFactory(DataSource dataSource) {
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         vendorAdapter.setGenerateDdl(true);
-
         LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
         factory.setJpaVendorAdapter(vendorAdapter);
         factory.setPackagesToScan("com.zooplus.openexchange.service.data.domain");
         factory.setDataSource(dataSource);
         factory.afterPropertiesSet();
-
         return factory.getObject();
     }
     @Bean
@@ -34,6 +32,5 @@ public class RepositoriesConfiguration {
         JpaTransactionManager txManager = new JpaTransactionManager();
         txManager.setEntityManagerFactory(entityManagerFactory(dataSource));
         return txManager;
-
     }
 }

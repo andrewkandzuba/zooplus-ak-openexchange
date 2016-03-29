@@ -24,7 +24,7 @@ public class DbAuthenticationProvider implements AuthenticationProvider {
         if(StringUtils.isEmpty(username) && StringUtils.isEmpty(password)){
             throw new BadCredentialsException("Empty credentials");
         }
-        User user = userRepository.findByEmailAndPassword(username, password);
+        User user = userRepository.findByNameAndPassword(username, password);
         if(user == null){
             throw new BadCredentialsException("Invalid credentials");
         }
