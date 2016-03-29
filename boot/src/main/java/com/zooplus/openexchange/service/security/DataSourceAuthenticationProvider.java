@@ -2,7 +2,8 @@ package com.zooplus.openexchange.service.security;
 
 import com.zooplus.openexchange.service.data.domain.User;
 import com.zooplus.openexchange.service.data.repositories.UserRepository;
-import org.apache.commons.lang.StringUtils;
+import com.zooplus.openexchange.service.security.tokens.AuthenticatedToken;
+import com.zooplus.openexchange.service.security.tokens.AuthenticatedTokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -11,24 +12,31 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 
+import java.util.Optional;
+
 @Component
-public class DbAuthenticationProvider implements AuthenticationProvider {
+public class DataSourceAuthenticationProvider implements AuthenticationProvider {
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private AuthenticatedTokenRepository authenticatedTokenRepository;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        String username = (String) authentication.getPrincipal();
-        String password = (String) authentication.getCredentials();
-
-        if(StringUtils.isEmpty(username) && StringUtils.isEmpty(password)){
+        Optional<String> username = (Optional) authentication.getPrincipal();
+        Optional<String> password = (Optional) authentication.getCredentials();
+        if(!username.isPresent() && !password.isPresent()){
             throw new BadCredentialsException("Empty credentials");
         }
-        User user = userRepository.findByNameAndPassword(username, password);
+        User user = userRepository.findByNameAndPassword(username.get(), password.get());
         if(user == null){
             throw new BadCredentialsException("Invalid credentials");
         }
-        return new UsernamePasswordAuthenticationToken(username, password, user.getRoles());
+
+        UsernamePasswordAuthenticationToken userAuth = new UsernamePasswordAuthenticationToken(user.getName(), null, user.getRoles());
+        AuthenticatedToken newToken = authenticatedTokenRepository.findByAuthentication(userAuth);
+        userAuth.setDetails(newToken.getToken());
+        return userAuth;
     }
 
     @Override

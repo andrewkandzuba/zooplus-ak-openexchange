@@ -5,14 +5,17 @@ import com.zooplus.openexchange.protocol.v1.Registrationresponse;
 import com.zooplus.openexchange.service.Starter;
 import com.zooplus.openexchange.service.controllers.v1.TestApiController;
 import com.zooplus.openexchange.service.data.domain.User;
+import com.zooplus.openexchange.service.data.repositories.UserRepository;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -25,6 +28,11 @@ import static com.zooplus.openexchange.service.controllers.v1.ApiController.USER
 @WebIntegrationTest("server.port:0")
 @ActiveProfiles("development")
 public class TestUserRegistrationIntegrationFlow extends TestApiController {
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Test
     public void testUserRegistration() throws Exception {
         // Request data
@@ -42,11 +50,13 @@ public class TestUserRegistrationIntegrationFlow extends TestApiController {
         final long preUserCreationTimeStamp = System.currentTimeMillis();
 
         // Send request
-        ResponseEntity<Registrationresponse> resp = restTemplate.exchange(
-                provideEndPoint() + "/" + USER_REGISTRATION_PATH,
-                HttpMethod.POST,
-                new HttpEntity<>(req, headers),
-                Registrationresponse.class);
+        ResponseEntity<Registrationresponse> resp =
+                client
+                        .exchange(
+                                provideEndPoint() + "/" + USER_REGISTRATION_PATH,
+                                HttpMethod.POST,
+                                new HttpEntity<>(req, adminHeaders),
+                                Registrationresponse.class);
 
         // Analyze response
         Assert.assertNotNull(resp);

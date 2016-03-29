@@ -1,5 +1,7 @@
 package com.zooplus.openexchange.service.security;
 
+import com.zooplus.openexchange.service.security.tokens.AuthenticatedTokenRepository;
+import com.zooplus.openexchange.service.security.tokens.TokenService;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
@@ -9,11 +11,10 @@ import org.springframework.security.web.authentication.preauth.PreAuthenticatedA
 import java.util.Optional;
 
 class TokenAuthenticationProvider implements AuthenticationProvider {
+    private AuthenticatedTokenRepository authenticatedTokenRepository;
 
-    private TokenService tokenService;
-
-    TokenAuthenticationProvider(TokenService tokenService) {
-        this.tokenService = tokenService;
+    TokenAuthenticationProvider(AuthenticatedTokenRepository authenticatedTokenRepository) {
+        this.authenticatedTokenRepository = authenticatedTokenRepository;
     }
 
     @Override
@@ -22,7 +23,7 @@ class TokenAuthenticationProvider implements AuthenticationProvider {
         if (!token.isPresent() || token.get().isEmpty()) {
             throw new BadCredentialsException("Invalid token");
         }
-        if (!tokenService.contains(token.get())) {
+        if (!authenticatedTokenRepository.findByAuthentication(token.get())) {
             throw new BadCredentialsException("Invalid token or token expired");
         }
         return tokenService.retrieve(token.get());

@@ -2,7 +2,7 @@ package com.zooplus.openexchange.service.security;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-class TokenResponse {
+public class TokenResponse {
     @JsonProperty
     private String token;
 

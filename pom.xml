@@ -23,8 +23,8 @@
         <spring.version>4.2.5.RELEASE</spring.version>
         <spring.integration.java.dsl>1.1.2.RELEASE</spring.integration.java.dsl>
         <spring.security.version>4.0.4.RELEASE</spring.security.version>
-        <!-- ehcache -->
-        <ehcache.version>2.10.1</ehcache.version>
+        <!-- guava -->
+        <guava.version>19.0</guava.version>
         <!-- code generation -->
         <jsonschema2pojo.version>0.4.16</jsonschema2pojo.version>
         <apache.commons-lang.version>2.6</apache.commons-lang.version>
@@ -101,18 +101,23 @@
                 <version>${spring-boot.version}</version>
             </dependency>
 
-            <!-- spring security2 -->
+            <!-- spring security -->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-security</artifactId>
                 <version>${spring-boot.version}</version>
             </dependency>
 
-            <!-- ehcache -->
+            <!-- spring + guave (in-memory cache) -->
             <dependency>
-                <groupId>net.sf.ehcache</groupId>
-                <artifactId>ehcache</artifactId>
-                <version>${ehcache.version}</version>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-context-support</artifactId>
+                <version>${spring.version}</version>
             </dependency>
 
             <!-- code generation -->

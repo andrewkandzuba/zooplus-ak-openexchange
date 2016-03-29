@@ -26,9 +26,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
 
+import static com.zooplus.openexchange.service.security.SecurityConfig.AUTH_HEADER_PASSWORD;
+import static com.zooplus.openexchange.service.security.SecurityConfig.AUTH_HEADER_TOKEN;
+import static com.zooplus.openexchange.service.security.SecurityConfig.AUTH_HEADER_USERNAME;
 
 class AuthenticationFilter extends GenericFilterBean {
-
     private final static Logger logger = LoggerFactory.getLogger(AuthenticationFilter.class);
     private static final String TOKEN_SESSION_KEY = "token";
     private static final String USER_SESSION_KEY = "user";
@@ -43,9 +45,9 @@ class AuthenticationFilter extends GenericFilterBean {
         HttpServletRequest httpRequest = asHttp(request);
         HttpServletResponse httpResponse = asHttp(response);
 
-        Optional<String> username = Optional.ofNullable(httpRequest.getHeader("X-Auth-Username"));
-        Optional<String> password = Optional.ofNullable(httpRequest.getHeader("X-Auth-Password"));
-        Optional<String> token = Optional.ofNullable(httpRequest.getHeader("X-Auth-Token"));
+        Optional<String> username = Optional.ofNullable(httpRequest.getHeader(AUTH_HEADER_USERNAME));
+        Optional<String> password = Optional.ofNullable(httpRequest.getHeader(AUTH_HEADER_PASSWORD));
+        Optional<String> token = Optional.ofNullable(httpRequest.getHeader(AUTH_HEADER_TOKEN));
 
         String resourcePath = new UrlPathHelper().getPathWithinApplication(httpRequest);
 

@@ -42,11 +42,6 @@ class UsersController implements ApiController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, path = USER_AUTHENTICATE_PATH)
-    ResponseEntity<String> authenticate(){
-        return new ResponseEntity<>("", HttpStatus.OK);
-    }
-
     @ResponseStatus(value= HttpStatus.INTERNAL_SERVER_ERROR, reason="Error occurred!")
     @ExceptionHandler({IOException.class, NullPointerException.class})
     public void errorHandler() {

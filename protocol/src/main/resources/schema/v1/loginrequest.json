@@ -1,0 +1,8 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "description": "User login request",
+  "type": "object",
+  "id": "LoginRequest",
+  "properties": {
+  }
+}
