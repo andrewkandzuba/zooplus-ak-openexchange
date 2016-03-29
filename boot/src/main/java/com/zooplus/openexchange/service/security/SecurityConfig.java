@@ -1,7 +1,9 @@
 package com.zooplus.openexchange.service.security;
 
 import com.zooplus.openexchange.service.controllers.v1.ApiController;
-import com.zooplus.openexchange.service.security.tokens.TokenService;
+import com.zooplus.openexchange.service.security.filters.AuthenticationFilter;
+import com.zooplus.openexchange.service.security.providers.DataSourceAuthenticationProvider;
+import com.zooplus.openexchange.service.security.providers.TokenAuthenticationProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -54,18 +56,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public TokenService tokenService() {
-        return new TokenService();
-    }
-
-    @Bean
     public  AuthenticationProvider backendAdminUsernamePasswordAuthenticationProvider() {
         return new DataSourceAuthenticationProvider();
     }
 
     @Bean
     public  AuthenticationProvider tokenAuthenticationProvider() {
-        return new TokenAuthenticationProvider(tokenService());
+        return new TokenAuthenticationProvider();
     }
 
     @Bean

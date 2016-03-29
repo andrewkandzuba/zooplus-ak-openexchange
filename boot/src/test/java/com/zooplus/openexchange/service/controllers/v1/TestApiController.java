@@ -1,14 +1,10 @@
 package com.zooplus.openexchange.service.controllers.v1;
 
-import com.zooplus.openexchange.service.data.domain.Role;
-import com.zooplus.openexchange.service.data.domain.User;
+import com.zooplus.openexchange.protocol.v1.Loginresponse;
 import com.zooplus.openexchange.service.data.repositories.RoleRepository;
 import com.zooplus.openexchange.service.data.repositories.UserRepository;
 import com.zooplus.openexchange.service.security.SecurityConfig;
-import com.zooplus.openexchange.service.security.TokenResponse;
 import com.zooplus.openexchange.service.utils.SequenceGenerator;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -20,8 +16,6 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
 
-import java.util.Collections;
-
 import static com.zooplus.openexchange.service.controllers.v1.ApiController.USER_AUTHENTICATE_PATH;
 import static com.zooplus.openexchange.service.security.SecurityConfig.AUTH_HEADER_PASSWORD;
 import static com.zooplus.openexchange.service.security.SecurityConfig.AUTH_HEADER_USERNAME;
@@ -32,11 +26,11 @@ public abstract class TestApiController {
     @Value("${local.server.port}")
     private int port;
     @Value("${admin.name}")
-    private String adminName;
+    protected String adminName;
     @Value("${admin.password}")
-    private String adminPassword;
+    protected String adminPassword;
     @Value("${admin.email}")
-    private String adminEmail;
+    protected String adminEmail;
 
     @Autowired
     protected UserRepository userRepository;
@@ -52,27 +46,24 @@ public abstract class TestApiController {
 
     @PostConstruct
     private void initAdminHeaders() {
-        // Mock admin user
-        User admin = new User(adminName, adminPassword, adminEmail);
-        admin.setRoles(Collections.singleton(new Role(generator.nextLong(), "ADMIN")));
-        MockitoAnnotations.initMocks(this);
-        Mockito.when(userRepository.findByNameAndPassword(adminName, adminPassword)).thenReturn(admin);
-
+        preInits();
         // Add adminHeaders
         HttpHeaders headers = new HttpHeaders();
         headers.add(AUTH_HEADER_USERNAME, adminName);
         headers.add(AUTH_HEADER_PASSWORD, adminPassword);
 
         // Send login request
-        ResponseEntity<TokenResponse> loginResp = new RestTemplate().exchange(
+        ResponseEntity<Loginresponse> loginResp = new RestTemplate().exchange(
                 provideEndPoint() + "/" + USER_AUTHENTICATE_PATH,
                 HttpMethod.POST,
                 new HttpEntity<>(headers),
-                TokenResponse.class);
+                Loginresponse.class);
 
         // Add admin authentication token to admin headers
-        adminHeaders.add(SecurityConfig.AUTH_HEADER_TOKEN, loginResp.toString());
+        adminHeaders.add(SecurityConfig.AUTH_HEADER_TOKEN, loginResp.getBody().getToken());
     }
+
+    protected void preInits(){}
 
     protected String provideEndPoint(){
         return String.format(TEST_ENDPOINT_TEMPLATE, port);

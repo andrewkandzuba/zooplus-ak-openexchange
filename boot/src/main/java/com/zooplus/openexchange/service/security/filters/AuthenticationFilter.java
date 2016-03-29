@@ -1,6 +1,7 @@
-package com.zooplus.openexchange.service.security;
+package com.zooplus.openexchange.service.security.filters;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.zooplus.openexchange.protocol.v1.Loginresponse;
 import com.zooplus.openexchange.service.controllers.v1.ApiController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,13 +31,13 @@ import static com.zooplus.openexchange.service.security.SecurityConfig.AUTH_HEAD
 import static com.zooplus.openexchange.service.security.SecurityConfig.AUTH_HEADER_TOKEN;
 import static com.zooplus.openexchange.service.security.SecurityConfig.AUTH_HEADER_USERNAME;
 
-class AuthenticationFilter extends GenericFilterBean {
+public class AuthenticationFilter extends GenericFilterBean {
     private final static Logger logger = LoggerFactory.getLogger(AuthenticationFilter.class);
     private static final String TOKEN_SESSION_KEY = "token";
     private static final String USER_SESSION_KEY = "user";
     private AuthenticationManager authenticationManager;
 
-    AuthenticationFilter(AuthenticationManager authenticationManager) {
+    public AuthenticationFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
     }
 
@@ -111,8 +112,9 @@ class AuthenticationFilter extends GenericFilterBean {
         Authentication resultOfAuthentication = tryToAuthenticateWithUsernameAndPassword(username, password);
         SecurityContextHolder.getContext().setAuthentication(resultOfAuthentication);
         httpResponse.setStatus(HttpServletResponse.SC_OK);
-        TokenResponse tokenResponse = new TokenResponse(resultOfAuthentication.getDetails().toString());
-        String tokenJsonResponse = new ObjectMapper().writeValueAsString(tokenResponse);
+        Loginresponse loginresponse = new Loginresponse();
+        loginresponse.setToken(resultOfAuthentication.getDetails().toString());
+        String tokenJsonResponse = new ObjectMapper().writeValueAsString(loginresponse);
         httpResponse.addHeader("Content-Type", "application/json");
         httpResponse.getWriter().print(tokenJsonResponse);
     }

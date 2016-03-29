@@ -1,9 +1,8 @@
-package com.zooplus.openexchange.service.security;
+package com.zooplus.openexchange.service.security.providers;
 
 import com.zooplus.openexchange.service.data.domain.User;
 import com.zooplus.openexchange.service.data.repositories.UserRepository;
-import com.zooplus.openexchange.service.security.tokens.AuthenticatedToken;
-import com.zooplus.openexchange.service.security.tokens.AuthenticatedTokenRepository;
+import com.zooplus.openexchange.service.security.tokens.AuthenticationTokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -19,7 +18,7 @@ public class DataSourceAuthenticationProvider implements AuthenticationProvider 
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private AuthenticatedTokenRepository authenticatedTokenRepository;
+    private AuthenticationTokenRepository authenticationTokenRepository;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -34,8 +33,8 @@ public class DataSourceAuthenticationProvider implements AuthenticationProvider 
         }
 
         UsernamePasswordAuthenticationToken userAuth = new UsernamePasswordAuthenticationToken(user.getName(), null, user.getRoles());
-        AuthenticatedToken newToken = authenticatedTokenRepository.findByAuthentication(userAuth);
-        userAuth.setDetails(newToken.getToken());
+        userAuth.setDetails(authenticationTokenRepository.generateNewToken());
+        authenticationTokenRepository.store(userAuth.getDetails().toString(), userAuth);
         return userAuth;
     }
 

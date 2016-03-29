@@ -5,15 +5,17 @@ import com.zooplus.openexchange.protocol.v1.Status;
 import com.zooplus.openexchange.service.controllers.v1.ApiController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
 
 @RestController
 @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-class AdminController implements ApiController{
+class AdminController extends ApiController{
     private final static String VCAP_APPLICATION = "VCAP_APPLICATION";
 
     @Autowired
@@ -23,10 +25,5 @@ class AdminController implements ApiController{
     @ResponseBody
     Status get() throws IOException {
         return new ObjectMapper().readValue(environment.getProperty(VCAP_APPLICATION), Status.class);
-    }
-
-    @ResponseStatus(value= HttpStatus.INTERNAL_SERVER_ERROR, reason="Unable to parse application's info")
-    @ExceptionHandler({IOException.class, NullPointerException.class})
-    public void errorHandler() {
     }
 }

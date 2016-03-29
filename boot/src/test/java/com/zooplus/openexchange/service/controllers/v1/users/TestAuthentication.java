@@ -1,13 +1,13 @@
 package com.zooplus.openexchange.service.controllers.v1.users;
 
+import com.zooplus.openexchange.protocol.v1.Loginresponse;
 import com.zooplus.openexchange.protocol.v1.Registrationrequest;
 import com.zooplus.openexchange.protocol.v1.Registrationresponse;
 import com.zooplus.openexchange.service.controllers.v1.ControllerStarter;
-import com.zooplus.openexchange.service.controllers.v1.TestApiController;
+import com.zooplus.openexchange.service.controllers.v1.TestApiMockDbController;
 import com.zooplus.openexchange.service.data.domain.Role;
 import com.zooplus.openexchange.service.data.domain.User;
 import com.zooplus.openexchange.service.security.SecurityConfig;
-import com.zooplus.openexchange.service.security.TokenResponse;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,7 +18,6 @@ import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.http.*;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.Collections;
 
@@ -29,7 +28,7 @@ import static com.zooplus.openexchange.service.controllers.v1.ApiController.USER
 @SpringApplicationConfiguration(ControllerStarter.class)
 @WebIntegrationTest("server.port:0")
 @ActiveProfiles("test")
-public class TestAuthentication extends TestApiController {
+public class TestAuthentication extends TestApiMockDbController {
 
     @Test
     public void testUserRegistration() throws Exception {
@@ -65,24 +64,26 @@ public class TestAuthentication extends TestApiController {
         Assert.assertEquals(registrationResponse.getStatusCode(), HttpStatus.OK);
         Assert.assertEquals(registrationResponse.getBody().getId(), user.getId());
 
+        // Mock repository
+        Mockito.when(userRepository.findByNameAndPassword(user.getName(), user.getPassword())).thenReturn(user);
+
         // Authenticate and get token
-        RestTemplate client = new RestTemplate();
         HttpHeaders clientHeader = new HttpHeaders();
         clientHeader.add(SecurityConfig.AUTH_HEADER_USERNAME, user.getName());
         clientHeader.add(SecurityConfig.AUTH_HEADER_PASSWORD, user.getPassword());
-        ResponseEntity<TokenResponse> loginResp =
+        ResponseEntity<Loginresponse> loginResp =
                 client
                         .exchange(
                                 provideEndPoint() + "/" + USER_AUTHENTICATE_PATH,
                                 HttpMethod.POST,
                                 new HttpEntity<>(clientHeader),
-                                TokenResponse.class);
+                                Loginresponse.class);
 
         // Analyze login response
         Assert.assertNotNull(loginResp);
         Assert.assertEquals(loginResp.getStatusCode(), HttpStatus.OK);
         Assert.assertTrue(loginResp.hasBody());
-        TokenResponse token = loginResp.getBody();
+        String token = loginResp.getBody().getToken();
         Assert.assertNotNull(token);
     }
 }

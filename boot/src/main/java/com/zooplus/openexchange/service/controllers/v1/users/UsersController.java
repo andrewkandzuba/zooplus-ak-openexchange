@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.util.Collections;
 
 @RestController
-class UsersController implements ApiController {
+class UsersController extends ApiController {
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -41,10 +41,4 @@ class UsersController implements ApiController {
         response.setId(addedUser.getId());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
-    @ResponseStatus(value= HttpStatus.INTERNAL_SERVER_ERROR, reason="Error occurred!")
-    @ExceptionHandler({IOException.class, NullPointerException.class})
-    public void errorHandler() {
-    }
-
 }

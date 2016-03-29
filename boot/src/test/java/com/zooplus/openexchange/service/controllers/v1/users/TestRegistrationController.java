@@ -3,7 +3,7 @@ package com.zooplus.openexchange.service.controllers.v1.users;
 import com.zooplus.openexchange.protocol.v1.Registrationrequest;
 import com.zooplus.openexchange.protocol.v1.Registrationresponse;
 import com.zooplus.openexchange.service.controllers.v1.ControllerStarter;
-import com.zooplus.openexchange.service.controllers.v1.TestApiController;
+import com.zooplus.openexchange.service.controllers.v1.TestApiMockDbController;
 import com.zooplus.openexchange.service.data.domain.User;
 import org.junit.Assert;
 import org.junit.Test;
@@ -25,7 +25,7 @@ import static com.zooplus.openexchange.service.controllers.v1.ApiController.USER
 @SpringApplicationConfiguration(ControllerStarter.class)
 @WebIntegrationTest("server.port:0")
 @ActiveProfiles("test")
-public class TestRegistrationController extends TestApiController {
+public class TestRegistrationController extends TestApiMockDbController {
     private final String userName = "user1";
     private final String userPassword = "someuserpassword";
     private final String userEmail = "user1@zooplus.com";

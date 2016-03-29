@@ -1,21 +1,20 @@
-package com.zooplus.openexchange.service.security;
+package com.zooplus.openexchange.service.security.providers;
 
-import com.zooplus.openexchange.service.security.tokens.AuthenticatedTokenRepository;
-import com.zooplus.openexchange.service.security.tokens.TokenService;
+import com.zooplus.openexchange.service.security.tokens.AuthenticationTokenRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
+import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
-class TokenAuthenticationProvider implements AuthenticationProvider {
-    private AuthenticatedTokenRepository authenticatedTokenRepository;
-
-    TokenAuthenticationProvider(AuthenticatedTokenRepository authenticatedTokenRepository) {
-        this.authenticatedTokenRepository = authenticatedTokenRepository;
-    }
+@Component
+public class TokenAuthenticationProvider implements AuthenticationProvider {
+    @Autowired
+    private AuthenticationTokenRepository authenticationTokenRepository;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -23,10 +22,11 @@ class TokenAuthenticationProvider implements AuthenticationProvider {
         if (!token.isPresent() || token.get().isEmpty()) {
             throw new BadCredentialsException("Invalid token");
         }
-        if (!authenticatedTokenRepository.findByAuthentication(token.get())) {
+        Authentication authentication1 = authenticationTokenRepository.findByToken(token.get());
+        if (authentication1 == null) {
             throw new BadCredentialsException("Invalid token or token expired");
         }
-        return tokenService.retrieve(token.get());
+        return authentication1;
     }
 
     @Override
