@@ -22,6 +22,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static com.zooplus.openexchange.service.controllers.v1.ApiController.USER_AUTHENTICATE_PATH;
 import static com.zooplus.openexchange.service.controllers.v1.ApiController.USER_REGISTRATION_PATH;
+import static com.zooplus.openexchange.service.security.SecurityConfig.X_AUTH_TOKEN_HEADER;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(Starter.class)
@@ -77,8 +78,8 @@ public class TestUserRegistrationIntegrationFlow extends TestApiController {
 
         // Login with a regular user
         HttpHeaders clientHeader = new HttpHeaders();
-        clientHeader.add(SecurityConfig.AUTH_HEADER_USERNAME, user.getName());
-        clientHeader.add(SecurityConfig.AUTH_HEADER_PASSWORD, user.getPassword());
+        clientHeader.add(SecurityConfig.X_AUTH_USERNAME_HEADER, user.getName());
+        clientHeader.add(SecurityConfig.X_AUTH_PASSWORD_HEADER, user.getPassword());
         ResponseEntity<Loginresponse> loginResp =
                 client
                         .exchange(
@@ -91,7 +92,8 @@ public class TestUserRegistrationIntegrationFlow extends TestApiController {
         Assert.assertNotNull(loginResp);
         Assert.assertEquals(loginResp.getStatusCode(), HttpStatus.OK);
         Assert.assertTrue(loginResp.hasBody());
-        String token = loginResp.getBody().getToken();
+        String token = loginResp.getHeaders().toSingleValueMap().getOrDefault(X_AUTH_TOKEN_HEADER, "");
+
         Assert.assertNotNull(token);
     }
 }

@@ -1,24 +1,18 @@
 package com.zooplus.openexchange.service.controllers.v1;
 
 import com.zooplus.openexchange.protocol.v1.Loginresponse;
-import com.zooplus.openexchange.service.data.repositories.RoleRepository;
-import com.zooplus.openexchange.service.data.repositories.UserRepository;
 import com.zooplus.openexchange.service.security.SecurityConfig;
-import com.zooplus.openexchange.service.utils.SequenceGenerator;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
 
 import static com.zooplus.openexchange.service.controllers.v1.ApiController.USER_AUTHENTICATE_PATH;
-import static com.zooplus.openexchange.service.security.SecurityConfig.AUTH_HEADER_PASSWORD;
-import static com.zooplus.openexchange.service.security.SecurityConfig.AUTH_HEADER_USERNAME;
+import static com.zooplus.openexchange.service.security.SecurityConfig.*;
 
 public abstract class TestApiController {
     private static final String TEST_ENDPOINT_TEMPLATE = "http://localhost:%s";
@@ -32,15 +26,6 @@ public abstract class TestApiController {
     @Value("${admin.email}")
     protected String adminEmail;
 
-    @Autowired
-    protected UserRepository userRepository;
-    @Autowired
-    protected RoleRepository roleRepository;
-    @Autowired
-    protected SequenceGenerator generator;
-    @Autowired
-    protected PasswordEncoder passwordEncoder;
-
     protected HttpHeaders adminHeaders = new HttpHeaders();
     protected RestTemplate client = new RestTemplate();
 
@@ -49,8 +34,8 @@ public abstract class TestApiController {
         preInits();
         // Add adminHeaders
         HttpHeaders headers = new HttpHeaders();
-        headers.add(AUTH_HEADER_USERNAME, adminName);
-        headers.add(AUTH_HEADER_PASSWORD, adminPassword);
+        headers.add(X_AUTH_USERNAME_HEADER, adminName);
+        headers.add(X_AUTH_PASSWORD_HEADER, adminPassword);
 
         // Send login request
         ResponseEntity<Loginresponse> loginResp = new RestTemplate().exchange(
@@ -60,7 +45,7 @@ public abstract class TestApiController {
                 Loginresponse.class);
 
         // Add admin authentication token to admin headers
-        adminHeaders.add(SecurityConfig.AUTH_HEADER_TOKEN, loginResp.getBody().getToken());
+        adminHeaders.add(SecurityConfig.X_AUTH_TOKEN_HEADER, loginResp.getHeaders().toSingleValueMap().getOrDefault(X_AUTH_TOKEN_HEADER, ""));
     }
 
     protected void preInits(){}

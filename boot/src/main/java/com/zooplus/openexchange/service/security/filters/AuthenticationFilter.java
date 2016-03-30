@@ -27,9 +27,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
 
-import static com.zooplus.openexchange.service.security.SecurityConfig.AUTH_HEADER_PASSWORD;
-import static com.zooplus.openexchange.service.security.SecurityConfig.AUTH_HEADER_TOKEN;
-import static com.zooplus.openexchange.service.security.SecurityConfig.AUTH_HEADER_USERNAME;
+import static com.zooplus.openexchange.service.security.SecurityConfig.X_AUTH_PASSWORD_HEADER;
+import static com.zooplus.openexchange.service.security.SecurityConfig.X_AUTH_TOKEN_HEADER;
+import static com.zooplus.openexchange.service.security.SecurityConfig.X_AUTH_USERNAME_HEADER;
 
 public class AuthenticationFilter extends GenericFilterBean {
     private final static Logger logger = LoggerFactory.getLogger(AuthenticationFilter.class);
@@ -46,9 +46,9 @@ public class AuthenticationFilter extends GenericFilterBean {
         HttpServletRequest httpRequest = asHttp(request);
         HttpServletResponse httpResponse = asHttp(response);
 
-        Optional<String> username = Optional.ofNullable(httpRequest.getHeader(AUTH_HEADER_USERNAME));
-        Optional<String> password = Optional.ofNullable(httpRequest.getHeader(AUTH_HEADER_PASSWORD));
-        Optional<String> token = Optional.ofNullable(httpRequest.getHeader(AUTH_HEADER_TOKEN));
+        Optional<String> username = Optional.ofNullable(httpRequest.getHeader(X_AUTH_USERNAME_HEADER));
+        Optional<String> password = Optional.ofNullable(httpRequest.getHeader(X_AUTH_PASSWORD_HEADER));
+        Optional<String> token = Optional.ofNullable(httpRequest.getHeader(X_AUTH_TOKEN_HEADER));
 
         String resourcePath = new UrlPathHelper().getPathWithinApplication(httpRequest);
 
@@ -113,9 +113,9 @@ public class AuthenticationFilter extends GenericFilterBean {
         SecurityContextHolder.getContext().setAuthentication(resultOfAuthentication);
         httpResponse.setStatus(HttpServletResponse.SC_OK);
         Loginresponse loginresponse = new Loginresponse();
-        loginresponse.setToken(resultOfAuthentication.getDetails().toString());
         String tokenJsonResponse = new ObjectMapper().writeValueAsString(loginresponse);
         httpResponse.addHeader("Content-Type", "application/json");
+        httpResponse.addHeader(X_AUTH_TOKEN_HEADER, resultOfAuthentication.getDetails().toString());
         httpResponse.getWriter().print(tokenJsonResponse);
     }
 

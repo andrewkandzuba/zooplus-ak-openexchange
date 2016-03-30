@@ -1,4 +1,4 @@
-package com.zooplus.openexchange.service.security.tokens;
+package com.zooplus.openexchange.service.data.cache;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
@@ -8,24 +8,28 @@ import org.springframework.stereotype.Component;
 import java.util.concurrent.TimeUnit;
 
 @Component
-public class AuthenticationTokenRepositoryImpl implements AuthenticationTokenRepository{
+public class AuthenticationServiceImpl implements AuthenticationService {
     private final Cache<String, Authentication> cache;
 
-    public AuthenticationTokenRepositoryImpl() {
+    public AuthenticationServiceImpl() {
         cache = CacheBuilder.newBuilder()
                 .maximumSize(100)
                 .expireAfterWrite(10, TimeUnit.MINUTES)
                 .build();
     }
 
-
     @Override
-    public void store(String token, Authentication authentication) {
-        cache.put(token, authentication);
+    public void cache(Authentication authentication) {
+        cache.put(authentication.getDetails().toString(), authentication);
     }
 
     @Override
-    public Authentication findByToken(String token) {
+    public void evict(Authentication authentication) {
+        cache.invalidate(authentication.getDetails().toString());
+    }
+
+    @Override
+    public Authentication get(String token) {
         return cache.getIfPresent(token);
     }
 }

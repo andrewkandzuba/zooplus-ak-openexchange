@@ -24,9 +24,9 @@ import javax.servlet.http.HttpServletResponse;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    public final static String AUTH_HEADER_USERNAME = "X-Auth-Username";
-    public final static String AUTH_HEADER_PASSWORD = "X-Auth-Password";
-    public final static String AUTH_HEADER_TOKEN = "X-Auth-Token";
+    public final static String X_AUTH_USERNAME_HEADER = "X-Auth-Username";
+    public final static String X_AUTH_PASSWORD_HEADER = "X-Auth-Password";
+    public final static String X_AUTH_TOKEN_HEADER = "X-Auth-Token";
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {

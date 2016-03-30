@@ -4,10 +4,11 @@ import com.zooplus.openexchange.protocol.v1.Loginresponse;
 import com.zooplus.openexchange.protocol.v1.Registrationrequest;
 import com.zooplus.openexchange.protocol.v1.Registrationresponse;
 import com.zooplus.openexchange.service.controllers.v1.ControllerStarter;
-import com.zooplus.openexchange.service.controllers.v1.TestApiMockDbController;
+import com.zooplus.openexchange.service.controllers.v1.TestApiMockRepositoriesController;
 import com.zooplus.openexchange.service.data.domain.Role;
 import com.zooplus.openexchange.service.data.domain.User;
 import com.zooplus.openexchange.service.security.SecurityConfig;
+import com.zooplus.openexchange.service.utils.ApplicationUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,6 +17,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.http.*;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -23,12 +25,13 @@ import java.util.Collections;
 
 import static com.zooplus.openexchange.service.controllers.v1.ApiController.USER_AUTHENTICATE_PATH;
 import static com.zooplus.openexchange.service.controllers.v1.ApiController.USER_REGISTRATION_PATH;
+import static com.zooplus.openexchange.service.security.SecurityConfig.X_AUTH_TOKEN_HEADER;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(ControllerStarter.class)
 @WebIntegrationTest("server.port:0")
 @ActiveProfiles("test")
-public class TestAuthentication extends TestApiMockDbController {
+public class TestAuthentication extends TestApiMockRepositoriesController {
 
     @Test
     public void testUserRegistration() throws Exception {
@@ -64,13 +67,16 @@ public class TestAuthentication extends TestApiMockDbController {
         Assert.assertEquals(registrationResponse.getStatusCode(), HttpStatus.OK);
         Assert.assertEquals(registrationResponse.getBody().getId(), user.getId());
 
-        // Mock repository
+        // Mock cache & repository
+        UsernamePasswordAuthenticationToken userAuthenticationToken = new UsernamePasswordAuthenticationToken(user.getName(), null, user.getRoles());
+        userAuthenticationToken.setDetails(ApplicationUtils.nextToken());
+        Mockito.when(tokenService.issue(user.getName(), user.getRoles())).thenReturn(userAuthenticationToken);
         Mockito.when(userRepository.findByNameAndPassword(user.getName(), user.getPassword())).thenReturn(user);
 
         // Authenticate and get token
         HttpHeaders clientHeader = new HttpHeaders();
-        clientHeader.add(SecurityConfig.AUTH_HEADER_USERNAME, user.getName());
-        clientHeader.add(SecurityConfig.AUTH_HEADER_PASSWORD, user.getPassword());
+        clientHeader.add(SecurityConfig.X_AUTH_USERNAME_HEADER, user.getName());
+        clientHeader.add(SecurityConfig.X_AUTH_PASSWORD_HEADER, user.getPassword());
         ResponseEntity<Loginresponse> loginResp =
                 client
                         .exchange(
@@ -83,7 +89,7 @@ public class TestAuthentication extends TestApiMockDbController {
         Assert.assertNotNull(loginResp);
         Assert.assertEquals(loginResp.getStatusCode(), HttpStatus.OK);
         Assert.assertTrue(loginResp.hasBody());
-        String token = loginResp.getBody().getToken();
+        String token = loginResp.getHeaders().toSingleValueMap().getOrDefault(X_AUTH_TOKEN_HEADER, "");
         Assert.assertNotNull(token);
     }
 }

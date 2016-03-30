@@ -2,7 +2,7 @@ package com.zooplus.openexchange.service.controllers.v1.admin;
 
 import com.zooplus.openexchange.protocol.v1.Status;
 import com.zooplus.openexchange.service.controllers.v1.ControllerStarter;
-import com.zooplus.openexchange.service.controllers.v1.TestApiMockDbController;
+import com.zooplus.openexchange.service.controllers.v1.TestApiMockRepositoriesController;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,7 +19,7 @@ import static com.zooplus.openexchange.service.controllers.v1.ApiController.STAT
 @SpringApplicationConfiguration(ControllerStarter.class)
 @WebIntegrationTest("server.port:0")
 @ActiveProfiles("test")
-public class TestAdminController extends TestApiMockDbController {
+public class TestAdminController extends TestApiMockRepositoriesController {
     @Test
     public void testAdminStatusPath() throws Throwable {
         // Make a request

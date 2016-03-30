@@ -4,9 +4,5 @@
   "type": "object",
   "id": "LoginResponse",
   "properties": {
-    "token": {
-      "type": "string",
-      "required": true
-    }
   }
 }

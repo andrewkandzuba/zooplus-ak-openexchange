@@ -1,5 +1,7 @@
 package com.zooplus.openexchange.service.controllers.v1;
 
+import com.zooplus.openexchange.service.data.cache.AuthenticationService;
+import com.zooplus.openexchange.service.data.cache.TokenService;
 import com.zooplus.openexchange.service.data.repositories.RoleRepository;
 import com.zooplus.openexchange.service.data.repositories.UserRepository;
 import org.mockito.Mockito;
@@ -24,5 +26,13 @@ public class ControllerStarter {
     @Bean(name = "roleRepository")
     public RoleRepository roleRepository() {
         return Mockito.mock(RoleRepository.class);
+    }
+    @Bean
+    public AuthenticationService authenticationRepository() {
+        return Mockito.mock(AuthenticationService.class);
+    }
+    @Bean
+    public TokenService tokenService(){
+        return Mockito.mock(TokenService.class);
     }
 }
