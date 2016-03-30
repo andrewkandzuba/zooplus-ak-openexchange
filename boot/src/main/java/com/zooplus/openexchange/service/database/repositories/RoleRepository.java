@@ -1,6 +1,6 @@
-package com.zooplus.openexchange.service.data.repositories;
+package com.zooplus.openexchange.service.database.repositories;
 
-import com.zooplus.openexchange.service.data.domain.Role;
+import com.zooplus.openexchange.service.database.domain.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import javax.transaction.Transactional;

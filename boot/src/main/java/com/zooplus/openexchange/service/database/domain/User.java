@@ -1,4 +1,4 @@
-package com.zooplus.openexchange.service.data.domain;
+package com.zooplus.openexchange.service.database.domain;
 
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;

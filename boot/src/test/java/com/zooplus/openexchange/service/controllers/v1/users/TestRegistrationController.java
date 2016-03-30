@@ -4,7 +4,8 @@ import com.zooplus.openexchange.protocol.v1.Registrationrequest;
 import com.zooplus.openexchange.protocol.v1.Registrationresponse;
 import com.zooplus.openexchange.service.controllers.v1.ControllerStarter;
 import com.zooplus.openexchange.service.controllers.v1.TestApiMockRepositoriesController;
-import com.zooplus.openexchange.service.data.domain.User;
+import com.zooplus.openexchange.service.database.domain.User;
+import com.zooplus.openexchange.service.utils.ApplicationUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,14 +33,14 @@ public class TestRegistrationController extends TestApiMockRepositoriesControlle
 
     @Test
     public void testUserRegistration() throws Exception {
-        // Mock new data and repository
+        // Mock new database and repository
         User user = new User(userName, userPassword, userEmail);
-        user.setId(generator.nextLong());
+        user.setId(ApplicationUtils.nextId++);
         MockitoAnnotations.initMocks(this);
         Mockito.when(userRepository.findByName(user.getName())).thenReturn(null);
         Mockito.when(userRepository.saveAndFlush(Mockito.any(User.class))).thenReturn(user);
 
-        // Prepare request data
+        // Prepare request database
         Registrationrequest registrationrequest = new Registrationrequest();
         registrationrequest.setName(user.getName());
         registrationrequest.setPassword(user.getPassword());
@@ -61,12 +62,12 @@ public class TestRegistrationController extends TestApiMockRepositoriesControlle
 
     @Test(expected = org.springframework.web.client.HttpClientErrorException.class)
     public void testRegisterTwice() throws Exception {
-        // Mock new data and repository
+        // Mock new database and repository
         User user = new User(userName, userPassword, userEmail);
         MockitoAnnotations.initMocks(this);
         Mockito.when(userRepository.findByName(user.getName())).thenReturn(user);
 
-        // Prepare request data
+        // Prepare request database
         Registrationrequest registrationrequest = new Registrationrequest();
         registrationrequest.setName(user.getName());
         registrationrequest.setPassword(user.getPassword());

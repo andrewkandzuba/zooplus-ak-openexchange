@@ -5,8 +5,8 @@ import com.zooplus.openexchange.protocol.v1.Registrationrequest;
 import com.zooplus.openexchange.protocol.v1.Registrationresponse;
 import com.zooplus.openexchange.service.controllers.v1.ControllerStarter;
 import com.zooplus.openexchange.service.controllers.v1.TestApiMockRepositoriesController;
-import com.zooplus.openexchange.service.data.domain.Role;
-import com.zooplus.openexchange.service.data.domain.User;
+import com.zooplus.openexchange.service.database.domain.Role;
+import com.zooplus.openexchange.service.database.domain.User;
 import com.zooplus.openexchange.service.security.SecurityConfig;
 import com.zooplus.openexchange.service.utils.ApplicationUtils;
 import org.junit.Assert;
@@ -35,13 +35,13 @@ public class TestAuthentication extends TestApiMockRepositoriesController {
 
     @Test
     public void testUserRegistration() throws Exception {
-        // Mock new data
+        // Mock new database
         String userName = "user1";
         String userPassword = "someuserpassword";
         String userEmail = "user1@zooplus.com";
         User user = new User(userName, userPassword, userEmail);
-        user.setId(generator.nextLong());
-        user.setRoles(Collections.singleton(new Role(generator.nextLong(), "USER")));
+        user.setId(ApplicationUtils.nextId++);
+        user.setRoles(Collections.singleton(new Role(ApplicationUtils.nextId++, "USER")));
 
         // Mock repository's behaviors
         MockitoAnnotations.initMocks(this);

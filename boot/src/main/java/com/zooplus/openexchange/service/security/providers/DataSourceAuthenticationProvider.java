@@ -1,9 +1,9 @@
 package com.zooplus.openexchange.service.security.providers;
 
-import com.zooplus.openexchange.service.data.cache.AuthenticationService;
-import com.zooplus.openexchange.service.data.cache.TokenService;
-import com.zooplus.openexchange.service.data.domain.User;
-import com.zooplus.openexchange.service.data.repositories.UserRepository;
+import com.zooplus.openexchange.service.security.cache.AuthenticationService;
+import com.zooplus.openexchange.service.security.cache.TokenService;
+import com.zooplus.openexchange.service.database.domain.User;
+import com.zooplus.openexchange.service.database.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;

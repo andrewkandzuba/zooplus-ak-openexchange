@@ -1,4 +1,4 @@
-package com.zooplus.openexchange.service.controllers.v1;
+package com.zooplus.openexchange.service.integration;
 
 import com.zooplus.openexchange.protocol.v1.Loginresponse;
 import com.zooplus.openexchange.service.security.SecurityConfig;

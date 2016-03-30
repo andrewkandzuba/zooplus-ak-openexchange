@@ -4,9 +4,8 @@ import com.zooplus.openexchange.protocol.v1.Loginresponse;
 import com.zooplus.openexchange.protocol.v1.Registrationrequest;
 import com.zooplus.openexchange.protocol.v1.Registrationresponse;
 import com.zooplus.openexchange.service.Starter;
-import com.zooplus.openexchange.service.controllers.v1.TestApiController;
-import com.zooplus.openexchange.service.data.domain.User;
-import com.zooplus.openexchange.service.data.repositories.UserRepository;
+import com.zooplus.openexchange.service.database.domain.User;
+import com.zooplus.openexchange.service.database.repositories.UserRepository;
 import com.zooplus.openexchange.service.security.SecurityConfig;
 import org.junit.Assert;
 import org.junit.Test;
@@ -37,7 +36,7 @@ public class TestUserRegistrationIntegrationFlow extends TestApiController {
 
     @Test
     public void testUserRegistration() throws Exception {
-        // Request data
+        // Request database
         final String userName = "ak";
         final String userPassword = "pwd";
         final String userEmail = "ak@zooplus.com";

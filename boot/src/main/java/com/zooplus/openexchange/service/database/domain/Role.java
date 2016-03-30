@@ -1,4 +1,4 @@
-package com.zooplus.openexchange.service.data.domain;
+package com.zooplus.openexchange.service.database.domain;
 
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.cloud.cloudfoundry.com.fasterxml.jackson.annotation.JsonIgnore;

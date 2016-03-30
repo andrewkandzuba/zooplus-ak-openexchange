@@ -1,4 +1,4 @@
-package com.zooplus.openexchange.service.data.cache;
+package com.zooplus.openexchange.service.security.cache;
 
 import org.springframework.security.core.Authentication;
 

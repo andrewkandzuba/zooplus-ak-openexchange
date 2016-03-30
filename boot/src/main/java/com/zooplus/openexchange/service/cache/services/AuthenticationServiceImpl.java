@@ -1,7 +1,8 @@
-package com.zooplus.openexchange.service.data.cache;
+package com.zooplus.openexchange.service.cache.services;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import com.zooplus.openexchange.service.security.cache.AuthenticationService;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 

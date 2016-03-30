@@ -1,9 +1,9 @@
 package com.zooplus.openexchange.service.controllers.v1;
 
-import com.zooplus.openexchange.service.data.cache.AuthenticationService;
-import com.zooplus.openexchange.service.data.cache.TokenService;
-import com.zooplus.openexchange.service.data.repositories.RoleRepository;
-import com.zooplus.openexchange.service.data.repositories.UserRepository;
+import com.zooplus.openexchange.service.database.repositories.RoleRepository;
+import com.zooplus.openexchange.service.database.repositories.UserRepository;
+import com.zooplus.openexchange.service.security.cache.AuthenticationService;
+import com.zooplus.openexchange.service.security.cache.TokenService;
 import org.mockito.Mockito;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
