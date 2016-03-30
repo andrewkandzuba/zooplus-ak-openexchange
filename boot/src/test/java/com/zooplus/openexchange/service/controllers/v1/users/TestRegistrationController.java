@@ -2,7 +2,7 @@ package com.zooplus.openexchange.service.controllers.v1.users;
 
 import com.zooplus.openexchange.protocol.v1.Registrationrequest;
 import com.zooplus.openexchange.protocol.v1.Registrationresponse;
-import com.zooplus.openexchange.service.controllers.v1.ControllerStarter;
+import com.zooplus.openexchange.starters.ControllerStarter;
 import com.zooplus.openexchange.service.controllers.v1.TestApiMockRepositoriesController;
 import com.zooplus.openexchange.service.database.domain.User;
 import com.zooplus.openexchange.service.utils.ApplicationUtils;

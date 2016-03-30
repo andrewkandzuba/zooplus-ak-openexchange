@@ -3,10 +3,10 @@ package com.zooplus.openexchange.service.integration;
 import com.zooplus.openexchange.protocol.v1.Loginresponse;
 import com.zooplus.openexchange.protocol.v1.Registrationrequest;
 import com.zooplus.openexchange.protocol.v1.Registrationresponse;
-import com.zooplus.openexchange.service.Starter;
 import com.zooplus.openexchange.service.database.domain.User;
 import com.zooplus.openexchange.service.database.repositories.UserRepository;
 import com.zooplus.openexchange.service.security.SecurityConfig;
+import com.zooplus.openexchange.starters.IntegrationStarter;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,7 +24,7 @@ import static com.zooplus.openexchange.service.controllers.v1.ApiController.USER
 import static com.zooplus.openexchange.service.security.SecurityConfig.X_AUTH_TOKEN_HEADER;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(Starter.class)
+@SpringApplicationConfiguration(IntegrationStarter.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @WebIntegrationTest("server.port:0")
 @ActiveProfiles("development")

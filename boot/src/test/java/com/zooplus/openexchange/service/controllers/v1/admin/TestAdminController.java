@@ -1,7 +1,7 @@
 package com.zooplus.openexchange.service.controllers.v1.admin;
 
 import com.zooplus.openexchange.protocol.v1.Status;
-import com.zooplus.openexchange.service.controllers.v1.ControllerStarter;
+import com.zooplus.openexchange.starters.ControllerStarter;
 import com.zooplus.openexchange.service.controllers.v1.TestApiMockRepositoriesController;
 import org.junit.Assert;
 import org.junit.Test;

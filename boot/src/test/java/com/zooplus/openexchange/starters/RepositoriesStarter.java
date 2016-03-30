@@ -1,4 +1,4 @@
-package com.zooplus.openexchange.service.database.repositories;
+package com.zooplus.openexchange.starters;
 
 import com.zooplus.openexchange.service.security.cache.AuthenticationService;
 import com.zooplus.openexchange.service.security.cache.TokenService;

@@ -1,4 +1,4 @@
-package com.zooplus.openexchange.service.controllers.v1;
+package com.zooplus.openexchange.starters;
 
 import com.zooplus.openexchange.service.database.repositories.RoleRepository;
 import com.zooplus.openexchange.service.database.repositories.UserRepository;

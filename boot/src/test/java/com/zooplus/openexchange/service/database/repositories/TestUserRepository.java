@@ -2,6 +2,7 @@ package com.zooplus.openexchange.service.database.repositories;
 
 import com.zooplus.openexchange.service.database.domain.Role;
 import com.zooplus.openexchange.service.database.domain.User;
+import com.zooplus.openexchange.starters.RepositoriesStarter;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
