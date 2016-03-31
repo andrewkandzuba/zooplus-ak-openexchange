@@ -11,28 +11,30 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
+import org.springframework.session.web.http.HeaderHttpSessionStrategy;
 
 import javax.servlet.http.HttpServletResponse;
 
 @EnableWebSecurity
+@EnableRedisHttpSession
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    public final static String X_AUTH_USERNAME_HEADER = "X-Auth-Username";
-    public final static String X_AUTH_PASSWORD_HEADER = "X-Auth-Password";
-    public final static String X_AUTH_TOKEN_HEADER = "X-Auth-Token";
+    public final static String X_AUTH_USERNAME_HEADER = "x-auth-username";
+    public final static String X_AUTH_PASSWORD_HEADER = "x-auth-password";
+    public final static String X_AUTH_TOKEN_HEADER = "x-auth-token";
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
+                //.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+               // .and()
                 .authorizeRequests()
                 .antMatchers(actuatorEndpoints()).hasRole("ADMIN")
-                .antMatchers(allPermittedEndpoints()).permitAll()
+                .antMatchers(permitAllEndpoints()).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .anonymous().disable()
@@ -47,12 +49,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationProvider(backendAdminUsernamePasswordAuthenticationProvider()).
-                authenticationProvider(tokenAuthenticationProvider());
+        auth.authenticationProvider(dataSourceUsernamePasswordAuthenticationProvider());
     }
 
     @Bean
-    public  AuthenticationProvider backendAdminUsernamePasswordAuthenticationProvider() {
+    public  AuthenticationProvider dataSourceUsernamePasswordAuthenticationProvider() {
         return new DataSourceAuthenticationProvider();
     }
 
@@ -70,7 +71,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new String[]{ApiController.ADMIN_ENDPOINT, ApiController.USER_REGISTRATION_PATH};
     }
 
-    private String[] allPermittedEndpoints() {
+    private String[] permitAllEndpoints() {
         return new String[]{ApiController.USER_AUTHENTICATE_PATH};
+    }
+
+    @Bean
+    public HeaderHttpSessionStrategy sessionStrategy() {
+        return new HeaderHttpSessionStrategy();
     }
 }

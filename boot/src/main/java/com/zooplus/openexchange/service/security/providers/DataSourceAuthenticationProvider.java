@@ -1,7 +1,5 @@
 package com.zooplus.openexchange.service.security.providers;
 
-import com.zooplus.openexchange.service.security.cache.AuthenticationService;
-import com.zooplus.openexchange.service.security.cache.TokenService;
 import com.zooplus.openexchange.service.database.domain.User;
 import com.zooplus.openexchange.service.database.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +16,6 @@ import java.util.Optional;
 public class DataSourceAuthenticationProvider implements AuthenticationProvider {
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private AuthenticationService authenticationService;
-    @Autowired
-    private TokenService tokenService;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -34,9 +28,7 @@ public class DataSourceAuthenticationProvider implements AuthenticationProvider 
         if(user == null){
             throw new BadCredentialsException("Invalid credentials");
         }
-        Authentication userAuth = tokenService.issue(user.getName(), user.getRoles());
-        authenticationService.cache(userAuth);
-        return userAuth;
+        return new UsernamePasswordAuthenticationToken(user.getName(), null, user.getRoles());
     }
 
     @Override

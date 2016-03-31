@@ -18,7 +18,7 @@ import java.util.concurrent.Executors;
                 "com.zooplus.openexchange.service.utils"
         })
 @PropertySource("classpath:config/environment-test.properties")
-@Profile("development")
+@Profile("integration")
 public class RepositoriesStarter {
     @Bean
     public ExecutorService executorService(){

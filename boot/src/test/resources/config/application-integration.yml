@@ -1,0 +1,12 @@
+spring:
+  profiles: integration
+  jpa:
+    show_sql: false
+    hibernate:
+      ddl-auto: none
+  datasource:
+    platform: h2
+  redis:
+    host: pub-redis-13452.us-east-1-3.2.ec2.garantiadata.com
+    port: 13452
+    password: KtIdcww61NxnpxJn

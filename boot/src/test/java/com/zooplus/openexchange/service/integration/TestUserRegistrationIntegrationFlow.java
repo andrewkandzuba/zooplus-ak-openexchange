@@ -27,7 +27,7 @@ import static com.zooplus.openexchange.service.security.SecurityConfig.X_AUTH_TO
 @SpringApplicationConfiguration(IntegrationStarter.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @WebIntegrationTest("server.port:0")
-@ActiveProfiles("development")
+@ActiveProfiles("integration")
 public class TestUserRegistrationIntegrationFlow extends TestApiController {
     @Autowired
     private UserRepository userRepository;
