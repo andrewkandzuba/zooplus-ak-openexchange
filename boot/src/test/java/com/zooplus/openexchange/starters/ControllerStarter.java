@@ -14,7 +14,8 @@ import org.springframework.context.annotation.PropertySource;
         scanBasePackages = {
                 "com.zooplus.openexchange.service.controllers",
                 "com.zooplus.openexchange.service.security",
-                "com.zooplus.openexchange.service.utils"
+                "com.zooplus.openexchange.service.utils",
+                "com.zooplus.openexchange.service.redis"
         })
 @PropertySource("classpath:config/environment-test.properties")
 @Profile("test")

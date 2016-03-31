@@ -15,7 +15,8 @@ import java.util.concurrent.Executors;
         scanBasePackages = {
                 "com.zooplus.openexchange.service.database",
                 "com.zooplus.openexchange.service.security",
-                "com.zooplus.openexchange.service.utils"
+                "com.zooplus.openexchange.service.utils",
+                "com.zooplus.openexchange.service.redis"
         })
 @PropertySource("classpath:config/environment-test.properties")
 @Profile("integration")
