@@ -1,15 +1,16 @@
-package com.zooplus.openexchange.service.integration;
+package com.zooplus.openexchange.mockers;
 
 import com.zooplus.openexchange.protocol.v1.Loginresponse;
 import com.zooplus.openexchange.service.security.SecurityConfig;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
+import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
+
+import java.io.IOException;
 
 import static com.zooplus.openexchange.service.controllers.v1.ApiController.USER_AUTHENTICATE_PATH;
 import static com.zooplus.openexchange.service.security.SecurityConfig.*;
@@ -26,8 +27,24 @@ public abstract class TestApiController {
     @Value("${admin.email}")
     protected String adminEmail;
 
-    protected HttpHeaders adminHeaders = new HttpHeaders();
-    protected RestTemplate client = new RestTemplate();
+    protected final HttpHeaders adminHeaders;
+    protected final RestTemplate client;
+
+    public TestApiController() {
+        this.adminHeaders = new HttpHeaders();
+        this.client = new RestTemplate();
+        this.client.setErrorHandler(new ResponseErrorHandler() {
+            @Override
+            public boolean hasError(ClientHttpResponse clientHttpResponse) throws IOException {
+                return clientHttpResponse.getStatusCode() != HttpStatus.OK;
+            }
+
+            @Override
+            public void handleError(ClientHttpResponse clientHttpResponse) throws IOException {
+                // ToDo: do something useful here
+            }
+        });
+    }
 
     @PostConstruct
     private void initAdminHeaders() {

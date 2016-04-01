@@ -1,5 +1,6 @@
 package com.zooplus.openexchange.service.integration;
 
+import com.zooplus.openexchange.mockers.TestApiController;
 import com.zooplus.openexchange.protocol.v1.Loginresponse;
 import com.zooplus.openexchange.protocol.v1.Registrationrequest;
 import com.zooplus.openexchange.protocol.v1.Registrationresponse;
@@ -28,7 +29,7 @@ import static com.zooplus.openexchange.service.security.SecurityConfig.X_AUTH_TO
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @WebIntegrationTest("server.port:0")
 @ActiveProfiles("integration")
-public class TestUserRegistrationIntegrationFlow extends TestApiController {
+public class TestUserRegistrationIntegrationFlows extends TestApiController {
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -62,9 +63,23 @@ public class TestUserRegistrationIntegrationFlow extends TestApiController {
         // Analyze response
         Assert.assertNotNull(resp);
         Assert.assertNotNull(resp.getBody().getId());
+        long newUserId = resp.getBody().getId();
+
+        // Send the same request second time => HttpStatus.CONFLICT
+        resp =
+                client
+                        .exchange(
+                                provideEndPoint() + "/" + USER_REGISTRATION_PATH,
+                                HttpMethod.POST,
+                                new HttpEntity<>(req, adminHeaders),
+                                Registrationresponse.class);
+
+        // Analyze response
+        Assert.assertNotNull(resp);
+        Assert.assertEquals(resp.getStatusCode(), HttpStatus.CONFLICT);
 
         // Fetch user directly from repository by Id
-        User user = userRepository.findOne(resp.getBody().getId());
+        User user = userRepository.findOne(newUserId);
         Assert.assertNotNull(user);
         Assert.assertEquals(user.getName(), userName);
         Assert.assertTrue(passwordEncoder.matches(userPassword, user.getPassword()));

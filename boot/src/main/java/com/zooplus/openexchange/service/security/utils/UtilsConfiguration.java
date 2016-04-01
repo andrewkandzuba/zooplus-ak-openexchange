@@ -1,4 +1,4 @@
-package com.zooplus.openexchange.service.utils;
+package com.zooplus.openexchange.service.security.utils;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

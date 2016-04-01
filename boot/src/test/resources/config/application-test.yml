@@ -1,2 +1,8 @@
 spring:
   profiles: test
+  jpa:
+    show_sql: false
+    hibernate:
+      ddl-auto: none
+  datasource:
+    platform: h2

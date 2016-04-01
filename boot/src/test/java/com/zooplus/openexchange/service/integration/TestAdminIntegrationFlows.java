@@ -1,8 +1,8 @@
-package com.zooplus.openexchange.service.controllers.v1.admin;
+package com.zooplus.openexchange.service.integration;
 
+import com.zooplus.openexchange.mockers.TestApiController;
 import com.zooplus.openexchange.protocol.v1.Status;
-import com.zooplus.openexchange.starters.ControllerStarter;
-import com.zooplus.openexchange.service.controllers.v1.TestApiMockRepositoriesController;
+import com.zooplus.openexchange.starters.IntegrationStarter;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,10 +16,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import static com.zooplus.openexchange.service.controllers.v1.ApiController.STATUS_PATH;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(ControllerStarter.class)
+@SpringApplicationConfiguration(IntegrationStarter.class)
 @WebIntegrationTest("server.port:0")
-@ActiveProfiles("test")
-public class TestAdminController extends TestApiMockRepositoriesController {
+@ActiveProfiles("integration")
+public class TestAdminIntegrationFlows extends TestApiController {
     @Test
     public void testAdminStatusPath() throws Throwable {
         // Make a request

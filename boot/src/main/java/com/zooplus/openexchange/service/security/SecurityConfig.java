@@ -3,7 +3,6 @@ package com.zooplus.openexchange.service.security;
 import com.zooplus.openexchange.service.controllers.v1.ApiController;
 import com.zooplus.openexchange.service.security.filters.AuthenticationFilter;
 import com.zooplus.openexchange.service.security.providers.DataSourceAuthenticationProvider;
-import com.zooplus.openexchange.service.security.providers.TokenAuthenticationProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -30,8 +29,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
-                //.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-               // .and()
                 .authorizeRequests()
                 .antMatchers(actuatorEndpoints()).hasRole("ADMIN")
                 .antMatchers(permitAllEndpoints()).permitAll()
@@ -55,11 +52,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public  AuthenticationProvider dataSourceUsernamePasswordAuthenticationProvider() {
         return new DataSourceAuthenticationProvider();
-    }
-
-    @Bean
-    public  AuthenticationProvider tokenAuthenticationProvider() {
-        return new TokenAuthenticationProvider();
     }
 
     @Bean
