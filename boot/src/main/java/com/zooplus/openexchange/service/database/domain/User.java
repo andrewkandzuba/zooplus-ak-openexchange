@@ -8,6 +8,7 @@ import org.springframework.cloud.cloudfoundry.com.fasterxml.jackson.annotation.J
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,10 +20,15 @@ public class User implements Serializable {
     public User() {
     }
 
-    public User(String name, String password, String email) {
+    public User(String name, String password, String email, Set<Role> roles) {
         this.name = name;
         this.password = password;
         this.email = email;
+        this.roles = roles;
+    }
+
+    public User(String name, String password, String email) {
+        this(name, password, email, Collections.emptySet());
     }
 
     @Id

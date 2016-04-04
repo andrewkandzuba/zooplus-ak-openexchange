@@ -1,5 +1,5 @@
 spring:
-  profiles: test
+  profiles: repository
   jpa:
     show_sql: false
     hibernate:

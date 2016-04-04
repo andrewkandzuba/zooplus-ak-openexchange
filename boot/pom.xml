@@ -112,11 +112,6 @@
             <artifactId>h2</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>com.github.kstyrc</groupId>
-            <artifactId>embedded-redis</artifactId>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 
     <build>

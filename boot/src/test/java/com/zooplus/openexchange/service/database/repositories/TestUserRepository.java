@@ -23,7 +23,7 @@ import java.util.concurrent.TimeUnit;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(RepositoriesStarter.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-@ActiveProfiles("test")
+@ActiveProfiles("repository")
 public class TestUserRepository {
     @Autowired
     private ExecutorService executorService;

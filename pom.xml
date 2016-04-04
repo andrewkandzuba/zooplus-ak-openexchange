@@ -48,7 +48,6 @@
         <properties-maven-plugin.version>1.0.0</properties-maven-plugin.version>
         <!-- datasources -->
         <h2.version>1.4.191</h2.version>
-        <embedded-redis.version>0.6</embedded-redis.version>
     </properties>
 
     <dependencyManagement>
@@ -201,12 +200,12 @@
                 <version>${h2.version}</version>
                 <scope>test</scope>
             </dependency>
-            <dependency>
+            <!-- dependency>
                 <groupId>com.github.kstyrc</groupId>
                 <artifactId>embedded-redis</artifactId>
                 <version>${embedded-redis.version}</version>
                 <scope>test</scope>
-            </dependency>
+            </dependency -->
         </dependencies>
     </dependencyManagement>
 
