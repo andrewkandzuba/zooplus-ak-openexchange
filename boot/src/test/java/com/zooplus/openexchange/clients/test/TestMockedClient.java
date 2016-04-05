@@ -1,4 +1,4 @@
-package com.zooplus.openexchange.mockers;
+package com.zooplus.openexchange.clients.test;
 
 import com.google.common.collect.Sets;
 import com.zooplus.openexchange.service.database.domain.Role;
@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-public class TestControllers extends TestAbstractClient {
+public class TestMockedClient extends TestAbstractClient {
     private static final String PRINCIPAL_NAME_INDEX_NAME = "org.springframework.session.FindByIndexNameSessionRepository.PRINCIPAL_NAME_INDEX_NAME";
     private static final String SPRING_SECURITY_CONTEXT = "SPRING_SECURITY_CONTEXT";
     private static final String SESSION_ATTRIBUTE_PREFIX = "sessionAttr:";

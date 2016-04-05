@@ -1,6 +1,6 @@
-package com.zooplus.openexchange.service.controllers.v1;
+package com.zooplus.openexchange.tests.unit;
 
-import com.zooplus.openexchange.mockers.TestControllers;
+import com.zooplus.openexchange.clients.test.TestMockedClient;
 import com.zooplus.openexchange.protocol.v1.Loginresponse;
 import com.zooplus.openexchange.protocol.v1.Registrationrequest;
 import com.zooplus.openexchange.protocol.v1.Registrationresponse;
@@ -30,7 +30,7 @@ import static com.zooplus.openexchange.service.security.SecurityConfig.X_AUTH_TO
 @SpringApplicationConfiguration(ControllersStarter.class)
 @WebIntegrationTest("server.port:0")
 @ActiveProfiles("controllers")
-public class TestUserRegistrationIntegrationFlows extends TestControllers {
+public class TestUserRegistrationIntegrationFlows extends TestMockedClient {
 
     @Test
     public void testUserRegistration() throws Exception {

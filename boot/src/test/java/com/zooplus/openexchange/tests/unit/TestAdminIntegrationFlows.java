@@ -1,6 +1,6 @@
-package com.zooplus.openexchange.service.controllers.v1;
+package com.zooplus.openexchange.tests.unit;
 
-import com.zooplus.openexchange.mockers.TestControllers;
+import com.zooplus.openexchange.clients.test.TestMockedClient;
 import com.zooplus.openexchange.protocol.v1.Status;
 import com.zooplus.openexchange.service.security.SecurityConfig;
 import com.zooplus.openexchange.starters.ControllersStarter;
@@ -19,7 +19,7 @@ import static com.zooplus.openexchange.service.controllers.v1.ApiController.STAT
 @SpringApplicationConfiguration(ControllersStarter.class)
 @WebIntegrationTest("server.port:0")
 @ActiveProfiles("controllers")
-public class TestAdminIntegrationFlows extends TestControllers {
+public class TestAdminIntegrationFlows extends TestMockedClient {
     @Test
     public void testAdminStatusPath() throws Throwable {
         // Make a request

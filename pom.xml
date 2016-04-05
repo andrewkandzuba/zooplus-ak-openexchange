@@ -43,9 +43,10 @@
         <!-- maven & build plugins -->
         <compile.source>1.8</compile.source>
         <compile.target>1.8</compile.target>
-        <maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
+        <maven-compiler-plugin.version>3.5.1</maven-compiler-plugin.version>
         <processor.plugin.version.>2.2.4</processor.plugin.version.>
         <properties-maven-plugin.version>1.0.0</properties-maven-plugin.version>
+        <maven-surefire-plugin.version>2.19.1</maven-surefire-plugin.version>
         <!-- datasources -->
         <h2.version>1.4.191</h2.version>
     </properties>
@@ -200,12 +201,6 @@
                 <version>${h2.version}</version>
                 <scope>test</scope>
             </dependency>
-            <!-- dependency>
-                <groupId>com.github.kstyrc</groupId>
-                <artifactId>embedded-redis</artifactId>
-                <version>${embedded-redis.version}</version>
-                <scope>test</scope>
-            </dependency -->
         </dependencies>
     </dependencyManagement>
 
@@ -219,6 +214,11 @@
         <pluginManagement>
             <plugins>
                 <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${maven-compiler-plugin.version}</version>
+                </plugin>
+                <plugin>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
                     <version>${spring-boot.version}</version>
@@ -227,6 +227,11 @@
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>properties-maven-plugin</artifactId>
                     <version>${properties-maven-plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${maven-surefire-plugin.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>

@@ -5,6 +5,7 @@ import com.zooplus.openexchange.protocol.v1.Loginresponse;
 import com.zooplus.openexchange.service.controllers.v1.ApiController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -75,8 +76,14 @@ public class AuthenticationFilter extends GenericFilterBean {
     }
 
     private void processUsernamePasswordAuthentication(HttpServletResponse httpResponse, Optional<String> username, Optional<String> password) throws IOException {
-        Authentication resultOfAuthentication = tryToAuthenticateWithUsernameAndPassword(username, password);
-        SecurityContextHolder.getContext().setAuthentication(resultOfAuthentication);
+        Authentication resultOfAuthentication = SecurityContextHolder.getContext().getAuthentication();
+        if (!(username.isPresent() && resultOfAuthentication != null && resultOfAuthentication.isAuthenticated()) ||
+                (resultOfAuthentication instanceof UsernamePasswordAuthenticationToken
+                        && !resultOfAuthentication.getName().equals(username.get())
+                        || resultOfAuthentication instanceof AnonymousAuthenticationToken)) {
+            resultOfAuthentication = tryToAuthenticateWithUsernameAndPassword(username, password);
+            SecurityContextHolder.getContext().setAuthentication(resultOfAuthentication);
+        }
         httpResponse.setStatus(HttpServletResponse.SC_OK);
         Loginresponse loginresponse = new Loginresponse();
         String tokenJsonResponse = new ObjectMapper().writeValueAsString(loginresponse);
