@@ -1,6 +1,7 @@
 package com.zooplus.openexchange.tests.integration;
 
 import com.zooplus.openexchange.clients.integration.TestIntegrationClient;
+import com.zooplus.openexchange.service.controllers.v1.ApiController;
 import com.zooplus.openexchange.service.database.domain.Role;
 import com.zooplus.openexchange.service.database.domain.User;
 import com.zooplus.openexchange.service.database.repositories.RoleRepository;
@@ -12,6 +13,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -43,6 +45,9 @@ public class TestHttpSessionCache extends TestIntegrationClient {
         // Login for the first time
         String userSessionToken = loginWithUserNameAndPassword(user.getName(), user.getPassword());
         Assert.assertNotNull(userSessionToken);
+
+        String response = get(userSessionToken, ApiController.USER_HELLO_PATH, HttpMethod.GET);
+        Assert.assertNotNull(response);
 
         // Login for the second time
         String userAnotherSessionToken = loginWithUserNameAndPassword(user.getName(), user.getPassword());

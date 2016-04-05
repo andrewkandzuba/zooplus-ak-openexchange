@@ -76,6 +76,32 @@ public abstract class TestAbstractClient {
         return loginResp.getHeaders().toSingleValueMap().getOrDefault(X_AUTH_TOKEN_HEADER, "");
     }
 
+    protected String get(String token, String path, HttpMethod method, String... params){
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(X_AUTH_TOKEN_HEADER, token);
+
+        // Send login request
+        ResponseEntity<String> resp = getClient()
+                .exchange(
+                        provideEndPoint() + "/" + path,
+                        method,
+                        new HttpEntity<>(headers),
+                        String.class);
+        logger.info("----------------------------------------------------------------------");
+        for(Map.Entry<String, List<String>> header : resp.getHeaders().entrySet()){
+            StringBuilder sb = new StringBuilder();
+            sb.append(String.format("[Header : %s ( ", header.getKey()));
+            for(String value : header.getValue()) {
+                sb.append(String.format(" %s ", value));
+            }
+            sb.append(" )]");
+            logger.info(sb.toString());
+        }
+        logger.info("----------------------------------------------------------------------");
+        // Remember admin authentication token
+        return resp.getBody();
+    }
+
     @PostConstruct
     private void initAdminHeaders() {
         loginAsAdmin();

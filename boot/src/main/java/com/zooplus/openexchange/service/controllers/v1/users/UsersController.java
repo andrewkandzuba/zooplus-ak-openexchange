@@ -41,4 +41,10 @@ class UsersController extends ApiController {
         response.setId(addedUser.getId());
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @RequestMapping(method = RequestMethod.GET, path = USER_HELLO_PATH)
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    ResponseEntity<String> hello() throws IOException {
+        return new ResponseEntity<>("hello!!!", HttpStatus.OK);
+    }
 }

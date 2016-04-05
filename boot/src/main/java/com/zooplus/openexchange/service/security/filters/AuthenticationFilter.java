@@ -5,20 +5,17 @@ import com.zooplus.openexchange.protocol.v1.Loginresponse;
 import com.zooplus.openexchange.service.controllers.v1.ApiController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.filter.GenericFilterBean;
+import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.UrlPathHelper;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -27,7 +24,7 @@ import java.util.Optional;
 import static com.zooplus.openexchange.service.security.SecurityConfig.X_AUTH_PASSWORD_HEADER;
 import static com.zooplus.openexchange.service.security.SecurityConfig.X_AUTH_USERNAME_HEADER;
 
-public class AuthenticationFilter extends GenericFilterBean {
+public class AuthenticationFilter extends OncePerRequestFilter {
     private final static Logger logger = LoggerFactory.getLogger(AuthenticationFilter.class);
     private AuthenticationManager authenticationManager;
 
@@ -36,15 +33,10 @@ public class AuthenticationFilter extends GenericFilterBean {
     }
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        HttpServletRequest httpRequest = asHttp(request);
-        HttpServletResponse httpResponse = asHttp(response);
-
+    protected void doFilterInternal(HttpServletRequest httpRequest, HttpServletResponse httpResponse, FilterChain chain) throws ServletException, IOException {
         Optional<String> username = Optional.ofNullable(httpRequest.getHeader(X_AUTH_USERNAME_HEADER));
         Optional<String> password = Optional.ofNullable(httpRequest.getHeader(X_AUTH_PASSWORD_HEADER));
-
         String resourcePath = new UrlPathHelper().getPathWithinApplication(httpRequest);
-
         try {
             if (postToAuthenticate(httpRequest, resourcePath)) {
                 logger.debug("Trying to authenticate user {} by X-Auth-Username method", username);
@@ -52,7 +44,7 @@ public class AuthenticationFilter extends GenericFilterBean {
                 return;
             }
             logger.debug("AuthenticationFilter is passing request down the filter chain");
-            chain.doFilter(request, response);
+            chain.doFilter(httpRequest, httpResponse);
         } catch (InternalAuthenticationServiceException internalAuthenticationServiceException) {
             SecurityContextHolder.clearContext();
             logger.error("Internal authentication service exception", internalAuthenticationServiceException);
@@ -63,27 +55,13 @@ public class AuthenticationFilter extends GenericFilterBean {
         }
     }
 
-    private HttpServletRequest asHttp(ServletRequest request) {
-        return (HttpServletRequest) request;
-    }
-
-    private HttpServletResponse asHttp(ServletResponse response) {
-        return (HttpServletResponse) response;
-    }
-
     private boolean postToAuthenticate(HttpServletRequest httpRequest, String resourcePath) {
         return ApiController.USER_AUTHENTICATE_PATH.equalsIgnoreCase(resourcePath) && httpRequest.getMethod().equals("POST");
     }
 
     private void processUsernamePasswordAuthentication(HttpServletResponse httpResponse, Optional<String> username, Optional<String> password) throws IOException {
-        Authentication resultOfAuthentication = SecurityContextHolder.getContext().getAuthentication();
-        if (!(username.isPresent() && resultOfAuthentication != null && resultOfAuthentication.isAuthenticated()) ||
-                (resultOfAuthentication instanceof UsernamePasswordAuthenticationToken
-                        && !resultOfAuthentication.getName().equals(username.get())
-                        || resultOfAuthentication instanceof AnonymousAuthenticationToken)) {
-            resultOfAuthentication = tryToAuthenticateWithUsernameAndPassword(username, password);
-            SecurityContextHolder.getContext().setAuthentication(resultOfAuthentication);
-        }
+        Authentication resultOfAuthentication = tryToAuthenticateWithUsernameAndPassword(username, password);
+        SecurityContextHolder.getContext().setAuthentication(resultOfAuthentication);
         httpResponse.setStatus(HttpServletResponse.SC_OK);
         Loginresponse loginresponse = new Loginresponse();
         String tokenJsonResponse = new ObjectMapper().writeValueAsString(loginresponse);

@@ -15,6 +15,7 @@ public abstract class ApiController {
     // methods
     public final static String STATUS_PATH = ADMIN_ENDPOINT + "/status";
     public final static String USER_REGISTRATION_PATH = USERS_ENDPOINT + "/register";
+    public final static String USER_HELLO_PATH = USERS_ENDPOINT + "/hello";
     public final static String USER_AUTHENTICATE_PATH = USERS_ENDPOINT + "/authenticate";
 
     @ResponseStatus(value= HttpStatus.INTERNAL_SERVER_ERROR, reason="Error occurred!")
