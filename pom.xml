@@ -205,7 +205,7 @@
     </dependencyManagement>
 
     <modules>
-        <module>boot</module>
+        <module>commons</module>
         <module>frontend</module>
         <module>logic</module>
         <module>protocol</module>
