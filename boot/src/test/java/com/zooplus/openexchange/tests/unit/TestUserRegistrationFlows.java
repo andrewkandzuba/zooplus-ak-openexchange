@@ -4,9 +4,9 @@ import com.zooplus.openexchange.clients.RestClient;
 import com.zooplus.openexchange.protocol.v1.Loginresponse;
 import com.zooplus.openexchange.protocol.v1.Registrationrequest;
 import com.zooplus.openexchange.protocol.v1.Registrationresponse;
-import com.zooplus.openexchange.service.database.domain.Role;
-import com.zooplus.openexchange.service.database.domain.User;
-import com.zooplus.openexchange.service.security.SecurityConfig;
+import com.zooplus.openexchange.service.frontend.database.domain.Role;
+import com.zooplus.openexchange.service.frontend.database.domain.User;
+import com.zooplus.openexchange.service.frontend.security.SecurityConfig;
 import com.zooplus.openexchange.starters.ControllersStarter;
 import javafx.util.Pair;
 import org.junit.Assert;
@@ -24,9 +24,9 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Optional;
 
-import static com.zooplus.openexchange.service.controllers.v1.ApiController.USER_LOGIN_PATH;
-import static com.zooplus.openexchange.service.controllers.v1.ApiController.USER_REGISTRATION_PATH;
-import static com.zooplus.openexchange.service.security.SecurityConfig.X_AUTH_TOKEN_HEADER;
+import static com.zooplus.openexchange.service.frontend.controllers.v1.Version.USER_LOGIN_PATH;
+import static com.zooplus.openexchange.service.frontend.controllers.v1.Version.USER_REGISTRATION_PATH;
+import static com.zooplus.openexchange.service.frontend.security.SecurityConfig.X_AUTH_TOKEN_HEADER;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(ControllersStarter.class)

@@ -1,8 +1,8 @@
 package com.zooplus.openexchange.tests.unit;
 
-import com.zooplus.openexchange.service.database.domain.Role;
-import com.zooplus.openexchange.service.database.domain.User;
-import com.zooplus.openexchange.service.database.repositories.UserRepository;
+import com.zooplus.openexchange.service.frontend.database.domain.Role;
+import com.zooplus.openexchange.service.frontend.database.domain.User;
+import com.zooplus.openexchange.service.frontend.database.repositories.UserRepository;
 import com.zooplus.openexchange.starters.RepositoriesStarter;
 import org.junit.Assert;
 import org.junit.Test;

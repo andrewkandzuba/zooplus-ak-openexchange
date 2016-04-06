@@ -22,7 +22,11 @@
             <artifactId>protocol</artifactId>
             <version>${parent.version}</version>
         </dependency>
-
+        <!-- spring security -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
         <!-- spring integration -->
         <dependency>
             <groupId>org.springframework.integration</groupId>

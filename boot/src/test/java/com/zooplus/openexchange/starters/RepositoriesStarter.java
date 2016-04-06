@@ -9,8 +9,8 @@ import java.util.concurrent.Executors;
 
 @SpringBootApplication(
         scanBasePackages = {
-                "com.zooplus.openexchange.service.database",
-                "com.zooplus.openexchange.service.utils"
+                "com.zooplus.openexchange.service.frontend.database",
+                "com.zooplus.openexchange.service.frontend.utils"
         })
 @PropertySource("classpath:config/environment-test.properties")
 public class RepositoriesStarter {

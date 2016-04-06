@@ -206,6 +206,7 @@
 
     <modules>
         <module>boot</module>
+        <module>frontend</module>
         <module>logic</module>
         <module>protocol</module>
     </modules>

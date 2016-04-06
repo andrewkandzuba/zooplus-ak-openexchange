@@ -2,7 +2,7 @@ package com.zooplus.openexchange.tests.unit;
 
 import com.zooplus.openexchange.clients.RestClient;
 import com.zooplus.openexchange.protocol.v1.Status;
-import com.zooplus.openexchange.service.security.SecurityConfig;
+import com.zooplus.openexchange.service.frontend.security.SecurityConfig;
 import com.zooplus.openexchange.starters.ControllersStarter;
 import javafx.util.Pair;
 import org.junit.Assert;
@@ -16,7 +16,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Optional;
 
-import static com.zooplus.openexchange.service.controllers.v1.ApiController.STATUS_PATH;
+import static com.zooplus.openexchange.service.frontend.controllers.v1.Version.STATUS_PATH;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(ControllersStarter.class)
