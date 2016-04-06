@@ -24,7 +24,7 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Optional;
 
-import static com.zooplus.openexchange.service.controllers.v1.ApiController.USER_AUTHENTICATE_PATH;
+import static com.zooplus.openexchange.service.controllers.v1.ApiController.USER_LOGIN_PATH;
 import static com.zooplus.openexchange.service.controllers.v1.ApiController.USER_REGISTRATION_PATH;
 import static com.zooplus.openexchange.service.security.SecurityConfig.X_AUTH_TOKEN_HEADER;
 
@@ -111,7 +111,7 @@ public class TestUserRegistrationFlows extends TestMockedClient {
         ResponseEntity<Loginresponse> loginResp =
                 getRestClient()
                         .exchange(
-                                USER_AUTHENTICATE_PATH,
+                                USER_LOGIN_PATH,
                                 HttpMethod.POST,
                                 RestClient.headersFrom(
                                         new Pair<>(SecurityConfig.X_AUTH_USERNAME_HEADER, user.getName()),

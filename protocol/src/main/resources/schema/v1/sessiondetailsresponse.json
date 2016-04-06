@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "description": "User session details response",
+  "type": "object",
+  "id": "SessionDetailsResponse",
+  "properties": {
+    "sessionId": {
+      "type": "string",
+      "required": true
+    }
+  }
+}

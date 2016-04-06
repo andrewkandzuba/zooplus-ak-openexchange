@@ -56,7 +56,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
     }
 
     private boolean postToAuthenticate(HttpServletRequest httpRequest, String resourcePath) {
-        return ApiController.USER_AUTHENTICATE_PATH.equalsIgnoreCase(resourcePath) && httpRequest.getMethod().equals("POST");
+        return ApiController.USER_LOGIN_PATH.equalsIgnoreCase(resourcePath) && httpRequest.getMethod().equals("POST");
     }
 
     private void processUsernamePasswordAuthentication(HttpServletResponse httpResponse, Optional<String> username, Optional<String> password) throws IOException {

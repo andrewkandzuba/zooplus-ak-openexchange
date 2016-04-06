@@ -2,6 +2,8 @@ package com.zooplus.openexchange.tests.integration;
 
 import com.zooplus.openexchange.clients.RestClient;
 import com.zooplus.openexchange.protocol.v1.Loginresponse;
+import com.zooplus.openexchange.protocol.v1.Logoutresponse;
+import com.zooplus.openexchange.protocol.v1.Sessiondetailsresponse;
 import com.zooplus.openexchange.service.database.domain.Role;
 import com.zooplus.openexchange.service.database.domain.User;
 import com.zooplus.openexchange.service.database.repositories.RoleRepository;
@@ -16,6 +18,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
@@ -24,8 +27,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.util.Collections;
 import java.util.Optional;
 
-import static com.zooplus.openexchange.service.controllers.v1.ApiController.USER_AUTHENTICATE_PATH;
-import static com.zooplus.openexchange.service.controllers.v1.ApiController.USER_HELLO_PATH;
+import static com.zooplus.openexchange.service.controllers.v1.ApiController.*;
 import static com.zooplus.openexchange.service.security.SecurityConfig.*;
 
 
@@ -57,7 +59,7 @@ public class TestHttpSessionCache extends TestLocalRestClient {
         // Login for the first time
         ResponseEntity<Loginresponse> loginResponse = getRestClient()
                 .exchange(
-                        USER_AUTHENTICATE_PATH,
+                        USER_LOGIN_PATH,
                         HttpMethod.POST,
                         RestClient.headersFrom(
                                 new Pair<>(X_AUTH_USERNAME_HEADER, user.getName()),
@@ -70,24 +72,24 @@ public class TestHttpSessionCache extends TestLocalRestClient {
         Assert.assertFalse(firstSessionToken.equals(""));
 
         // Try to access user resource
-        ResponseEntity<String> helloResponse = getRestClient()
+        ResponseEntity<Sessiondetailsresponse> sessionDetailsResponse = getRestClient()
                 .exchange(
-                        USER_HELLO_PATH,
+                        USER_SESSION_DETAILS_PATH,
                         HttpMethod.GET,
                         RestClient.headersFrom(
-                                new Pair<>(X_AUTH_TOKEN_HEADER, firstSessionToken),
-                                new Pair<>(X_AUTH_PASSWORD_HEADER, user.getPassword())),
+                                new Pair<>(X_AUTH_TOKEN_HEADER, firstSessionToken)),
                         Optional.empty(),
-                        String.class
+                        Sessiondetailsresponse.class
                 );
-        Assert.assertNotNull(helloResponse);
-        Assert.assertNotNull(helloResponse.hasBody());
-        Assert.assertEquals("hello!!!", helloResponse.getBody());
+        Assert.assertNotNull(sessionDetailsResponse);
+        Assert.assertEquals(sessionDetailsResponse.getStatusCode(), HttpStatus.OK);
+        Assert.assertNotNull(sessionDetailsResponse.hasBody());
+        Assert.assertEquals(sessionDetailsResponse.getBody().getSessionId(), firstSessionToken);
 
         //  Login with a same user again => second session
         loginResponse = getRestClient()
                 .exchange(
-                        USER_AUTHENTICATE_PATH,
+                        USER_LOGIN_PATH,
                         HttpMethod.POST,
                         RestClient.headersFrom(
                                 new Pair<>(X_AUTH_USERNAME_HEADER, user.getName()),
@@ -103,18 +105,58 @@ public class TestHttpSessionCache extends TestLocalRestClient {
         Assert.assertNotEquals(firstSessionToken, secondSessionToken);
 
         // Try to access user resource on behalf on second session
-        helloResponse = getRestClient()
+        sessionDetailsResponse = getRestClient()
                 .exchange(
-                        USER_HELLO_PATH,
+                        USER_SESSION_DETAILS_PATH,
                         HttpMethod.GET,
                         RestClient.headersFrom(
-                                new Pair<>(X_AUTH_TOKEN_HEADER, firstSessionToken),
-                                new Pair<>(X_AUTH_PASSWORD_HEADER, user.getPassword())),
+                                new Pair<>(X_AUTH_TOKEN_HEADER, secondSessionToken)),
                         Optional.empty(),
-                        String.class
+                        Sessiondetailsresponse.class
                 );
-        Assert.assertNotNull(helloResponse);
-        Assert.assertNotNull(helloResponse.hasBody());
-        Assert.assertEquals("hello!!!", helloResponse.getBody());
+        Assert.assertNotNull(sessionDetailsResponse);
+        Assert.assertEquals(sessionDetailsResponse.getStatusCode(), HttpStatus.OK);
+        Assert.assertNotNull(sessionDetailsResponse.hasBody());
+        Assert.assertEquals(sessionDetailsResponse.getBody().getSessionId(), secondSessionToken);
+
+        // Logout from the second session
+        ResponseEntity<Logoutresponse> logoutResponse = getRestClient()
+                .exchange(
+                        USER_LOGOUT_PATH,
+                        HttpMethod.POST,
+                        RestClient.headersFrom(
+                                new Pair<>(X_AUTH_TOKEN_HEADER, secondSessionToken)),
+                        Optional.empty(),
+                        Logoutresponse.class
+                );
+        Assert.assertNotNull(logoutResponse);
+        Assert.assertNotNull(logoutResponse.getBody());
+        Assert.assertTrue(logoutResponse.getBody().getSessionLifeTime() > 0);
+
+        // Not able to access API with invalidated token
+        sessionDetailsResponse = getRestClient()
+                .exchange(
+                        USER_SESSION_DETAILS_PATH,
+                        HttpMethod.GET,
+                        RestClient.headersFrom(
+                                new Pair<>(X_AUTH_TOKEN_HEADER, secondSessionToken)),
+                        Optional.empty(),
+                        Sessiondetailsresponse.class
+                );
+        Assert.assertNotNull(sessionDetailsResponse);
+        Assert.assertEquals(sessionDetailsResponse.getStatusCode(), HttpStatus.UNAUTHORIZED);
+
+        // But still can do it with valid token
+        sessionDetailsResponse = getRestClient()
+                .exchange(
+                        USER_SESSION_DETAILS_PATH,
+                        HttpMethod.GET,
+                        RestClient.headersFrom(
+                                new Pair<>(X_AUTH_TOKEN_HEADER, firstSessionToken)),
+                        Optional.empty(),
+                        Sessiondetailsresponse.class
+                );
+        Assert.assertNotNull(sessionDetailsResponse);
+        Assert.assertEquals(sessionDetailsResponse.getStatusCode(), HttpStatus.OK);
     }
 }
