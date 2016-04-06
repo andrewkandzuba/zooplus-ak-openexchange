@@ -1,6 +1,6 @@
 package com.zooplus.openexchange.tests.unit;
 
-import com.zooplus.openexchange.clients.test.TestMockedClient;
+import com.zooplus.openexchange.clients.RestClient;
 import com.zooplus.openexchange.protocol.v1.Loginresponse;
 import com.zooplus.openexchange.protocol.v1.Registrationrequest;
 import com.zooplus.openexchange.protocol.v1.Registrationresponse;
@@ -8,6 +8,7 @@ import com.zooplus.openexchange.service.database.domain.Role;
 import com.zooplus.openexchange.service.database.domain.User;
 import com.zooplus.openexchange.service.security.SecurityConfig;
 import com.zooplus.openexchange.starters.ControllersStarter;
+import javafx.util.Pair;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,6 +22,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.Optional;
 
 import static com.zooplus.openexchange.service.controllers.v1.ApiController.USER_AUTHENTICATE_PATH;
 import static com.zooplus.openexchange.service.controllers.v1.ApiController.USER_REGISTRATION_PATH;
@@ -30,7 +32,7 @@ import static com.zooplus.openexchange.service.security.SecurityConfig.X_AUTH_TO
 @SpringApplicationConfiguration(ControllersStarter.class)
 @WebIntegrationTest("server.port:0")
 @ActiveProfiles("controllers")
-public class TestUserRegistrationIntegrationFlows extends TestMockedClient {
+public class TestUserRegistrationFlows extends TestMockedClient {
 
     @Test
     public void testUserRegistration() throws Exception {
@@ -56,16 +58,14 @@ public class TestUserRegistrationIntegrationFlows extends TestMockedClient {
         req.setPassword(userPassword);
         req.setEmail(userEmail);
 
-
         // Send request
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(SecurityConfig.X_AUTH_TOKEN_HEADER, getAdminSessionToken());
         ResponseEntity<Registrationresponse> resp =
-                getClient()
+                getRestClient()
                         .exchange(
-                                provideEndPoint() + "/" + USER_REGISTRATION_PATH,
+                                USER_REGISTRATION_PATH,
                                 HttpMethod.POST,
-                                new HttpEntity<>(req, headers),
+                                RestClient.headersFrom(new Pair<>(SecurityConfig.X_AUTH_TOKEN_HEADER, getAdminSessionToken())),
+                                Optional.of(req),
                                 Registrationresponse.class);
 
         // Analyze response
@@ -80,11 +80,12 @@ public class TestUserRegistrationIntegrationFlows extends TestMockedClient {
 
         // Send the same request second time => HttpStatus.CONFLICT
         resp =
-                getClient()
+                getRestClient()
                         .exchange(
-                                provideEndPoint() + "/" + USER_REGISTRATION_PATH,
+                                USER_REGISTRATION_PATH,
                                 HttpMethod.POST,
-                                new HttpEntity<>(req, headers),
+                                RestClient.headersFrom(new Pair<>(SecurityConfig.X_AUTH_TOKEN_HEADER, getAdminSessionToken())),
+                                Optional.of(req),
                                 Registrationresponse.class);
 
         // Analyze response
@@ -107,15 +108,15 @@ public class TestUserRegistrationIntegrationFlows extends TestMockedClient {
         Mockito.when(userRepository.findByNameAndPassword(user.getName(), user.getPassword())).thenReturn(user);
 
         // Login with a regular user
-        headers.clear();
-        headers.add(SecurityConfig.X_AUTH_USERNAME_HEADER, user.getName());
-        headers.add(SecurityConfig.X_AUTH_PASSWORD_HEADER, user.getPassword());
         ResponseEntity<Loginresponse> loginResp =
-                getClient()
+                getRestClient()
                         .exchange(
-                                provideEndPoint() + "/" + USER_AUTHENTICATE_PATH,
+                                USER_AUTHENTICATE_PATH,
                                 HttpMethod.POST,
-                                new HttpEntity<>(headers),
+                                RestClient.headersFrom(
+                                        new Pair<>(SecurityConfig.X_AUTH_USERNAME_HEADER, user.getName()),
+                                        new Pair<>(SecurityConfig.X_AUTH_PASSWORD_HEADER, user.getPassword())),
+                                Optional.empty(),
                                 Loginresponse.class);
 
         // Analyze login response

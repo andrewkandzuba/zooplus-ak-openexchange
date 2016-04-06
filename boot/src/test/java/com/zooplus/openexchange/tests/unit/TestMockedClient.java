@@ -1,10 +1,11 @@
-package com.zooplus.openexchange.clients.test;
+package com.zooplus.openexchange.tests.unit;
 
 import com.google.common.collect.Sets;
 import com.zooplus.openexchange.service.database.domain.Role;
 import com.zooplus.openexchange.service.database.domain.User;
 import com.zooplus.openexchange.service.database.repositories.RoleRepository;
 import com.zooplus.openexchange.service.database.repositories.UserRepository;
+import com.zooplus.openexchange.tests.integration.TestLocalRestClient;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,13 +19,14 @@ import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.session.MapSession;
 
+import javax.annotation.PostConstruct;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-public class TestMockedClient extends TestAbstractClient {
+public class TestMockedClient extends TestLocalRestClient {
     private static final String PRINCIPAL_NAME_INDEX_NAME = "org.springframework.session.FindByIndexNameSessionRepository.PRINCIPAL_NAME_INDEX_NAME";
     private static final String SPRING_SECURITY_CONTEXT = "SPRING_SECURITY_CONTEXT";
     private static final String SESSION_ATTRIBUTE_PREFIX = "sessionAttr:";
@@ -63,22 +65,9 @@ public class TestMockedClient extends TestAbstractClient {
         return adminName;
     }
 
-    @Override
-    protected void loginAsAdmin() {
-        // Mock DB
-        Set<Role> roles = mockRoles();
-        User user = mockUser(adminName, adminPassword, adminEmail, roles);
-        // Emulate admin authentication
-        mockUserRedisSession(userRepository.findByName(user.getName()), getAdminSessionToken());
-    }
-
-    protected Set<Role> mockRoles(){
-        Role adminRole = new Role(getNextId(), "ADMIN");
-        Role userRole = new Role(getNextId(), "USER");
-        Mockito.when(roleRepository.findByName("ADMIN")).thenReturn(adminRole);
-        Mockito.when(roleRepository.findByName("USER")).thenReturn(userRole);
-        return Sets.newHashSet(adminRole, userRole);
-    }
+    protected long getNextId(){
+        return ++nextId;
+    };
 
     protected User mockUser(String userName, String userPassword, String userEmail, Set<Role> roles){
         User user = new User(userName, passwordEncoder.encode(userPassword), userEmail, roles);
@@ -88,10 +77,6 @@ public class TestMockedClient extends TestAbstractClient {
         Mockito.when(userRepository.findOne(user.getId())).thenReturn(user);
         return user;
     }
-
-    protected long getNextId(){
-        return ++nextId;
-    };
 
     protected void mockUserRedisSession(User user, String sessionToken) {
         // Mock user authentication
@@ -121,6 +106,21 @@ public class TestMockedClient extends TestAbstractClient {
         Mockito.when(redisOperations.boundValueOps(Mockito.anyString())).thenReturn(boundValueOperations);
         Mockito.when(boundValueOperations.append(Mockito.anyString())).thenReturn(0);
         Mockito.when(boundValueOperations.expire(Mockito.anyLong(), Mockito.any(TimeUnit.class))).thenReturn(false);
+    }
+
+    @PostConstruct
+    private void initMocks(){
+        Set<Role> allRoles = mockRoles();
+        User adminUser = mockUser(adminName, adminPassword, adminEmail, allRoles);
+        mockUserRedisSession(adminUser, adminSessionToken);
+    }
+
+    private Set<Role> mockRoles(){
+        Role adminRole = new Role(getNextId(), "ADMIN");
+        Role userRole = new Role(getNextId(), "USER");
+        Mockito.when(roleRepository.findByName("ADMIN")).thenReturn(adminRole);
+        Mockito.when(roleRepository.findByName("USER")).thenReturn(userRole);
+        return Sets.newHashSet(adminRole, userRole);
     }
 
     private Map<Object, Object> toMap(MapSession session) {

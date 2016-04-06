@@ -1,9 +1,10 @@
 package com.zooplus.openexchange.tests.unit;
 
-import com.zooplus.openexchange.clients.test.TestMockedClient;
+import com.zooplus.openexchange.clients.RestClient;
 import com.zooplus.openexchange.protocol.v1.Status;
 import com.zooplus.openexchange.service.security.SecurityConfig;
 import com.zooplus.openexchange.starters.ControllersStarter;
+import javafx.util.Pair;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,24 +14,25 @@ import org.springframework.http.*;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.Optional;
+
 import static com.zooplus.openexchange.service.controllers.v1.ApiController.STATUS_PATH;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(ControllersStarter.class)
 @WebIntegrationTest("server.port:0")
 @ActiveProfiles("controllers")
-public class TestAdminIntegrationFlows extends TestMockedClient {
+public class TestAdminFlows extends TestMockedClient {
     @Test
     public void testAdminStatusPath() throws Throwable {
         // Make a request
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(SecurityConfig.X_AUTH_TOKEN_HEADER, getAdminSessionToken());
         ResponseEntity<Status> response =
-                getClient()
+                getRestClient()
                         .exchange(
-                                provideEndPoint() + "/" + STATUS_PATH,
+                                STATUS_PATH,
                                 HttpMethod.GET,
-                                new HttpEntity<>(headers),
+                                RestClient.headersFrom(new Pair<>(SecurityConfig.X_AUTH_TOKEN_HEADER, getAdminSessionToken())),
+                                Optional.empty(),
                                 Status.class);
 
         Assert.assertNotNull(response);
