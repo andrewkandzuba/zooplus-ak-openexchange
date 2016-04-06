@@ -2,7 +2,6 @@ package com.zooplus.openexchange.tests.unit;
 
 import com.zooplus.openexchange.clients.RestClient;
 import com.zooplus.openexchange.protocol.v1.Status;
-import com.zooplus.openexchange.service.frontend.security.SecurityConfig;
 import com.zooplus.openexchange.starters.ControllersStarter;
 import javafx.util.Pair;
 import org.junit.Assert;
@@ -10,13 +9,16 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
-import org.springframework.http.*;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Optional;
 
-import static com.zooplus.openexchange.service.frontend.controllers.v1.Version.STATUS_PATH;
+import static com.zooplus.openexchange.security.SecurityConfigurationDetails.X_AUTH_TOKEN_HEADER;
+import static com.zooplus.openexchange.controllers.v1.Version.STATUS_PATH;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(ControllersStarter.class)
@@ -31,7 +33,7 @@ public class TestAdminFlows extends TestMockedClient {
                         .exchange(
                                 STATUS_PATH,
                                 HttpMethod.GET,
-                                RestClient.headersFrom(new Pair<>(SecurityConfig.X_AUTH_TOKEN_HEADER, getAdminSessionToken())),
+                                RestClient.headersFrom(new Pair<>(X_AUTH_TOKEN_HEADER, getAdminSessionToken())),
                                 Optional.empty(),
                                 Status.class);
 

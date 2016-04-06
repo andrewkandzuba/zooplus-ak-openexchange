@@ -4,10 +4,10 @@ import com.zooplus.openexchange.clients.RestClient;
 import com.zooplus.openexchange.protocol.v1.Loginresponse;
 import com.zooplus.openexchange.protocol.v1.Logoutresponse;
 import com.zooplus.openexchange.protocol.v1.Sessiondetailsresponse;
-import com.zooplus.openexchange.service.frontend.database.domain.Role;
-import com.zooplus.openexchange.service.frontend.database.domain.User;
-import com.zooplus.openexchange.service.frontend.database.repositories.RoleRepository;
-import com.zooplus.openexchange.service.frontend.database.repositories.UserRepository;
+import com.zooplus.openexchange.database.domain.Role;
+import com.zooplus.openexchange.database.domain.User;
+import com.zooplus.openexchange.database.repositories.RoleRepository;
+import com.zooplus.openexchange.database.repositories.UserRepository;
 import com.zooplus.openexchange.starters.IntegrationStarter;
 import javafx.util.Pair;
 import org.junit.Assert;
@@ -27,8 +27,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.util.Collections;
 import java.util.Optional;
 
-import static com.zooplus.openexchange.service.frontend.controllers.v1.Version.*;
-import static com.zooplus.openexchange.service.frontend.security.SecurityConfig.*;
+import static com.zooplus.openexchange.security.SecurityConfigurationDetails.*;
+import static com.zooplus.openexchange.controllers.v1.Version.*;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)

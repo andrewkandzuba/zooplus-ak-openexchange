@@ -5,7 +5,7 @@ import org.springframework.context.annotation.PropertySource;
 
 @SpringBootApplication(
         scanBasePackages = {
-                "com.zooplus.openexchange.service"
+                "com.zooplus.openexchange"
         })
 @PropertySource("classpath:config/environment-test.properties")
 public class IntegrationStarter {

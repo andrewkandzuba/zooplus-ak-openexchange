@@ -19,13 +19,8 @@
         <!-- protocol -->
         <dependency>
             <groupId>com.zooplus.openexchange.ak.samples</groupId>
-            <artifactId>protocol</artifactId>
+            <artifactId>commons</artifactId>
             <version>${parent.version}</version>
-        </dependency>
-        <!-- spring security -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
         <!-- spring integration -->
         <dependency>
@@ -40,7 +35,6 @@
             <groupId>org.springframework.integration</groupId>
             <artifactId>spring-integration-http</artifactId>
         </dependency>
-
         <!-- testing -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -76,14 +70,12 @@
                 <directory>src/main/resources</directory>
             </resource>
         </resources>
-
         <testResources>
             <testResource>
                 <filtering>true</filtering>
                 <directory>src/test/resources</directory>
             </testResource>
         </testResources>
-
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

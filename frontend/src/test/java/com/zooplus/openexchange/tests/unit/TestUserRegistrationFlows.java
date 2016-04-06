@@ -4,9 +4,8 @@ import com.zooplus.openexchange.clients.RestClient;
 import com.zooplus.openexchange.protocol.v1.Loginresponse;
 import com.zooplus.openexchange.protocol.v1.Registrationrequest;
 import com.zooplus.openexchange.protocol.v1.Registrationresponse;
-import com.zooplus.openexchange.service.frontend.database.domain.Role;
-import com.zooplus.openexchange.service.frontend.database.domain.User;
-import com.zooplus.openexchange.service.frontend.security.SecurityConfig;
+import com.zooplus.openexchange.database.domain.Role;
+import com.zooplus.openexchange.database.domain.User;
 import com.zooplus.openexchange.starters.ControllersStarter;
 import javafx.util.Pair;
 import org.junit.Assert;
@@ -15,7 +14,9 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
-import org.springframework.http.*;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -24,9 +25,9 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Optional;
 
-import static com.zooplus.openexchange.service.frontend.controllers.v1.Version.USER_LOGIN_PATH;
-import static com.zooplus.openexchange.service.frontend.controllers.v1.Version.USER_REGISTRATION_PATH;
-import static com.zooplus.openexchange.service.frontend.security.SecurityConfig.X_AUTH_TOKEN_HEADER;
+import static com.zooplus.openexchange.security.SecurityConfigurationDetails.*;
+import static com.zooplus.openexchange.controllers.v1.Version.USER_LOGIN_PATH;
+import static com.zooplus.openexchange.controllers.v1.Version.USER_REGISTRATION_PATH;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(ControllersStarter.class)
@@ -64,7 +65,7 @@ public class TestUserRegistrationFlows extends TestMockedClient {
                         .exchange(
                                 USER_REGISTRATION_PATH,
                                 HttpMethod.POST,
-                                RestClient.headersFrom(new Pair<>(SecurityConfig.X_AUTH_TOKEN_HEADER, getAdminSessionToken())),
+                                RestClient.headersFrom(new Pair<>(X_AUTH_TOKEN_HEADER, getAdminSessionToken())),
                                 Optional.of(req),
                                 Registrationresponse.class);
 
@@ -84,7 +85,7 @@ public class TestUserRegistrationFlows extends TestMockedClient {
                         .exchange(
                                 USER_REGISTRATION_PATH,
                                 HttpMethod.POST,
-                                RestClient.headersFrom(new Pair<>(SecurityConfig.X_AUTH_TOKEN_HEADER, getAdminSessionToken())),
+                                RestClient.headersFrom(new Pair<>(X_AUTH_TOKEN_HEADER, getAdminSessionToken())),
                                 Optional.of(req),
                                 Registrationresponse.class);
 
@@ -114,8 +115,8 @@ public class TestUserRegistrationFlows extends TestMockedClient {
                                 USER_LOGIN_PATH,
                                 HttpMethod.POST,
                                 RestClient.headersFrom(
-                                        new Pair<>(SecurityConfig.X_AUTH_USERNAME_HEADER, user.getName()),
-                                        new Pair<>(SecurityConfig.X_AUTH_PASSWORD_HEADER, user.getPassword())),
+                                        new Pair<>(X_AUTH_USERNAME_HEADER, user.getName()),
+                                        new Pair<>(X_AUTH_PASSWORD_HEADER, user.getPassword())),
                                 Optional.empty(),
                                 Loginresponse.class);
 

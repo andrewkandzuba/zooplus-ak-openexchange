@@ -1,10 +1,10 @@
 package com.zooplus.openexchange.tests.unit;
 
 import com.google.common.collect.Sets;
-import com.zooplus.openexchange.service.frontend.database.domain.Role;
-import com.zooplus.openexchange.service.frontend.database.domain.User;
-import com.zooplus.openexchange.service.frontend.database.repositories.RoleRepository;
-import com.zooplus.openexchange.service.frontend.database.repositories.UserRepository;
+import com.zooplus.openexchange.database.domain.Role;
+import com.zooplus.openexchange.database.domain.User;
+import com.zooplus.openexchange.database.repositories.RoleRepository;
+import com.zooplus.openexchange.database.repositories.UserRepository;
 import com.zooplus.openexchange.tests.integration.TestLocalRestClient;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
