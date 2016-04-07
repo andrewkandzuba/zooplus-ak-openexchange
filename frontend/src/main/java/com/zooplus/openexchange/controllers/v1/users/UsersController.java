@@ -1,9 +1,6 @@
 package com.zooplus.openexchange.controllers.v1.users;
 
-import com.zooplus.openexchange.protocol.v1.Logoutresponse;
-import com.zooplus.openexchange.protocol.v1.Registrationrequest;
-import com.zooplus.openexchange.protocol.v1.Registrationresponse;
-import com.zooplus.openexchange.protocol.v1.Sessiondetailsresponse;
+import com.zooplus.openexchange.protocol.v1.*;
 import com.zooplus.openexchange.controllers.v1.Version;
 import com.zooplus.openexchange.database.domain.Role;
 import com.zooplus.openexchange.database.domain.User;
@@ -34,7 +31,7 @@ class UsersController extends Version {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, path = USER_REGISTRATION_PATH)
+    @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE, path = USER_REGISTRATION_PATH)
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     ResponseEntity<Registrationresponse> register(@RequestBody Registrationrequest request) throws IOException {
         if(userRepository.findByName(request.getName())!=null){
@@ -49,7 +46,7 @@ class UsersController extends Version {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE, path = USER_SESSION_DETAILS_PATH)
+    @RequestMapping(method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE, path = USER_SESSION_DETAILS_PATH)
     @PreAuthorize("hasAuthority('ROLE_USER')")
     ResponseEntity<Sessiondetailsresponse> sessionDetails(HttpSession session) throws IOException {
         Sessiondetailsresponse response = new Sessiondetailsresponse();
@@ -57,7 +54,7 @@ class UsersController extends Version {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, path = USER_LOGOUT_PATH)
+    @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE, path = USER_LOGOUT_PATH)
     @PreAuthorize("hasAuthority('ROLE_USER')")
     ResponseEntity<Logoutresponse> logout(HttpSession session) throws IOException {
         long sessionLifeTime = System.currentTimeMillis() - session.getCreationTime();

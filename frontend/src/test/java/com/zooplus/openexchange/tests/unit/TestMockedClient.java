@@ -5,6 +5,7 @@ import com.zooplus.openexchange.database.domain.Role;
 import com.zooplus.openexchange.database.domain.User;
 import com.zooplus.openexchange.database.repositories.RoleRepository;
 import com.zooplus.openexchange.database.repositories.UserRepository;
+import com.zooplus.openexchange.security.filters.CsrfTokenGeneratorFilter;
 import com.zooplus.openexchange.tests.integration.TestLocalRestClient;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +18,13 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.csrf.CsrfToken;
+import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.session.MapSession;
 
 import javax.annotation.PostConstruct;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import javax.servlet.http.HttpServletRequest;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class TestMockedClient extends TestLocalRestClient {
@@ -65,11 +66,37 @@ public class TestMockedClient extends TestLocalRestClient {
         return adminName;
     }
 
-    protected long getNextId(){
+    protected long getNextId() {
         return ++nextId;
-    };
+    }
 
-    protected User mockUser(String userName, String userPassword, String userEmail, Set<Role> roles){
+    @Autowired
+    protected CsrfTokenRepository csrfTokenRepository;
+
+    protected CsrfToken mockCsrfToken() {
+        final String tokenValue = UUID.randomUUID().toString();
+        CsrfToken csrfToken = new CsrfToken() {
+            @Override
+            public String getHeaderName() {
+                return CsrfTokenGeneratorFilter.CSRF_TOKEN_HEADER;
+            }
+
+            @Override
+            public String getParameterName() {
+                return "X-CSRF-PARAM";
+            }
+
+            @Override
+            public String getToken() {
+                return tokenValue;
+            }
+        };
+        Mockito.when(csrfTokenRepository.generateToken(Mockito.any(HttpServletRequest.class))).thenReturn(csrfToken);
+        Mockito.when(csrfTokenRepository.loadToken(Mockito.any(HttpServletRequest.class))).thenReturn(csrfToken);
+        return csrfToken;
+    }
+
+    protected User mockUser(String userName, String userPassword, String userEmail, Set<Role> roles) {
         User user = new User(userName, passwordEncoder.encode(userPassword), userEmail, roles);
         user.setId(getNextId());
         Mockito.when(userRepository.findByName(user.getName())).thenReturn(user);
@@ -109,13 +136,13 @@ public class TestMockedClient extends TestLocalRestClient {
     }
 
     @PostConstruct
-    private void initMocks(){
+    private void initMocks() {
         Set<Role> allRoles = mockRoles();
         User adminUser = mockUser(adminName, adminPassword, adminEmail, allRoles);
         mockUserRedisSession(adminUser, adminSessionToken);
     }
 
-    private Set<Role> mockRoles(){
+    private Set<Role> mockRoles() {
         Role adminRole = new Role(getNextId(), "ADMIN");
         Role userRole = new Role(getNextId(), "USER");
         Mockito.when(roleRepository.findByName("ADMIN")).thenReturn(adminRole);

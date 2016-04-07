@@ -12,13 +12,15 @@ import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Optional;
 
-import static com.zooplus.openexchange.security.SecurityConfigurationDetails.X_AUTH_TOKEN_HEADER;
 import static com.zooplus.openexchange.controllers.v1.Version.STATUS_PATH;
+import static com.zooplus.openexchange.security.filters.CsrfTokenGeneratorFilter.*;
+import static com.zooplus.openexchange.security.filters.DataSourceAuthenticationFilter.X_AUTH_TOKEN_HEADER;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(ControllersStarter.class)
@@ -27,13 +29,18 @@ import static com.zooplus.openexchange.controllers.v1.Version.STATUS_PATH;
 public class TestAdminFlows extends TestMockedClient {
     @Test
     public void testAdminStatusPath() throws Throwable {
+        CsrfToken csrfToken = mockCsrfToken();
+
         // Make a request
         ResponseEntity<Status> response =
                 getRestClient()
                         .exchange(
                                 STATUS_PATH,
                                 HttpMethod.GET,
-                                RestClient.headersFrom(new Pair<>(X_AUTH_TOKEN_HEADER, getAdminSessionToken())),
+                                RestClient.build(
+                                        new Pair<>(X_AUTH_TOKEN_HEADER, getAdminSessionToken()),
+                                        new Pair<>(CSRF_TOKEN_HEADER, csrfToken.getHeaderName())
+                                ),
                                 Optional.empty(),
                                 Status.class);
 

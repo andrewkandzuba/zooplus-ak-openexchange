@@ -1,13 +1,13 @@
 package com.zooplus.openexchange.tests.integration;
 
 import com.zooplus.openexchange.clients.RestClient;
-import com.zooplus.openexchange.protocol.v1.Loginresponse;
-import com.zooplus.openexchange.protocol.v1.Logoutresponse;
-import com.zooplus.openexchange.protocol.v1.Sessiondetailsresponse;
 import com.zooplus.openexchange.database.domain.Role;
 import com.zooplus.openexchange.database.domain.User;
 import com.zooplus.openexchange.database.repositories.RoleRepository;
 import com.zooplus.openexchange.database.repositories.UserRepository;
+import com.zooplus.openexchange.protocol.v1.Loginresponse;
+import com.zooplus.openexchange.protocol.v1.Logoutresponse;
+import com.zooplus.openexchange.protocol.v1.Sessiondetailsresponse;
 import com.zooplus.openexchange.starters.IntegrationStarter;
 import javafx.util.Pair;
 import org.junit.Assert;
@@ -23,12 +23,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.http.HttpHeaders;
 
 import java.util.Collections;
 import java.util.Optional;
 
-import static com.zooplus.openexchange.security.SecurityConfigurationDetails.*;
 import static com.zooplus.openexchange.controllers.v1.Version.*;
+import static com.zooplus.openexchange.security.filters.DataSourceAuthenticationFilter.*;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -45,7 +46,6 @@ public class TestHttpSessionCache extends TestLocalRestClient {
     @Value("${local.server.port}")
     private int port;
 
-
     @Test
     public void testSessionCache() throws Exception {
         Role role = roleRepository.findByName("USER");
@@ -61,7 +61,7 @@ public class TestHttpSessionCache extends TestLocalRestClient {
                 .exchange(
                         USER_LOGIN_PATH,
                         HttpMethod.POST,
-                        RestClient.headersFrom(
+                        RestClient.build(
                                 new Pair<>(X_AUTH_USERNAME_HEADER, user.getName()),
                                 new Pair<>(X_AUTH_PASSWORD_HEADER, user.getPassword())),
                         Optional.empty(),
@@ -70,14 +70,14 @@ public class TestHttpSessionCache extends TestLocalRestClient {
         Assert.assertNotNull(loginResponse.getHeaders());
         String firstSessionToken = loginResponse.getHeaders().toSingleValueMap().getOrDefault(X_AUTH_TOKEN_HEADER, "");
         Assert.assertFalse(firstSessionToken.equals(""));
+        HttpHeaders firstSessionHeader = loginResponse.getHeaders();
 
         // Try to access user resource
         ResponseEntity<Sessiondetailsresponse> sessionDetailsResponse = getRestClient()
                 .exchange(
                         USER_SESSION_DETAILS_PATH,
                         HttpMethod.GET,
-                        RestClient.headersFrom(
-                                new Pair<>(X_AUTH_TOKEN_HEADER, firstSessionToken)),
+                        firstSessionHeader,
                         Optional.empty(),
                         Sessiondetailsresponse.class
                 );
@@ -91,7 +91,7 @@ public class TestHttpSessionCache extends TestLocalRestClient {
                 .exchange(
                         USER_LOGIN_PATH,
                         HttpMethod.POST,
-                        RestClient.headersFrom(
+                        RestClient.build(
                                 new Pair<>(X_AUTH_USERNAME_HEADER, user.getName()),
                                 new Pair<>(X_AUTH_PASSWORD_HEADER, user.getPassword())),
                         Optional.empty(),
@@ -100,6 +100,7 @@ public class TestHttpSessionCache extends TestLocalRestClient {
         Assert.assertNotNull(loginResponse.getHeaders());
         String secondSessionToken = loginResponse.getHeaders().toSingleValueMap().getOrDefault(X_AUTH_TOKEN_HEADER, "");
         Assert.assertFalse(secondSessionToken.equals(""));
+        HttpHeaders secondSessionHeader = loginResponse.getHeaders();
 
         // Test there are two different sessions
         Assert.assertNotEquals(firstSessionToken, secondSessionToken);
@@ -109,8 +110,7 @@ public class TestHttpSessionCache extends TestLocalRestClient {
                 .exchange(
                         USER_SESSION_DETAILS_PATH,
                         HttpMethod.GET,
-                        RestClient.headersFrom(
-                                new Pair<>(X_AUTH_TOKEN_HEADER, secondSessionToken)),
+                        secondSessionHeader,
                         Optional.empty(),
                         Sessiondetailsresponse.class
                 );
@@ -124,7 +124,7 @@ public class TestHttpSessionCache extends TestLocalRestClient {
                 .exchange(
                         USER_LOGOUT_PATH,
                         HttpMethod.POST,
-                        RestClient.headersFrom(
+                        RestClient.build(
                                 new Pair<>(X_AUTH_TOKEN_HEADER, secondSessionToken)),
                         Optional.empty(),
                         Logoutresponse.class
@@ -138,8 +138,7 @@ public class TestHttpSessionCache extends TestLocalRestClient {
                 .exchange(
                         USER_SESSION_DETAILS_PATH,
                         HttpMethod.GET,
-                        RestClient.headersFrom(
-                                new Pair<>(X_AUTH_TOKEN_HEADER, secondSessionToken)),
+                        secondSessionHeader,
                         Optional.empty(),
                         Sessiondetailsresponse.class
                 );
@@ -151,8 +150,7 @@ public class TestHttpSessionCache extends TestLocalRestClient {
                 .exchange(
                         USER_SESSION_DETAILS_PATH,
                         HttpMethod.GET,
-                        RestClient.headersFrom(
-                                new Pair<>(X_AUTH_TOKEN_HEADER, firstSessionToken)),
+                        firstSessionHeader,
                         Optional.empty(),
                         Sessiondetailsresponse.class
                 );

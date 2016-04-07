@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 public class RestClient {
+
     private final String endPoint;
     private final RestTemplate restTemplate;
 
@@ -45,11 +46,12 @@ public class RestClient {
     }
 
     @SafeVarargs
-    public static HttpHeaders headersFrom(Pair<String, String>... pairs){
+    public static HttpHeaders build(Pair<String, String>... pairs){
         HttpHeaders headers = new HttpHeaders();
         for(Pair pair : pairs){
             headers.add((String) pair.getKey(), (String) pair.getValue());
         }
+        headers.setContentType(MediaType.APPLICATION_JSON);
         return HttpHeaders.readOnlyHttpHeaders(headers);
     }
 }

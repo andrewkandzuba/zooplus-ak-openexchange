@@ -3,7 +3,6 @@ package com.zooplus.openexchange.security.providers;
 import com.zooplus.openexchange.database.domain.User;
 import com.zooplus.openexchange.database.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -13,7 +12,7 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 
 @Component
-public class DataSourceAuthenticationProvider implements AuthenticationProvider {
+public class DataSourceAuthenticationProvider implements CustomAuthenticationProvider {
     @Autowired
     private UserRepository userRepository;
 
