@@ -202,7 +202,7 @@
         <module>commons-ws</module>
         <module>frontend</module>
         <module>logic</module>
-        <module>protocol</module>
+        <module>protocol-generation</module>
     </modules>
 
     <build>
@@ -211,17 +211,43 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>${maven-compiler-plugin.version}</version>
+                    <configuration>
+                        <source>${compile.source}</source>
+                        <target>${compile.target}</target>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
                     <version>${spring-boot.version}</version>
+                    <configuration>
+                        <mainClass>com.zooplus.openexchange.Starter</mainClass>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>repackage</goal>
+                            </goals>
+                        </execution>
+                    </executions>
                 </plugin>
                 <plugin>
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>properties-maven-plugin</artifactId>
                     <version>${properties-maven-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <phase>initialize</phase>
+                            <goals>
+                                <goal>read-project-properties</goal>
+                            </goals>
+                            <configuration>
+                                <files>
+                                    <file>${project.basedir}/src/test/resources/config/environment-test.properties</file>
+                                </files>
+                            </configuration>
+                        </execution>
+                    </executions>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -259,6 +285,25 @@
                             </configuration>
                         </execution>
                     </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.jsonschema2pojo</groupId>
+                    <artifactId>jsonschema2pojo-maven-plugin</artifactId>
+                    <version>${jsonschema2pojo.version}</version>
+                    <executions>
+                        <execution>
+                            <phase>generate-sources</phase>
+                            <goals>
+                                <goal>generate</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <includeJsr303Annotations>true</includeJsr303Annotations>
+                        <sourceDirectory>${basedir}/src/main/resources/protocol</sourceDirectory>
+                        <outputDirectory>${basedir}/target/generated-sources</outputDirectory>
+                        <targetPackage>com.zooplus.openexchange.protocol</targetPackage>
+                    </configuration>
                 </plugin>
             </plugins>
         </pluginManagement>

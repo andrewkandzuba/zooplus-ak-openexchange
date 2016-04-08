@@ -1,11 +1,14 @@
 package com.zooplus.openexchange.controllers.v1.users;
 
-import com.zooplus.openexchange.protocol.v1.*;
 import com.zooplus.openexchange.controllers.v1.Version;
 import com.zooplus.openexchange.database.domain.Role;
 import com.zooplus.openexchange.database.domain.User;
 import com.zooplus.openexchange.database.repositories.RoleRepository;
 import com.zooplus.openexchange.database.repositories.UserRepository;
+import com.zooplus.openexchange.protocol.rest.v1.Logoutresponse;
+import com.zooplus.openexchange.protocol.rest.v1.Registrationrequest;
+import com.zooplus.openexchange.protocol.rest.v1.Registrationresponse;
+import com.zooplus.openexchange.protocol.rest.v1.Sessiondetailsresponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

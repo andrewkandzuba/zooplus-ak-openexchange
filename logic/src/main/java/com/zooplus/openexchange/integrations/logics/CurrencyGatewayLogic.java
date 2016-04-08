@@ -1,22 +1,22 @@
 package com.zooplus.openexchange.integrations.logics;
 
-import com.zooplus.openexchange.services.StatusService;
+import com.zooplus.openexchange.services.CurrenciesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.integration.annotation.MessageEndpoint;
 import org.springframework.integration.dsl.IntegrationFlow;
 import org.springframework.integration.dsl.IntegrationFlows;
 
-import static com.zooplus.openexchange.integrations.gateways.StatusGateway.STATUS_GATEWAY_CHANNEL;
+import static com.zooplus.openexchange.integrations.gateways.CurrenciesGateway.CURRENCIES_GATEWAY_CHANNEL;
 
 @MessageEndpoint
-public class StatusGatewayLogic {
+public class CurrencyGatewayLogic {
     @Autowired
-    StatusService service;
+    CurrenciesService service;
 
     @Bean
     public IntegrationFlow httpFlow() {
-        return IntegrationFlows.from(STATUS_GATEWAY_CHANNEL)
+        return IntegrationFlows.from(CURRENCIES_GATEWAY_CHANNEL)
                 .handle(service)
                 .get();
     }

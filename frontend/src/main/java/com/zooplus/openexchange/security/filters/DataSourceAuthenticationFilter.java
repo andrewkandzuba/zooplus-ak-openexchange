@@ -1,7 +1,7 @@
 package com.zooplus.openexchange.security.filters;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.zooplus.openexchange.protocol.v1.Loginresponse;
+import com.zooplus.openexchange.protocol.rest.v1.Loginresponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;

@@ -1,7 +1,7 @@
 package com.zooplus.openexchange.tests.unit;
 
 import com.zooplus.openexchange.clients.RestClient;
-import com.zooplus.openexchange.protocol.v1.Status;
+import com.zooplus.openexchange.protocol.rest.v1.Statusresponse;
 import com.zooplus.openexchange.starters.ControllersStarter;
 import javafx.util.Pair;
 import org.junit.Assert;
@@ -32,7 +32,7 @@ public class TestAdminFlows extends TestMockedClient {
         CsrfToken csrfToken = mockCsrfToken();
 
         // Make a request
-        ResponseEntity<Status> response =
+        ResponseEntity<Statusresponse> response =
                 getRestClient()
                         .exchange(
                                 STATUS_PATH,
@@ -42,7 +42,7 @@ public class TestAdminFlows extends TestMockedClient {
                                         new Pair<>(CSRF_TOKEN_HEADER, csrfToken.getHeaderName())
                                 ),
                                 Optional.empty(),
-                                Status.class);
+                                Statusresponse.class);
 
         Assert.assertNotNull(response);
         Assert.assertEquals(response.getStatusCode(), HttpStatus.OK);

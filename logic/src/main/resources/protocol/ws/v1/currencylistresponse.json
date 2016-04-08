@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "description": "Currency list response",
+  "type": "object",
+  "id": "CurrencyListResponse",
+  "properties": {
+    "currencies" : {
+      "type" : "array",
+      "items" : {
+        "javaType" : "com.zooplus.openexchange.database.domain.Currency"
+      }
+    }
+  }
+}

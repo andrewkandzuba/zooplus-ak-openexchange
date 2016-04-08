@@ -18,7 +18,7 @@
         <!-- protocol -->
         <dependency>
             <groupId>com.zooplus.openexchange.ak.samples</groupId>
-            <artifactId>protocol</artifactId>
+            <artifactId>protocol-generation</artifactId>
             <version>${parent.version}</version>
         </dependency>
         <!-- spring boot ws -->
@@ -26,7 +26,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-websocket</artifactId>
         </dependency>
-	    <!-- spring boot messeging -->
+        <!-- spring boot messeging -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-messaging</artifactId>
@@ -64,10 +64,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>${compile.source}</source>
-                    <target>${compile.target}</target>
-                </configuration>
             </plugin>
         </plugins>
     </build>

@@ -1,10 +1,12 @@
 package com.zooplus.openexchange.starters;
 
-import com.zooplus.openexchange.protocol.v1.Status;
-import com.zooplus.openexchange.services.StatusService;
+import com.zooplus.openexchange.database.domain.Currency;
+import com.zooplus.openexchange.services.CurrenciesService;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.integration.annotation.IntegrationComponentScan;
+
+import java.util.Collections;
 
 @SpringBootApplication(
         scanBasePackages = {
@@ -13,13 +15,7 @@ import org.springframework.integration.annotation.IntegrationComponentScan;
 @IntegrationComponentScan("com.zooplus.openexchange.integrations")
 public class LogicStarter {
     @Bean
-    StatusService getStatusService() {
-        return () -> {
-            Status s = new Status();
-            s.setHost("localhost");
-            s.setInstanceId("id-1");
-            s.setPort(8888);
-            return s;
-        };
+    CurrenciesService getCurrenciesService() {
+        return () -> Collections.singletonList(new Currency("USD", "United States Dollar"));
     }
 }

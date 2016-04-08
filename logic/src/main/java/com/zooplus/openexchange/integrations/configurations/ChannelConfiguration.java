@@ -5,12 +5,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.integration.dsl.channel.MessageChannels;
 import org.springframework.messaging.MessageChannel;
 
-import static com.zooplus.openexchange.integrations.gateways.StatusGateway.STATUS_GATEWAY_CHANNEL;
+import static com.zooplus.openexchange.integrations.gateways.CurrenciesGateway.CURRENCIES_GATEWAY_CHANNEL;
 
 @Configuration
 public class ChannelConfiguration {
-    @Bean(name = STATUS_GATEWAY_CHANNEL)
-    public MessageChannel cfStatusRequestChannel() {
+    @Bean(name = CURRENCIES_GATEWAY_CHANNEL)
+    public MessageChannel CurrenciesRequestChannel() {
         return MessageChannels.direct().get();
     }
 }

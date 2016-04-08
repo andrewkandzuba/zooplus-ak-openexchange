@@ -2,7 +2,7 @@ package com.zooplus.openexchange.controllers.v1.admin;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zooplus.openexchange.controllers.v1.Version;
-import com.zooplus.openexchange.protocol.v1.Status;
+import com.zooplus.openexchange.protocol.rest.v1.Statusresponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
@@ -23,8 +23,8 @@ class AdminController extends Version {
 
     @RequestMapping(method = RequestMethod.GET, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE, path = STATUS_PATH)
     @ResponseBody
-    ResponseEntity<Status> get() throws IOException {
-        return new ResponseEntity<>(new ObjectMapper().readValue(environment.getProperty(VCAP_APPLICATION), Status.class), HttpStatus.OK);
+    ResponseEntity<Statusresponse> get() throws IOException {
+        return new ResponseEntity<>(new ObjectMapper().readValue(environment.getProperty(VCAP_APPLICATION), Statusresponse.class), HttpStatus.OK);
     }
 
     @ResponseStatus(value= HttpStatus.INTERNAL_SERVER_ERROR, reason="Error occurred!")
