@@ -18,7 +18,7 @@
         <!-- protocol -->
         <dependency>
             <groupId>com.zooplus.openexchange.ak.samples</groupId>
-            <artifactId>commons</artifactId>
+            <artifactId>commons-rest</artifactId>
             <version>${parent.version}</version>
         </dependency>
         <!-- spring persistence -->
@@ -105,12 +105,6 @@
                 <artifactId>build-helper-maven-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>parse-version</id>
-                        <goals>
-                            <goal>parse-version</goal>
-                        </goals>
-                    </execution>
-                    <execution>
                         <id>attach-artifacts</id>
                         <phase>package</phase>
                         <goals>
@@ -124,18 +118,6 @@
                                     <classifier>manifest</classifier>
                                 </artifact>
                             </artifacts>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>add-source</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>add-source</goal>
-                        </goals>
-                        <configuration>
-                            <sources>
-                                <source>${project.build.directory}/generated-sources</source>
-                            </sources>
                         </configuration>
                     </execution>
                 </executions>
@@ -171,39 +153,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <includes>
-                        <include>**/unit/**</include>
-                    </includes>
-                    <excludes>
-                        <exclude>**/integration/**</exclude>
-                    </excludes>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
-    <profiles>
-        <profile>
-            <id>integration-tests</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                        <configuration>
-                            <includes>
-                                <include>**/integration/**</include>
-                            </includes>
-                            <excludes>
-                                <exclude>**/unit/**</exclude>
-                            </excludes>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
 </project>
