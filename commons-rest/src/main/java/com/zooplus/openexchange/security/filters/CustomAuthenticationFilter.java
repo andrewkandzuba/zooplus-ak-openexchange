@@ -25,10 +25,13 @@ public abstract class CustomAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
     protected AuthenticationManager authenticationManager;
 
-    public abstract String[] actuatorEndpoints();
-    public abstract String[] permitSecurityEndpoints();
+    public abstract String[] permitAdminEndpoints();
+    public abstract String[] permitAllEndpoints();
+
+    public abstract String logoutEndpoint();
+    public abstract String loginEndpoint();
+
     public abstract String[] permitCsrfEndpoints();
-    public abstract String authenticationPath();
     public abstract CsrfTokenRepository csrfTokenRepository();
 
     protected abstract void processWithCustomAuthentication(HttpServletRequest httpRequest,
@@ -69,7 +72,7 @@ public abstract class CustomAuthenticationFilter extends OncePerRequestFilter {
 
     private boolean postToAuthenticate(HttpServletRequest httpRequest) {
         String resourcePath = new UrlPathHelper().getPathWithinApplication(httpRequest);
-        return authenticationPath().equalsIgnoreCase(resourcePath)
+        return loginEndpoint().equalsIgnoreCase(resourcePath)
                 && httpRequest.getMethod().equals("POST");
     }
 }

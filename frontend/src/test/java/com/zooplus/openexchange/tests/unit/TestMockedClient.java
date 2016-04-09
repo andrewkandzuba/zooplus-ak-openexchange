@@ -5,7 +5,7 @@ import com.zooplus.openexchange.database.domain.Role;
 import com.zooplus.openexchange.database.domain.User;
 import com.zooplus.openexchange.database.repositories.RoleRepository;
 import com.zooplus.openexchange.database.repositories.UserRepository;
-import com.zooplus.openexchange.security.filters.CsrfTokenGeneratorFilter;
+import com.zooplus.openexchange.security.filters.CsrfTokenReflectionFilter;
 import com.zooplus.openexchange.tests.integration.TestLocalRestClient;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,7 +78,7 @@ public class TestMockedClient extends TestLocalRestClient {
         CsrfToken csrfToken = new CsrfToken() {
             @Override
             public String getHeaderName() {
-                return CsrfTokenGeneratorFilter.CSRF_TOKEN_HEADER;
+                return CsrfTokenReflectionFilter.CSRF_TOKEN_HEADER;
             }
 
             @Override

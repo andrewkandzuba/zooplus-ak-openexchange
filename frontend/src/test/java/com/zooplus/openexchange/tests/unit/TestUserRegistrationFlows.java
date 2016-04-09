@@ -28,7 +28,7 @@ import java.util.Optional;
 
 import static com.zooplus.openexchange.controllers.v1.Version.USER_LOGIN_PATH;
 import static com.zooplus.openexchange.controllers.v1.Version.USER_REGISTRATION_PATH;
-import static com.zooplus.openexchange.security.filters.CsrfTokenGeneratorFilter.CSRF_TOKEN_HEADER;
+import static com.zooplus.openexchange.security.filters.CsrfTokenReflectionFilter.CSRF_TOKEN_HEADER;
 import static com.zooplus.openexchange.security.filters.DataSourceAuthenticationFilter.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)

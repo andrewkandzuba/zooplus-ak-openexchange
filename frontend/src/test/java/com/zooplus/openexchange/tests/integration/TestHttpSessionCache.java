@@ -63,7 +63,8 @@ public class TestHttpSessionCache extends TestLocalRestClient {
                         HttpMethod.POST,
                         RestClient.build(
                                 new Pair<>(X_AUTH_USERNAME_HEADER, user.getName()),
-                                new Pair<>(X_AUTH_PASSWORD_HEADER, user.getPassword())),
+                                new Pair<>(X_AUTH_PASSWORD_HEADER, user.getPassword())
+                        ),
                         Optional.empty(),
                         Loginresponse.class);
         Assert.assertNotNull(loginResponse);

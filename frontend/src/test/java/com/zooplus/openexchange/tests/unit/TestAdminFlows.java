@@ -19,7 +19,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.util.Optional;
 
 import static com.zooplus.openexchange.controllers.v1.Version.STATUS_PATH;
-import static com.zooplus.openexchange.security.filters.CsrfTokenGeneratorFilter.*;
+import static com.zooplus.openexchange.security.filters.CsrfTokenReflectionFilter.*;
 import static com.zooplus.openexchange.security.filters.DataSourceAuthenticationFilter.X_AUTH_TOKEN_HEADER;
 
 @RunWith(SpringJUnit4ClassRunner.class)

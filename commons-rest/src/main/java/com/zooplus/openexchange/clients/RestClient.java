@@ -7,6 +7,7 @@ import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
+import java.util.Map;
 import java.util.Optional;
 
 public class RestClient {
@@ -47,11 +48,19 @@ public class RestClient {
 
     @SafeVarargs
     public static HttpHeaders build(Pair<String, String>... pairs){
-        HttpHeaders headers = new HttpHeaders();
-        for(Pair pair : pairs){
-            headers.add((String) pair.getKey(), (String) pair.getValue());
+        return build(new HttpHeaders(), pairs);
+    }
+
+    @SafeVarargs
+    public static HttpHeaders build(HttpHeaders headers, Pair<String, String>... pairs){
+        HttpHeaders newHeaders = new HttpHeaders();
+        for(Map.Entry<String, String> pair : headers.toSingleValueMap().entrySet()){
+            newHeaders.add(pair.getKey(), pair.getValue());
         }
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        return HttpHeaders.readOnlyHttpHeaders(headers);
+        for(Pair pair : pairs){
+            newHeaders.add((String) pair.getKey(), (String) pair.getValue());
+        }
+        newHeaders.setContentType(MediaType.APPLICATION_JSON);
+        return HttpHeaders.readOnlyHttpHeaders(newHeaders);
     }
 }

@@ -25,6 +25,7 @@ public class DataSourceAuthenticationFilter extends CustomAuthenticationFilter {
     public final static String X_AUTH_TOKEN_HEADER = "x-auth-token";
 
     private final static Logger logger = LoggerFactory.getLogger(DataSourceAuthenticationFilter.class);
+
     protected void processWithCustomAuthentication(HttpServletRequest httpRequest,
                                                    HttpServletResponse httpResponse) throws IOException {
 
@@ -41,12 +42,12 @@ public class DataSourceAuthenticationFilter extends CustomAuthenticationFilter {
     }
 
     @Override
-    public String[] actuatorEndpoints() {
+    public String[] permitAdminEndpoints() {
         return new String[]{ADMIN_ENDPOINT, USER_REGISTRATION_PATH};
     }
 
     @Override
-    public String[] permitSecurityEndpoints() {
+    public String[] permitAllEndpoints() {
         return new String[]{USER_LOGIN_PATH};
     }
 
@@ -56,13 +57,20 @@ public class DataSourceAuthenticationFilter extends CustomAuthenticationFilter {
     }
 
     @Override
-    public String authenticationPath() {
+    public String loginEndpoint() {
+        return USER_LOGIN_PATH;
+    }
+
+    @Override
+    public String logoutEndpoint() {
         return USER_LOGIN_PATH;
     }
 
     @Override
     @Bean
     public CsrfTokenRepository csrfTokenRepository() {
+        HttpSessionCsrfTokenRepository sessionCsrfTokenRepository = new HttpSessionCsrfTokenRepository();
+        sessionCsrfTokenRepository.setSessionAttributeName("_csrf");
         return new HttpSessionCsrfTokenRepository();
     }
 }

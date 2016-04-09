@@ -1,6 +1,6 @@
 package com.zooplus.openexchange.security;
 
-import com.zooplus.openexchange.security.filters.CsrfTokenGeneratorFilter;
+import com.zooplus.openexchange.security.filters.CsrfTokenReflectionFilter;
 import com.zooplus.openexchange.security.filters.CustomAuthenticationFilter;
 import com.zooplus.openexchange.security.providers.CustomAuthenticationProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.security.web.csrf.CsrfFilter;
-import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 import org.springframework.session.web.http.HeaderHttpSessionStrategy;
 
@@ -28,35 +27,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private CustomAuthenticationFilter customAuthenticationFilter;
     @Autowired
     private CustomAuthenticationProvider customAuthenticationProvider;
-    @Autowired
-    private CsrfTokenRepository csrfTokenRepository;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-                .csrf()
-                .ignoringAntMatchers(customAuthenticationFilter.permitCsrfEndpoints())
-                .csrfTokenRepository(csrfTokenRepository)
-                .and()
-                .addFilterBefore(
-                        new CsrfTokenGeneratorFilter(csrfTokenRepository),
-                        CsrfFilter.class);
 
-        http
+        http.csrf().ignoringAntMatchers(customAuthenticationFilter.permitCsrfEndpoints())
+                .and()
                 .authenticationProvider(customAuthenticationProvider)
-                .authorizeRequests().anyRequest().authenticated()
-                .antMatchers(customAuthenticationFilter.actuatorEndpoints()).hasRole("ADMIN")
-                .antMatchers(customAuthenticationFilter.permitSecurityEndpoints()).permitAll()
+                .authorizeRequests()
+                .antMatchers(customAuthenticationFilter.permitAdminEndpoints()).hasRole("ADMIN")
+                .antMatchers(customAuthenticationFilter.permitAllEndpoints()).permitAll()
                 .and()
-                .anonymous().disable()
-                .exceptionHandling().authenticationEntryPoint(unauthorizedEntryPoint());
-
-        http
+                .addFilterAfter(
+                        new CsrfTokenReflectionFilter(),
+                        CsrfFilter.class)
                 .addFilterBefore(
                         customAuthenticationFilter,
-                        BasicAuthenticationFilter.class
-                );
-
+                        BasicAuthenticationFilter.class)
+                .exceptionHandling().authenticationEntryPoint(unauthorizedEntryPoint());
+                /*.and().logout()
+                .logoutRequestMatcher(new AntPathRequestMatcher(customAuthenticationFilter.logoutEndpoint()));*/
     }
 
     @Override
