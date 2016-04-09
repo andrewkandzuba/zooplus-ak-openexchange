@@ -6,7 +6,7 @@ import org.mockito.Mockito;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.security.web.csrf.CsrfTokenRepository;
+import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 
 @SpringBootApplication(
         scanBasePackages = {
@@ -25,7 +25,7 @@ public class ControllersStarter {
         return Mockito.mock(UserRepository.class);
     }
     @Bean
-    public CsrfTokenRepository csrfTokenRepository(){
-        return Mockito.mock(CsrfTokenRepository.class);
+    public HttpSessionCsrfTokenRepository httpSessionCsrfTokenRepository(){
+        return Mockito.mock(HttpSessionCsrfTokenRepository.class);
     }
 }

@@ -4,11 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zooplus.openexchange.protocol.rest.v1.Loginresponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.csrf.CsrfTokenRepository;
-import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
@@ -53,7 +50,7 @@ public class DataSourceAuthenticationFilter extends CustomAuthenticationFilter {
 
     @Override
     public String[] permitCsrfEndpoints() {
-        return new String[]{USER_LOGIN_PATH, USER_LOGOUT_PATH};
+        return new String[]{USER_LOGIN_PATH};
     }
 
     @Override
@@ -63,14 +60,6 @@ public class DataSourceAuthenticationFilter extends CustomAuthenticationFilter {
 
     @Override
     public String logoutEndpoint() {
-        return USER_LOGIN_PATH;
-    }
-
-    @Override
-    @Bean
-    public CsrfTokenRepository csrfTokenRepository() {
-        HttpSessionCsrfTokenRepository sessionCsrfTokenRepository = new HttpSessionCsrfTokenRepository();
-        sessionCsrfTokenRepository.setSessionAttributeName("_csrf");
-        return new HttpSessionCsrfTokenRepository();
+        return USER_LOGOUT_PATH;
     }
 }

@@ -72,6 +72,7 @@ public class TestUserRegistrationFlows extends TestMockedClient {
                                 HttpMethod.POST,
                                 RestClient.build(
                                         new Pair<>(X_AUTH_TOKEN_HEADER, getAdminSessionToken()),
+                                        new Pair<>("X-CSRF-HEADER", CSRF_TOKEN_HEADER),
                                         new Pair<>(CSRF_TOKEN_HEADER, csrfToken.getToken())
                                 ),
                                 Optional.of(req),

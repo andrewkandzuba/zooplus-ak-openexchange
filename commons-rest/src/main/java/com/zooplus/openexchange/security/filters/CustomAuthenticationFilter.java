@@ -9,7 +9,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.UrlPathHelper;
 
@@ -32,7 +31,6 @@ public abstract class CustomAuthenticationFilter extends OncePerRequestFilter {
     public abstract String loginEndpoint();
 
     public abstract String[] permitCsrfEndpoints();
-    public abstract CsrfTokenRepository csrfTokenRepository();
 
     protected abstract void processWithCustomAuthentication(HttpServletRequest httpRequest,
                                                             HttpServletResponse httpResponse) throws IOException;

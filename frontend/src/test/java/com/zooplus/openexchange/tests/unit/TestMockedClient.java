@@ -19,7 +19,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.csrf.CsrfToken;
-import org.springframework.security.web.csrf.CsrfTokenRepository;
+import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.session.MapSession;
 
 import javax.annotation.PostConstruct;
@@ -71,7 +71,7 @@ public class TestMockedClient extends TestLocalRestClient {
     }
 
     @Autowired
-    protected CsrfTokenRepository csrfTokenRepository;
+    protected HttpSessionCsrfTokenRepository csrfTokenRepository;
 
     protected CsrfToken mockCsrfToken() {
         final String tokenValue = UUID.randomUUID().toString();

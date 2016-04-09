@@ -34,7 +34,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().ignoringAntMatchers(customAuthenticationFilter.permitCsrfEndpoints())
                 .and()
                 .authenticationProvider(customAuthenticationProvider)
-                .authorizeRequests()
+                .authorizeRequests().anyRequest().authenticated()
                 .antMatchers(customAuthenticationFilter.permitAdminEndpoints()).hasRole("ADMIN")
                 .antMatchers(customAuthenticationFilter.permitAllEndpoints()).permitAll()
                 .and()
@@ -45,8 +45,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         customAuthenticationFilter,
                         BasicAuthenticationFilter.class)
                 .exceptionHandling().authenticationEntryPoint(unauthorizedEntryPoint());
-                /*.and().logout()
-                .logoutRequestMatcher(new AntPathRequestMatcher(customAuthenticationFilter.logoutEndpoint()));*/
     }
 
     @Override

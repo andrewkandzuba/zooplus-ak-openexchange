@@ -125,8 +125,7 @@ public class TestHttpSessionCache extends TestLocalRestClient {
                 .exchange(
                         USER_LOGOUT_PATH,
                         HttpMethod.POST,
-                        RestClient.build(
-                                new Pair<>(X_AUTH_TOKEN_HEADER, secondSessionToken)),
+                        secondSessionHeader,
                         Optional.empty(),
                         Logoutresponse.class
                 );

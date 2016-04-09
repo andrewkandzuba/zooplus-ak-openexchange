@@ -61,6 +61,7 @@ class UsersController extends Version {
     @PreAuthorize("hasAuthority('ROLE_USER')")
     ResponseEntity<Logoutresponse> logout(HttpSession session) throws IOException {
         long sessionLifeTime = System.currentTimeMillis() - session.getCreationTime();
+        session.removeAttribute("_csrf");
         session.invalidate();
         Logoutresponse logoutresponse = new Logoutresponse();
         logoutresponse.setSessionLifeTime(sessionLifeTime);
