@@ -20,5 +20,4 @@ public class CsrfTokenReflectionFilter extends OncePerRequestFilter {
         response.setHeader("X-CSRF-TOKEN", token.getToken());
         filterChain.doFilter(request, response);
     }
-
 }

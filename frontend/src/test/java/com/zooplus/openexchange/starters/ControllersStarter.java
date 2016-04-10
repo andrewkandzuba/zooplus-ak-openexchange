@@ -6,13 +6,14 @@ import org.mockito.Mockito;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 
 @SpringBootApplication(
         scanBasePackages = {
                 "com.zooplus.openexchange.controllers.v1",
                 "com.zooplus.openexchange.utils",
-                "com.zooplus.openexchange.security"
+                "com.zooplus.openexchange.security.filters",
+                "com.zooplus.openexchange.security.providers",
+                "com.zooplus.openexchange.security.configurations.stubs"
         })
 @PropertySource("classpath:config/environment-test.properties")
 public class ControllersStarter {
@@ -23,9 +24,5 @@ public class ControllersStarter {
     @Bean
     public UserRepository userRepository(){
         return Mockito.mock(UserRepository.class);
-    }
-    @Bean
-    public HttpSessionCsrfTokenRepository httpSessionCsrfTokenRepository(){
-        return Mockito.mock(HttpSessionCsrfTokenRepository.class);
     }
 }

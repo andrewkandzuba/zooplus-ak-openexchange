@@ -1,31 +1,58 @@
 package com.zooplus.openexchange.security.filters;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.zooplus.openexchange.controllers.v1.Version;
 import com.zooplus.openexchange.protocol.rest.v1.Loginresponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.util.UrlPathHelper;
 
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
 
-import static com.zooplus.openexchange.controllers.v1.Version.*;
-
 @Component
-public class DataSourceAuthenticationFilter extends CustomAuthenticationFilter {
+public class DataSourceAuthenticationFilter extends OncePerRequestFilter {
     public final static String X_AUTH_USERNAME_HEADER = "x-auth-username";
     public final static String X_AUTH_PASSWORD_HEADER = "x-auth-password";
     public final static String X_AUTH_TOKEN_HEADER = "x-auth-token";
-
     private final static Logger logger = LoggerFactory.getLogger(DataSourceAuthenticationFilter.class);
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
-    protected void processWithCustomAuthentication(HttpServletRequest httpRequest,
-                                                   HttpServletResponse httpResponse) throws IOException {
+    @Override
+    protected void doFilterInternal(HttpServletRequest httpRequest, HttpServletResponse httpResponse, FilterChain chain) throws ServletException, IOException {
+        try {
+            if (postToAuthenticate(httpRequest)) {
+                processWithCustomAuthentication(httpRequest, httpResponse);
+                return;
+            }
+            logger.debug("CustomAuthenticationFilter is passing request down the filter chain");
+            chain.doFilter(httpRequest, httpResponse);
+        } catch (InternalAuthenticationServiceException internalAuthenticationServiceException) {
+            SecurityContextHolder.clearContext();
+            logger.error("Internal authentication service exception", internalAuthenticationServiceException);
+            httpResponse.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        } catch (AuthenticationException authenticationException) {
+            SecurityContextHolder.clearContext();
+            httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, authenticationException.getMessage());
+        }
+    }
 
+    private void processWithCustomAuthentication(HttpServletRequest httpRequest,
+                                                 HttpServletResponse httpResponse) throws IOException {
         Optional<String> username = Optional.ofNullable(httpRequest.getHeader(X_AUTH_USERNAME_HEADER));
         Optional<String> password = Optional.ofNullable(httpRequest.getHeader(X_AUTH_PASSWORD_HEADER));
         logger.debug("Trying to authenticate user {} by X-Auth-Username method", username);
@@ -38,28 +65,23 @@ public class DataSourceAuthenticationFilter extends CustomAuthenticationFilter {
         httpResponse.getWriter().print(tokenJsonResponse);
     }
 
-    @Override
-    public String[] permitAdminEndpoints() {
-        return new String[]{ADMIN_ENDPOINT, USER_REGISTRATION_PATH};
+    private Authentication tryToAuthenticateWithUsernameAndPassword(Optional<String> username, Optional<String> password) {
+        UsernamePasswordAuthenticationToken requestAuthentication = new UsernamePasswordAuthenticationToken(username, password);
+        return tryToAuthenticate(requestAuthentication);
     }
 
-    @Override
-    public String[] permitAllEndpoints() {
-        return new String[]{USER_LOGIN_PATH};
+    private Authentication tryToAuthenticate(Authentication requestAuthentication) {
+        Authentication responseAuthentication = authenticationManager.authenticate(requestAuthentication);
+        if (responseAuthentication == null || !responseAuthentication.isAuthenticated()) {
+            throw new InternalAuthenticationServiceException("Unable to authenticate Domain User for provided credentials");
+        }
+        logger.debug("User successfully authenticated");
+        return responseAuthentication;
     }
 
-    @Override
-    public String[] permitCsrfEndpoints() {
-        return new String[]{USER_LOGIN_PATH};
-    }
-
-    @Override
-    public String loginEndpoint() {
-        return USER_LOGIN_PATH;
-    }
-
-    @Override
-    public String logoutEndpoint() {
-        return USER_LOGOUT_PATH;
+    private boolean postToAuthenticate(HttpServletRequest httpRequest) {
+        String resourcePath = new UrlPathHelper().getPathWithinApplication(httpRequest);
+        return Version.USER_LOGIN_PATH.equalsIgnoreCase(resourcePath)
+                && httpRequest.getMethod().equals("POST");
     }
 }

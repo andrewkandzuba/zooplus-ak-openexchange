@@ -12,12 +12,14 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.web.csrf.CsrfToken;
+import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -36,6 +38,8 @@ import static com.zooplus.openexchange.security.filters.DataSourceAuthentication
 @WebIntegrationTest("server.port:0")
 @ActiveProfiles("controllers")
 public class TestUserRegistrationFlows extends TestMockedClient {
+    @Autowired
+    private CsrfTokenRepository csrfTokenRepository;
 
     @Test
     public void testUserRegistration() throws Exception {
@@ -62,7 +66,7 @@ public class TestUserRegistrationFlows extends TestMockedClient {
         req.setEmail(userEmail);
 
         // Mock csrf token
-        CsrfToken csrfToken = mockCsrfToken();
+        CsrfToken csrfToken = csrfTokenRepository.generateToken(null);
 
         // Send request
         ResponseEntity<Registrationresponse> resp =

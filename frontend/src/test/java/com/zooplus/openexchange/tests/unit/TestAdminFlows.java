@@ -7,19 +7,21 @@ import javafx.util.Pair;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.web.csrf.CsrfToken;
+import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Optional;
 
 import static com.zooplus.openexchange.controllers.v1.Version.STATUS_PATH;
-import static com.zooplus.openexchange.security.filters.CsrfTokenReflectionFilter.*;
+import static com.zooplus.openexchange.security.filters.CsrfTokenReflectionFilter.CSRF_TOKEN_HEADER;
 import static com.zooplus.openexchange.security.filters.DataSourceAuthenticationFilter.X_AUTH_TOKEN_HEADER;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -27,9 +29,12 @@ import static com.zooplus.openexchange.security.filters.DataSourceAuthentication
 @WebIntegrationTest("server.port:0")
 @ActiveProfiles("controllers")
 public class TestAdminFlows extends TestMockedClient {
+    @Autowired
+    private CsrfTokenRepository csrfTokenRepository;
+
     @Test
     public void testAdminStatusPath() throws Throwable {
-        CsrfToken csrfToken = mockCsrfToken();
+        CsrfToken csrfToken = csrfTokenRepository.generateToken(null);
 
         // Make a request
         ResponseEntity<Statusresponse> response =
@@ -39,7 +44,8 @@ public class TestAdminFlows extends TestMockedClient {
                                 HttpMethod.GET,
                                 RestClient.build(
                                         new Pair<>(X_AUTH_TOKEN_HEADER, getAdminSessionToken()),
-                                        new Pair<>(CSRF_TOKEN_HEADER, csrfToken.getHeaderName())
+                                        new Pair<>("X-CSRF-HEADER", CSRF_TOKEN_HEADER),
+                                        new Pair<>(CSRF_TOKEN_HEADER, csrfToken.getToken())
                                 ),
                                 Optional.empty(),
                                 Statusresponse.class);

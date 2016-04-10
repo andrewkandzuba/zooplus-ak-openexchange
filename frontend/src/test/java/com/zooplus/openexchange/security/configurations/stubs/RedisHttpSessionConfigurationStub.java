@@ -1,4 +1,4 @@
-package com.zooplus.openexchange.security;
+package com.zooplus.openexchange.security.configurations.stubs;
 
 import org.mockito.Mockito;
 import org.springframework.context.ApplicationEventPublisher;
@@ -18,7 +18,7 @@ import org.springframework.session.data.redis.config.annotation.web.http.RedisHt
 @Configuration
 @EnableRedisHttpSession
 @Profile("controllers")
-public class MockRedisHttpSessionConfiguration extends RedisHttpSessionConfiguration {
+public class RedisHttpSessionConfigurationStub extends RedisHttpSessionConfiguration {
     @Bean
     @Override
     public RedisOperationsSessionRepository sessionRepository(RedisOperations<Object, Object> sessionRedisTemplate, ApplicationEventPublisher applicationEventPublisher) {
