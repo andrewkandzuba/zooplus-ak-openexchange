@@ -23,7 +23,10 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Collections;
 
+import static com.zooplus.openexchange.controllers.v1.Version.USERS_ENDPOINT;
+
 @RestController
+@RequestMapping(USERS_ENDPOINT)
 class UsersController extends Version {
     private final static Logger logger = LoggerFactory.getLogger(UsersController.class);
 

@@ -5,22 +5,21 @@ import com.zooplus.openexchange.integrations.gateways.CurrenciesGateway;
 import com.zooplus.openexchange.protocol.ws.v1.Currencylistrequest;
 import com.zooplus.openexchange.protocol.ws.v1.Currencylistresponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.List;
 
-import static com.zooplus.openexchange.controllers.v1.Version.CURRENCIES_LIST_API;
-import static com.zooplus.openexchange.controllers.v1.Version.CURRENCIES_LIST_TOPIC;
+import static com.zooplus.openexchange.controllers.v1.Version.*;
 
 @Controller
+@RequestMapping(CURRENCIES_ENDPOINT)
 public class CurrenciesController {
     @Autowired
     CurrenciesGateway gateway;
 
-    @MessageMapping(CURRENCIES_LIST_API)
-    @SendTo(CURRENCIES_LIST_TOPIC)
+    @RequestMapping(path = CURRENCIES_LIST_API, method = RequestMethod.GET)
     public Currencylistresponse list(Currencylistrequest request) throws Exception {
         List<Currency> currencies = gateway.getCurrencies();
         Currencylistresponse response = new Currencylistresponse();

@@ -13,8 +13,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
+import static com.zooplus.openexchange.controllers.v1.Version.ADMIN_ENDPOINT;
+
 @RestController
 @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+@RequestMapping(ADMIN_ENDPOINT)
 class AdminController extends Version {
     private final static String VCAP_APPLICATION = "VCAP_APPLICATION";
 

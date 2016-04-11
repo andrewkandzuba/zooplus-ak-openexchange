@@ -21,6 +21,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.util.Optional;
 
 import static com.zooplus.openexchange.controllers.v1.Version.STATUS_PATH;
+import static com.zooplus.openexchange.controllers.v1.Version.ADMIN_ENDPOINT;
 import static com.zooplus.openexchange.security.filters.CsrfTokenReflectionFilter.CSRF_TOKEN_HEADER;
 import static com.zooplus.openexchange.security.filters.DataSourceAuthenticationFilter.X_AUTH_TOKEN_HEADER;
 
@@ -40,7 +41,7 @@ public class TestAdminFlows extends TestMockedClient {
         ResponseEntity<Statusresponse> response =
                 getRestClient()
                         .exchange(
-                                STATUS_PATH,
+                                ADMIN_ENDPOINT + STATUS_PATH,
                                 HttpMethod.GET,
                                 RestClient.build(
                                         new Pair<>(X_AUTH_TOKEN_HEADER, getAdminSessionToken()),

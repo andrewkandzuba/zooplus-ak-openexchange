@@ -1,11 +1,11 @@
 package com.zooplus.openexchange.security.filters;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.zooplus.openexchange.controllers.v1.Version;
 import com.zooplus.openexchange.protocol.rest.v1.Loginresponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,6 +22,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
+
+import static com.zooplus.openexchange.controllers.v1.Version.USER_LOGIN_PATH;
+import static com.zooplus.openexchange.controllers.v1.Version.USERS_ENDPOINT;
 
 @Component
 public class DataSourceAuthenticationFilter extends OncePerRequestFilter {
@@ -81,7 +84,6 @@ public class DataSourceAuthenticationFilter extends OncePerRequestFilter {
 
     private boolean postToAuthenticate(HttpServletRequest httpRequest) {
         String resourcePath = new UrlPathHelper().getPathWithinApplication(httpRequest);
-        return Version.USER_LOGIN_PATH.equalsIgnoreCase(resourcePath)
-                && httpRequest.getMethod().equals("POST");
+        return resourcePath.equalsIgnoreCase(USERS_ENDPOINT + USER_LOGIN_PATH) && HttpMethod.POST.matches(httpRequest.getMethod());
     }
 }

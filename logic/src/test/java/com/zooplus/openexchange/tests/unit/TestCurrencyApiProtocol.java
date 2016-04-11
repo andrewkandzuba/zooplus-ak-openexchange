@@ -1,4 +1,4 @@
-package com.zooplus.openexchange.tests.protocol.v1;
+package com.zooplus.openexchange.tests.unit;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zooplus.openexchange.protocol.integration.v1.Currencies;

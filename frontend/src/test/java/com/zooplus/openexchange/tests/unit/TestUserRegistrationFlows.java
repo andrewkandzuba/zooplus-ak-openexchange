@@ -28,6 +28,7 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Optional;
 
+import static com.zooplus.openexchange.controllers.v1.Version.USERS_ENDPOINT;
 import static com.zooplus.openexchange.controllers.v1.Version.USER_LOGIN_PATH;
 import static com.zooplus.openexchange.controllers.v1.Version.USER_REGISTRATION_PATH;
 import static com.zooplus.openexchange.security.filters.CsrfTokenReflectionFilter.CSRF_TOKEN_HEADER;
@@ -72,7 +73,7 @@ public class TestUserRegistrationFlows extends TestMockedClient {
         ResponseEntity<Registrationresponse> resp =
                 getRestClient()
                         .exchange(
-                                USER_REGISTRATION_PATH,
+                                USERS_ENDPOINT + USER_REGISTRATION_PATH,
                                 HttpMethod.POST,
                                 RestClient.build(
                                         new Pair<>(X_AUTH_TOKEN_HEADER, getAdminSessionToken()),
@@ -96,7 +97,7 @@ public class TestUserRegistrationFlows extends TestMockedClient {
         resp =
                 getRestClient()
                         .exchange(
-                                USER_REGISTRATION_PATH,
+                                USERS_ENDPOINT + USER_REGISTRATION_PATH,
                                 HttpMethod.POST,
                                 RestClient.build(
                                         new Pair<>(X_AUTH_TOKEN_HEADER, getAdminSessionToken()),
@@ -128,7 +129,7 @@ public class TestUserRegistrationFlows extends TestMockedClient {
         ResponseEntity<Loginresponse> loginResp =
                 getRestClient()
                         .exchange(
-                                USER_LOGIN_PATH,
+                                USERS_ENDPOINT + USER_LOGIN_PATH,
                                 HttpMethod.POST,
                                 RestClient.build(
                                         new Pair<>(X_AUTH_USERNAME_HEADER, user.getName()),

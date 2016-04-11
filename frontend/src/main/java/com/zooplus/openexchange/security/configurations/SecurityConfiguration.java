@@ -32,13 +32,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http
                 .csrf()
                 .csrfTokenRepository(csrfTokenRepository())
-                .ignoringAntMatchers(USER_LOGIN_PATH);
+                .ignoringAntMatchers(USERS_ENDPOINT + USER_LOGIN_PATH);
 
         http
                 .authenticationProvider(authenticationProvider())
                 .authorizeRequests().anyRequest().authenticated()
-                .antMatchers(ADMIN_ENDPOINT, USER_REGISTRATION_PATH).hasRole("ADMIN")
-                .antMatchers(USER_LOGIN_PATH).permitAll()
+                .antMatchers(ADMIN_ENDPOINT, USERS_ENDPOINT + USER_REGISTRATION_PATH).hasRole("ADMIN")
+                .antMatchers(USERS_ENDPOINT + USER_LOGIN_PATH).permitAll()
                 .and()
                 .addFilterAfter(
                         new CsrfTokenReflectionFilter(),
@@ -75,6 +75,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return new HeaderHttpSessionStrategy();
     }
 
+    @Override
     @Bean
     public AuthenticationManager authenticationManager() throws Exception {
         return super.authenticationManager();

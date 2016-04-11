@@ -59,7 +59,7 @@ public class TestHttpSessionCache extends TestLocalRestClient {
         // Login for the first time
         ResponseEntity<Loginresponse> loginResponse = getRestClient()
                 .exchange(
-                        USER_LOGIN_PATH,
+                        USERS_ENDPOINT + USER_LOGIN_PATH,
                         HttpMethod.POST,
                         RestClient.build(
                                 new Pair<>(X_AUTH_USERNAME_HEADER, user.getName()),
@@ -76,7 +76,7 @@ public class TestHttpSessionCache extends TestLocalRestClient {
         // Try to access user resource
         ResponseEntity<Sessiondetailsresponse> sessionDetailsResponse = getRestClient()
                 .exchange(
-                        USER_SESSION_DETAILS_PATH,
+                        USERS_ENDPOINT + USER_SESSION_DETAILS_PATH,
                         HttpMethod.GET,
                         firstSessionHeader,
                         Optional.empty(),
@@ -90,7 +90,7 @@ public class TestHttpSessionCache extends TestLocalRestClient {
         //  Login with a same user again => second session
         loginResponse = getRestClient()
                 .exchange(
-                        USER_LOGIN_PATH,
+                        USERS_ENDPOINT + USER_LOGIN_PATH,
                         HttpMethod.POST,
                         RestClient.build(
                                 new Pair<>(X_AUTH_USERNAME_HEADER, user.getName()),
@@ -109,7 +109,7 @@ public class TestHttpSessionCache extends TestLocalRestClient {
         // Try to access user resource on behalf on second session
         sessionDetailsResponse = getRestClient()
                 .exchange(
-                        USER_SESSION_DETAILS_PATH,
+                        USERS_ENDPOINT + USER_SESSION_DETAILS_PATH,
                         HttpMethod.GET,
                         secondSessionHeader,
                         Optional.empty(),
@@ -123,7 +123,7 @@ public class TestHttpSessionCache extends TestLocalRestClient {
         // Logout from the second session
         ResponseEntity<Logoutresponse> logoutResponse = getRestClient()
                 .exchange(
-                        USER_LOGOUT_PATH,
+                        USERS_ENDPOINT + USER_LOGOUT_PATH,
                         HttpMethod.POST,
                         secondSessionHeader,
                         Optional.empty(),
@@ -136,7 +136,7 @@ public class TestHttpSessionCache extends TestLocalRestClient {
         // Not able to access API with invalidated token
         sessionDetailsResponse = getRestClient()
                 .exchange(
-                        USER_SESSION_DETAILS_PATH,
+                        USERS_ENDPOINT + USER_SESSION_DETAILS_PATH,
                         HttpMethod.GET,
                         secondSessionHeader,
                         Optional.empty(),
@@ -148,7 +148,7 @@ public class TestHttpSessionCache extends TestLocalRestClient {
         // But still can do it with valid token
         sessionDetailsResponse = getRestClient()
                 .exchange(
-                        USER_SESSION_DETAILS_PATH,
+                        USERS_ENDPOINT + USER_SESSION_DETAILS_PATH,
                         HttpMethod.GET,
                         firstSessionHeader,
                         Optional.empty(),
