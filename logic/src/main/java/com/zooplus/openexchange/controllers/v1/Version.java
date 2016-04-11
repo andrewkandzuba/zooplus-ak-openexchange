@@ -3,12 +3,12 @@ package com.zooplus.openexchange.controllers.v1;
 public class Version {
     public final static String API_PATH_V1 = "/api/v1";
 
-    // categories
-    public final static String CURRENCIES_ENDPOINT = API_PATH_V1 + "/currencies";
+    // transports
     public final static String WS_ENDPOINT = "/ws";
+    public final static String REST_ENDPOINT = "/rest";
 
-    // broker's topics
-    public final static String TOPIC_BROKER = "/topic/";
+    // categories
+    public final static String CURRENCIES_ENDPOINT = "/currencies";
 
     // methods
     public final static String CURRENCIES_LIST_API = "/list";

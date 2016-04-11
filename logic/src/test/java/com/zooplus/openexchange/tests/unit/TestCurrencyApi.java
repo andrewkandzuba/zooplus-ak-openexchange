@@ -17,6 +17,7 @@ import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketMessage;
 import org.springframework.web.socket.WebSocketSession;
+import org.springframework.web.socket.client.WebSocketClient;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 import org.springframework.web.socket.sockjs.client.RestTemplateXhrTransport;
@@ -30,6 +31,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import static com.zooplus.openexchange.controllers.v1.Version.API_PATH_V1;
+import static com.zooplus.openexchange.controllers.v1.Version.WS_ENDPOINT;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(ApiStarter.class)
@@ -39,7 +41,7 @@ public class TestCurrencyApi {
     private final static Logger logger = LoggerFactory.getLogger(TestCurrencyApi.class);
     @Value("${local.server.port}")
     private int port;
-    private SockJsClient sockJsClient;
+    private WebSocketClient sockJsClient;
 
     @Before
     public void setUp() throws Exception {
@@ -63,7 +65,7 @@ public class TestCurrencyApi {
             protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
                 reply.countDown();
             }
-        }, "http://localhost:" + port + API_PATH_V1);
+        }, "http://localhost:" + port + API_PATH_V1 + WS_ENDPOINT);
 
         connected.await(1000L, TimeUnit.MILLISECONDS);
 

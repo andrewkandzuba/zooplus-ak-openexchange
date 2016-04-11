@@ -14,7 +14,7 @@ import java.util.List;
 import static com.zooplus.openexchange.controllers.v1.Version.*;
 
 @Controller
-@RequestMapping(CURRENCIES_ENDPOINT)
+@RequestMapping(API_PATH_V1 + REST_ENDPOINT + CURRENCIES_ENDPOINT)
 public class CurrenciesController {
     @Autowired
     CurrenciesGateway gateway;
