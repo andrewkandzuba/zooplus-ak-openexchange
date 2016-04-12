@@ -70,7 +70,7 @@ public class TestCurrencyApi {
                 Assert.assertTrue(response.getCurrencies().stream().anyMatch(currency -> currency.getCode().equals("USD")));
                 reply.countDown();
             }
-        }, "http://localhost:" + port + API_PATH_V1 + WS_ENDPOINT);
+        }, "http://localhost:" + port + API_PATH_V1 + WS_ENDPOINT + CURRENCIES_WS_ENDPOINT);
         Assert.assertTrue(connected.await(3000, TimeUnit.MILLISECONDS));
 
         // Test session is opened and operating

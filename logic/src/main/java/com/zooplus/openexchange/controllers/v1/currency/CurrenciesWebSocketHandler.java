@@ -11,7 +11,7 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 @Component
-public class CentralEndpointHandler extends TextWebSocketHandler {
+class CurrenciesWebSocketHandler extends TextWebSocketHandler {
     @Autowired
     CurrenciesGateway currenciesGateway;
 
