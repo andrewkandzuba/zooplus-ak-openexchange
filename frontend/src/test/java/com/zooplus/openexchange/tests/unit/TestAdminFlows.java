@@ -1,7 +1,7 @@
 package com.zooplus.openexchange.tests.unit;
 
 import com.zooplus.openexchange.clients.RestClient;
-import com.zooplus.openexchange.protocol.rest.v1.Statusresponse;
+import com.zooplus.openexchange.protocol.rest.v1.StatusResponse;
 import com.zooplus.openexchange.starters.ControllersStarter;
 import javafx.util.Pair;
 import org.junit.Assert;
@@ -20,8 +20,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Optional;
 
-import static com.zooplus.openexchange.controllers.v1.Version.STATUS_PATH;
 import static com.zooplus.openexchange.controllers.v1.Version.ADMIN_ENDPOINT;
+import static com.zooplus.openexchange.controllers.v1.Version.STATUS_PATH;
 import static com.zooplus.openexchange.security.filters.CsrfTokenReflectionFilter.CSRF_TOKEN_HEADER;
 import static com.zooplus.openexchange.security.filters.DataSourceAuthenticationFilter.X_AUTH_TOKEN_HEADER;
 
@@ -38,7 +38,7 @@ public class TestAdminFlows extends TestMockedClient {
         CsrfToken csrfToken = csrfTokenRepository.generateToken(null);
 
         // Make a request
-        ResponseEntity<Statusresponse> response =
+        ResponseEntity<StatusResponse> response =
                 getRestClient()
                         .exchange(
                                 ADMIN_ENDPOINT + STATUS_PATH,
@@ -49,7 +49,7 @@ public class TestAdminFlows extends TestMockedClient {
                                         new Pair<>(CSRF_TOKEN_HEADER, csrfToken.getToken())
                                 ),
                                 Optional.empty(),
-                                Statusresponse.class);
+                                StatusResponse.class);
 
         Assert.assertNotNull(response);
         Assert.assertEquals(response.getStatusCode(), HttpStatus.OK);

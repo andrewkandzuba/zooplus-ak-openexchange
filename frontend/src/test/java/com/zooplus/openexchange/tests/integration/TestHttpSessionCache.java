@@ -5,9 +5,7 @@ import com.zooplus.openexchange.database.domain.Role;
 import com.zooplus.openexchange.database.domain.User;
 import com.zooplus.openexchange.database.repositories.RoleRepository;
 import com.zooplus.openexchange.database.repositories.UserRepository;
-import com.zooplus.openexchange.protocol.rest.v1.Loginresponse;
-import com.zooplus.openexchange.protocol.rest.v1.Logoutresponse;
-import com.zooplus.openexchange.protocol.rest.v1.Sessiondetailsresponse;
+import com.zooplus.openexchange.protocol.rest.v1.*;
 import com.zooplus.openexchange.starters.IntegrationStarter;
 import javafx.util.Pair;
 import org.junit.Assert;
@@ -57,7 +55,7 @@ public class TestHttpSessionCache extends TestLocalRestClient {
         Assert.assertTrue(userRepository.exists(user.getId()));
 
         // Login for the first time
-        ResponseEntity<Loginresponse> loginResponse = getRestClient()
+        ResponseEntity<LoginResponse> loginResponse = getRestClient()
                 .exchange(
                         USERS_ENDPOINT + USER_LOGIN_PATH,
                         HttpMethod.POST,
@@ -66,7 +64,7 @@ public class TestHttpSessionCache extends TestLocalRestClient {
                                 new Pair<>(X_AUTH_PASSWORD_HEADER, user.getPassword())
                         ),
                         Optional.empty(),
-                        Loginresponse.class);
+                        LoginResponse.class);
         Assert.assertNotNull(loginResponse);
         Assert.assertNotNull(loginResponse.getHeaders());
         String firstSessionToken = loginResponse.getHeaders().toSingleValueMap().getOrDefault(X_AUTH_TOKEN_HEADER, "");
@@ -74,13 +72,13 @@ public class TestHttpSessionCache extends TestLocalRestClient {
         HttpHeaders firstSessionHeader = loginResponse.getHeaders();
 
         // Try to access user resource
-        ResponseEntity<Sessiondetailsresponse> sessionDetailsResponse = getRestClient()
+        ResponseEntity<SessionDetailsResponse> sessionDetailsResponse = getRestClient()
                 .exchange(
                         USERS_ENDPOINT + USER_SESSION_DETAILS_PATH,
                         HttpMethod.GET,
                         firstSessionHeader,
                         Optional.empty(),
-                        Sessiondetailsresponse.class
+                        SessionDetailsResponse.class
                 );
         Assert.assertNotNull(sessionDetailsResponse);
         Assert.assertEquals(sessionDetailsResponse.getStatusCode(), HttpStatus.OK);
@@ -96,7 +94,7 @@ public class TestHttpSessionCache extends TestLocalRestClient {
                                 new Pair<>(X_AUTH_USERNAME_HEADER, user.getName()),
                                 new Pair<>(X_AUTH_PASSWORD_HEADER, user.getPassword())),
                         Optional.empty(),
-                        Loginresponse.class);
+                        LoginResponse.class);
         Assert.assertNotNull(loginResponse);
         Assert.assertNotNull(loginResponse.getHeaders());
         String secondSessionToken = loginResponse.getHeaders().toSingleValueMap().getOrDefault(X_AUTH_TOKEN_HEADER, "");
@@ -113,7 +111,7 @@ public class TestHttpSessionCache extends TestLocalRestClient {
                         HttpMethod.GET,
                         secondSessionHeader,
                         Optional.empty(),
-                        Sessiondetailsresponse.class
+                        SessionDetailsResponse.class
                 );
         Assert.assertNotNull(sessionDetailsResponse);
         Assert.assertEquals(sessionDetailsResponse.getStatusCode(), HttpStatus.OK);
@@ -121,13 +119,13 @@ public class TestHttpSessionCache extends TestLocalRestClient {
         Assert.assertEquals(sessionDetailsResponse.getBody().getSessionId(), secondSessionToken);
 
         // Logout from the second session
-        ResponseEntity<Logoutresponse> logoutResponse = getRestClient()
+        ResponseEntity<LogoutResponse> logoutResponse = getRestClient()
                 .exchange(
                         USERS_ENDPOINT + USER_LOGOUT_PATH,
                         HttpMethod.POST,
                         secondSessionHeader,
                         Optional.empty(),
-                        Logoutresponse.class
+                        LogoutResponse.class
                 );
         Assert.assertNotNull(logoutResponse);
         Assert.assertNotNull(logoutResponse.getBody());
@@ -140,7 +138,7 @@ public class TestHttpSessionCache extends TestLocalRestClient {
                         HttpMethod.GET,
                         secondSessionHeader,
                         Optional.empty(),
-                        Sessiondetailsresponse.class
+                        SessionDetailsResponse.class
                 );
         Assert.assertNotNull(sessionDetailsResponse);
         Assert.assertEquals(sessionDetailsResponse.getStatusCode(), HttpStatus.UNAUTHORIZED);
@@ -152,7 +150,7 @@ public class TestHttpSessionCache extends TestLocalRestClient {
                         HttpMethod.GET,
                         firstSessionHeader,
                         Optional.empty(),
-                        Sessiondetailsresponse.class
+                        SessionDetailsResponse.class
                 );
         Assert.assertNotNull(sessionDetailsResponse);
         Assert.assertEquals(sessionDetailsResponse.getStatusCode(), HttpStatus.OK);

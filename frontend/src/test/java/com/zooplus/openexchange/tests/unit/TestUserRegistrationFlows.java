@@ -3,9 +3,9 @@ package com.zooplus.openexchange.tests.unit;
 import com.zooplus.openexchange.clients.RestClient;
 import com.zooplus.openexchange.database.domain.Role;
 import com.zooplus.openexchange.database.domain.User;
-import com.zooplus.openexchange.protocol.rest.v1.Loginresponse;
-import com.zooplus.openexchange.protocol.rest.v1.Registrationrequest;
-import com.zooplus.openexchange.protocol.rest.v1.Registrationresponse;
+import com.zooplus.openexchange.protocol.rest.v1.LoginResponse;
+import com.zooplus.openexchange.protocol.rest.v1.RegistrationRequest;
+import com.zooplus.openexchange.protocol.rest.v1.RegistrationResponse;
 import com.zooplus.openexchange.starters.ControllersStarter;
 import javafx.util.Pair;
 import org.junit.Assert;
@@ -28,9 +28,7 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Optional;
 
-import static com.zooplus.openexchange.controllers.v1.Version.USERS_ENDPOINT;
-import static com.zooplus.openexchange.controllers.v1.Version.USER_LOGIN_PATH;
-import static com.zooplus.openexchange.controllers.v1.Version.USER_REGISTRATION_PATH;
+import static com.zooplus.openexchange.controllers.v1.Version.*;
 import static com.zooplus.openexchange.security.filters.CsrfTokenReflectionFilter.CSRF_TOKEN_HEADER;
 import static com.zooplus.openexchange.security.filters.DataSourceAuthenticationFilter.*;
 
@@ -61,7 +59,7 @@ public class TestUserRegistrationFlows extends TestMockedClient {
         Mockito.when(userRepository.saveAndFlush(Mockito.any(User.class))).thenReturn(user);
 
         // Create request
-        Registrationrequest req = new Registrationrequest();
+        RegistrationRequest req = new RegistrationRequest();
         req.setName(userName);
         req.setPassword(userPassword);
         req.setEmail(userEmail);
@@ -70,7 +68,7 @@ public class TestUserRegistrationFlows extends TestMockedClient {
         CsrfToken csrfToken = csrfTokenRepository.generateToken(null);
 
         // Send request
-        ResponseEntity<Registrationresponse> resp =
+        ResponseEntity<RegistrationResponse> resp =
                 getRestClient()
                         .exchange(
                                 USERS_ENDPOINT + USER_REGISTRATION_PATH,
@@ -81,7 +79,7 @@ public class TestUserRegistrationFlows extends TestMockedClient {
                                         new Pair<>(CSRF_TOKEN_HEADER, csrfToken.getToken())
                                 ),
                                 Optional.of(req),
-                                Registrationresponse.class);
+                                RegistrationResponse.class);
 
         // Analyze response
         Assert.assertNotNull(resp);
@@ -104,7 +102,7 @@ public class TestUserRegistrationFlows extends TestMockedClient {
                                         new Pair<>(CSRF_TOKEN_HEADER, csrfToken.getToken())
                                 ),
                                 Optional.of(req),
-                                Registrationresponse.class);
+                                RegistrationResponse.class);
 
         // Analyze response
         Assert.assertNotNull(resp);
@@ -126,7 +124,7 @@ public class TestUserRegistrationFlows extends TestMockedClient {
         Mockito.when(userRepository.findByNameAndPassword(user.getName(), user.getPassword())).thenReturn(user);
 
         // Login with a regular user
-        ResponseEntity<Loginresponse> loginResp =
+        ResponseEntity<LoginResponse> loginResp =
                 getRestClient()
                         .exchange(
                                 USERS_ENDPOINT + USER_LOGIN_PATH,
@@ -136,7 +134,7 @@ public class TestUserRegistrationFlows extends TestMockedClient {
                                         new Pair<>(X_AUTH_PASSWORD_HEADER, user.getPassword())
                                 ),
                                 Optional.empty(),
-                                Loginresponse.class);
+                                LoginResponse.class);
 
         // Analyze login response
         Assert.assertNotNull(loginResp);

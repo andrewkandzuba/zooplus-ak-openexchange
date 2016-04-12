@@ -11,7 +11,7 @@ import java.util.Collections;
 @SpringBootApplication(
         scanBasePackages = {
                 "com.zooplus.openexchange.integrations",
-                "com.zooplus.openexchange.controllers",
+                "com.zooplus.openexchange.controllers.v1",
                 "com.zooplus.openexchange.configuration"
         })
 @IntegrationComponentScan("com.zooplus.openexchange.integrations")

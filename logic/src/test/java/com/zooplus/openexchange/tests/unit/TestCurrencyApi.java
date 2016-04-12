@@ -1,13 +1,14 @@
 package com.zooplus.openexchange.tests.unit;
 
+import com.zooplus.openexchange.protocol.ws.v1.CurrenciesListRequest;
+import com.zooplus.openexchange.protocol.ws.v1.CurrenciesListResponse;
 import com.zooplus.openexchange.starters.ApiStarter;
-import org.junit.After;
+import com.zooplus.openexchange.utils.MessageConvetor;
+import org.junit.AfterClass;
 import org.junit.Assert;
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
@@ -15,7 +16,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.web.socket.TextMessage;
-import org.springframework.web.socket.WebSocketMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.client.WebSocketClient;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
@@ -30,21 +30,19 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import static com.zooplus.openexchange.controllers.v1.Version.API_PATH_V1;
-import static com.zooplus.openexchange.controllers.v1.Version.WS_ENDPOINT;
+import static com.zooplus.openexchange.controllers.v1.Version.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(ApiStarter.class)
 @WebIntegrationTest("server.port:0")
 @ActiveProfiles("api")
 public class TestCurrencyApi {
-    private final static Logger logger = LoggerFactory.getLogger(TestCurrencyApi.class);
     @Value("${local.server.port}")
     private int port;
-    private WebSocketClient sockJsClient;
+    private static WebSocketClient sockJsClient;
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeClass
+    public static void setUp() throws Exception {
         List<Transport> transports = new ArrayList<>(2);
         transports.add(new WebSocketTransport(new StandardWebSocketClient()));
         transports.add(new RestTemplateXhrTransport());
@@ -55,6 +53,8 @@ public class TestCurrencyApi {
     public void testCurrencyList() throws Exception {
         CountDownLatch connected = new CountDownLatch(1);
         CountDownLatch reply = new CountDownLatch(1);
+
+        // Connect to server WS
         ListenableFuture<WebSocketSession> future = sockJsClient.doHandshake(new TextWebSocketHandler() {
             @Override
             public void afterConnectionEstablished(WebSocketSession session) throws Exception {
@@ -63,25 +63,32 @@ public class TestCurrencyApi {
 
             @Override
             protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
+                Object t = MessageConvetor.from(message.getPayload());
+                Assert.assertTrue(t instanceof CurrenciesListResponse);
+                CurrenciesListResponse response = (CurrenciesListResponse) t;
+                Assert.assertEquals(response.getCurrencies().size(), 1);
+                Assert.assertTrue(response.getCurrencies().stream().anyMatch(currency -> currency.getCode().equals("USD")));
                 reply.countDown();
             }
         }, "http://localhost:" + port + API_PATH_V1 + WS_ENDPOINT);
+        Assert.assertTrue(connected.await(3000, TimeUnit.MILLISECONDS));
 
-        connected.await(1000L, TimeUnit.MILLISECONDS);
-
+        // Test session is opened and operating
         WebSocketSession webSocketSession = future.get();
         Assert.assertNotNull(webSocketSession);
         Assert.assertTrue(webSocketSession.isOpen());
 
-        WebSocketMessage<String> message = new TextMessage("text");
-        webSocketSession.sendMessage(message);
+        // Create message and send
+        CurrenciesListRequest request = new CurrenciesListRequest();
+        request.setTop(10);
+        webSocketSession.sendMessage(new TextMessage(MessageConvetor.to(request, CurrenciesListRequest.class)));
+        Assert.assertTrue(reply.await(3000, TimeUnit.MILLISECONDS));
 
-        reply.await(1000, TimeUnit.MILLISECONDS);
-
+        // close session
         webSocketSession.close();
     }
 
-    @After
-    public void tearDown() throws Exception {
+    @AfterClass
+    public static void tearDown() throws Exception {
     }
 }

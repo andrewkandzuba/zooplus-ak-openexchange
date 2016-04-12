@@ -2,7 +2,11 @@
   "$schema": "http://json-schema.org/draft-04/schema",
   "description": "Currency list request",
   "type": "object",
-  "id": "CurrencyListRequest",
+  "id": "CurrenciesListRequest",
   "properties": {
+    "top": {
+      "type": "integer",
+      "required": true
+    }
   }
 }

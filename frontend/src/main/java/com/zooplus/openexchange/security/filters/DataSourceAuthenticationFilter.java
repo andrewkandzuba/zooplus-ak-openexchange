@@ -1,7 +1,7 @@
 package com.zooplus.openexchange.security.filters;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.zooplus.openexchange.protocol.rest.v1.Loginresponse;
+import com.zooplus.openexchange.protocol.rest.v1.LoginResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +23,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
 
-import static com.zooplus.openexchange.controllers.v1.Version.USER_LOGIN_PATH;
 import static com.zooplus.openexchange.controllers.v1.Version.USERS_ENDPOINT;
+import static com.zooplus.openexchange.controllers.v1.Version.USER_LOGIN_PATH;
 
 @Component
 public class DataSourceAuthenticationFilter extends OncePerRequestFilter {
@@ -62,7 +62,7 @@ public class DataSourceAuthenticationFilter extends OncePerRequestFilter {
         Authentication resultOfAuthentication = tryToAuthenticateWithUsernameAndPassword(username, password);
         SecurityContextHolder.getContext().setAuthentication(resultOfAuthentication);
         httpResponse.setStatus(HttpServletResponse.SC_OK);
-        Loginresponse loginresponse = new Loginresponse();
+        LoginResponse loginresponse = new LoginResponse();
         String tokenJsonResponse = new ObjectMapper().writeValueAsString(loginresponse);
         httpResponse.addHeader("Content-Type", "application/json");
         httpResponse.getWriter().print(tokenJsonResponse);
