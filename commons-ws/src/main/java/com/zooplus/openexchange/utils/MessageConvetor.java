@@ -1,28 +1,30 @@
 package com.zooplus.openexchange.utils;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.zooplus.openexchange.protocol.ws.v1.MessageWrapper;
-
-import java.io.IOException;
+import org.springframework.web.socket.TextMessage;
 
 public abstract class MessageConvetor {
-    private static ObjectMapper objectMapper = new ObjectMapper();
-    public static <K> String to(K payload, Class<K> clazz) throws JsonProcessingException {
+    private static ObjectMapper objectMapper;
+
+    static {
+        objectMapper = new ObjectMapper();
+        objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+    }
+
+    public static <P> TextMessage to(P payload, Class<P> clazz) throws Exception {
         MessageWrapper mw = new MessageWrapper();
         mw.setPayloadClassName(clazz.getName());
         mw.setPayloadContent(objectMapper.writerFor(clazz).writeValueAsString(payload));
-        return objectMapper.writerFor(MessageWrapper.class).writeValueAsString(mw);
+        return new TextMessage(objectMapper.writerFor(MessageWrapper.class).writeValueAsString(mw));
     }
-    public static Object from(String payload) throws IOException, ClassNotFoundException {
-        MessageWrapper messageWrapper = objectMapper.readValue(payload, MessageWrapper.class);
-        Class clazz = Class.forName(messageWrapper.getPayloadClassName());
-        return objectMapper.readValue(messageWrapper.getPayloadContent(), clazz);
+
+    public static MessageWrapper from(TextMessage message) throws Exception {
+        return from(message.getPayload(), MessageWrapper.class);
     }
-    public static MessageWrapper unwrap(String payload) throws IOException, ClassNotFoundException {
-        return objectMapper.readValue(payload, MessageWrapper.class);
-    }
-    public static <K> K from(String payload, Class<K> clazz) throws IOException {
-       return clazz.cast(objectMapper.readValue(payload, clazz));
+
+    public static <P> P from(String buffer, Class<P> clazz) throws Exception {
+        return objectMapper.readValue(buffer, clazz);
     }
 }

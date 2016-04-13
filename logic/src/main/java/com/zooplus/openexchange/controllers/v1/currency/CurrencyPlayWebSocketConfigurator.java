@@ -18,11 +18,11 @@ public class CurrencyPlayWebSocketConfigurator extends JettyWebSocketConfigurato
     @Autowired
     private DefaultHandshakeHandler defaultHandshakeHandler;
     @Autowired
-    private CurrenciesMessagesProcessor currenciesMessagesProcessor;
+    private CurrenciesListRequestMessagesProcessor currenciesListRequestMessagesProcessor;
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(new JettyWebSocketHandler(currenciesMessagesProcessor), API_PATH_V1 + WS_ENDPOINT + CURRENCIES_WS_ENDPOINT)
+        registry.addHandler(new JettyWebSocketHandler(currenciesListRequestMessagesProcessor), API_PATH_V1 + WS_ENDPOINT + CURRENCIES_WS_ENDPOINT)
                 .setHandshakeHandler(defaultHandshakeHandler)
                 .withSockJS();
     }

@@ -7,20 +7,18 @@ import com.zooplus.openexchange.protocol.ws.v1.CurrenciesListResponse;
 import com.zooplus.openexchange.utils.MessageConvetor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 
 @Component
-class CurrenciesMessagesProcessor implements MessageProcessor {
+class CurrenciesListRequestMessagesProcessor implements MessageProcessor {
     @Autowired
     CurrenciesGateway currenciesGateway;
 
     @Override
     public void handle(WebSocketSession session, Object message) throws Exception {
-        CurrenciesListRequest request = (CurrenciesListRequest) message;
         CurrenciesListResponse response = new CurrenciesListResponse();
         response.setCurrencies(currenciesGateway.getCurrencies());
-        session.sendMessage(new TextMessage(MessageConvetor.to(response, CurrenciesListResponse.class)));
+        session.sendMessage(MessageConvetor.to(response, CurrenciesListResponse.class));
     }
 
     @Override

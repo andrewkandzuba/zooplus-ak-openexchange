@@ -18,17 +18,13 @@ public class JettyWebSocketHandler extends TextWebSocketHandler {
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-        // Deserialize messageWrapper from payload
-        MessageWrapper wrapper = MessageConvetor.unwrap(message.getPayload());
-        // Get payload class
+        MessageWrapper wrapper = MessageConvetor.from(message);
         Class clazz = Class.forName(wrapper.getPayloadClassName());
-        // Try to find the first processor, which supports the payload
         Optional<MessageProcessor> processor = Arrays.stream(processors).filter(p -> p.supports(clazz)).findFirst();
-        // Process the message, if processor is found
-        if(processor.isPresent()){
-            processor.get().handle(session, MessageConvetor.from(message.getPayload(), clazz));
+        if (processor.isPresent()) {
+            processor.get().handle(session, MessageConvetor.from(wrapper.getPayloadContent(), clazz));
+        } else {
+            throw new IllegalStateException("Unexpected WebSocket message type: " + clazz);
         }
-        // Throw exception otherwise
-        throw new Exception(String.format("Message class %s is not supported", clazz.getName()));
     }
 }
