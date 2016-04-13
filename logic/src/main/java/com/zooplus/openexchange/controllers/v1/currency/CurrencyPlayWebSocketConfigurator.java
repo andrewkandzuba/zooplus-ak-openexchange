@@ -1,6 +1,7 @@
 package com.zooplus.openexchange.controllers.v1.currency;
 
 import com.zooplus.openexchange.controllers.JettyWebSocketConfigurator;
+import com.zooplus.openexchange.controllers.JettyWebSocketHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
@@ -15,13 +16,13 @@ import static com.zooplus.openexchange.controllers.v1.Version.WS_ENDPOINT;
 @EnableWebSocket
 public class CurrencyPlayWebSocketConfigurator extends JettyWebSocketConfigurator {
     @Autowired
-    private CurrenciesWebSocketHandler wsCurrenciesHandlers;
-    @Autowired
     private DefaultHandshakeHandler defaultHandshakeHandler;
+    @Autowired
+    private CurrenciesMessagesProcessor currenciesMessagesProcessor;
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(wsCurrenciesHandlers, API_PATH_V1 + WS_ENDPOINT + CURRENCIES_WS_ENDPOINT)
+        registry.addHandler(new JettyWebSocketHandler(currenciesMessagesProcessor), API_PATH_V1 + WS_ENDPOINT + CURRENCIES_WS_ENDPOINT)
                 .setHandshakeHandler(defaultHandshakeHandler)
                 .withSockJS();
     }

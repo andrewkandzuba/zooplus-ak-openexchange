@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "description": "Message wrapper for WS payload",
+  "type": "object",
+  "id": "MessageWrapper",
+  "properties": {
+    "payloadClassName" : {
+      "type" : "string",
+      "required": "true"
+    },
+    "payloadContent" : {
+      "type" : "string",
+      "required": "true"
+    }
+  }
+}
