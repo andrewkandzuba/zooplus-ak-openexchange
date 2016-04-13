@@ -4,6 +4,7 @@ import com.zooplus.openexchange.controllers.JettyWebSocketHandler;
 import com.zooplus.openexchange.controllers.MessageProcessor;
 import com.zooplus.openexchange.protocol.ws.v1.CurrenciesListRequest;
 import com.zooplus.openexchange.protocol.ws.v1.CurrenciesListResponse;
+import com.zooplus.openexchange.protocol.ws.v1.ErrorMessage;
 import com.zooplus.openexchange.starters.ApiStarter;
 import com.zooplus.openexchange.utils.MessageConvetor;
 import org.junit.AfterClass;
@@ -16,7 +17,6 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.client.WebSocketClient;
@@ -100,8 +100,9 @@ public class TestCurrencyApi {
 
         WebSocketHandler handler = new JettyWebSocketHandler(){
             @Override
-            public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-                isErrorReceived.compareAndSet(false, (status.getCode() == CloseStatus.SERVER_ERROR.getCode()));
+            public void handleClientErrorMessage(WebSocketSession session, ErrorMessage e) {
+                super.handleClientErrorMessage(session, e);
+                isErrorReceived.compareAndSet(false, true);
                 reply.countDown();
             }
         };
@@ -115,11 +116,7 @@ public class TestCurrencyApi {
                                 e.printStackTrace();
                             }
                         },
-                        throwable -> {
-                            throwable.printStackTrace();
-                            reply.countDown();
-                            isErrorReceived.compareAndSet(false, true);
-                        });
+                        Throwable::printStackTrace);
         Assert.assertTrue(connected.await(3000, TimeUnit.MILLISECONDS));
         Assert.assertTrue(reply.await(3000, TimeUnit.MILLISECONDS));
         Assert.assertTrue(isErrorReceived.get());
