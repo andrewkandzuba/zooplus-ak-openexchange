@@ -17,7 +17,7 @@ class CurrenciesListRequestMessagesProcessor implements MessageProcessor {
     @Override
     public void handle(WebSocketSession session, Object message) throws Exception {
         CurrenciesListResponse response = new CurrenciesListResponse();
-        response.setCurrencies(currenciesGateway.getCurrencies());
+        response.setCurrencies(currenciesGateway.getCurrenciesList());
         session.sendMessage(MessageConvetor.to(response, CurrenciesListResponse.class));
     }
 

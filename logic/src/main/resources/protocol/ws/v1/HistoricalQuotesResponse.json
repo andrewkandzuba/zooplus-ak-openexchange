@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "description": "Historical quotes request",
+  "type": "object",
+  "id": "HistoricalQuotesRequest",
+  "properties": {
+    "type" : "array",
+    "items" : {
+      "javaType" : "com.zooplus.openexchange.database.domain.Rate"
+    }
+  }
+}
