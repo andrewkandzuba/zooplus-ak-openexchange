@@ -62,7 +62,6 @@ public class JettyWebSocketHandler extends TextWebSocketHandler {
         }
     }
 
-
     public void handleClientErrorMessage(WebSocketSession session, ErrorMessage e) {
         LOGGER.info("Handle error message: [sessionId: {}, errorCode: {}, errorMessage: {}", session.getId(), e.getErrorCode(), e.getErrorMessage());
     }

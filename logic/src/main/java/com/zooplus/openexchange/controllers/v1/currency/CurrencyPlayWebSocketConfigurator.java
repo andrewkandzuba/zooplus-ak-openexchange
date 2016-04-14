@@ -1,6 +1,6 @@
 package com.zooplus.openexchange.controllers.v1.currency;
 
-import com.zooplus.openexchange.controllers.JettyWebSocketConfigurator;
+import com.zooplus.openexchange.configurations.JettyWebSocketConfigurator;
 import com.zooplus.openexchange.controllers.JettyWebSocketHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;

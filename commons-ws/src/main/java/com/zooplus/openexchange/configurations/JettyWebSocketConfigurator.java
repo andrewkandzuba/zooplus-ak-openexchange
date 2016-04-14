@@ -1,4 +1,4 @@
-package com.zooplus.openexchange.controllers;
+package com.zooplus.openexchange.configurations;
 
 import org.eclipse.jetty.websocket.api.WebSocketBehavior;
 import org.eclipse.jetty.websocket.api.WebSocketPolicy;
