@@ -4,9 +4,11 @@
   "type": "object",
   "id": "HistoricalQuotesRequest",
   "properties": {
-    "type" : "array",
-    "items" : {
-      "javaType" : "com.zooplus.openexchange.database.domain.Rate"
+    "rates": {
+      "type": "array",
+      "items": {
+        "javaType": "com.zooplus.openexchange.database.domain.Rate"
+      }
     }
   }
 }

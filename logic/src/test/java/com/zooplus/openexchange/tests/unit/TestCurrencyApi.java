@@ -5,6 +5,8 @@ import com.zooplus.openexchange.controllers.MessageProcessor;
 import com.zooplus.openexchange.protocol.v1.FakeMessage;
 import com.zooplus.openexchange.protocol.ws.v1.CurrenciesListRequest;
 import com.zooplus.openexchange.protocol.ws.v1.CurrenciesListResponse;
+import com.zooplus.openexchange.protocol.ws.v1.HistoricalQuotesRequest;
+import com.zooplus.openexchange.protocol.ws.v1.HistoricalQuotesResponse;
 import com.zooplus.openexchange.starters.ApiStarter;
 import com.zooplus.openexchange.utils.MessageConvetor;
 import org.junit.AfterClass;
@@ -72,6 +74,50 @@ public class TestCurrencyApi {
                                 CurrenciesListRequest request = new CurrenciesListRequest();
                                 request.setTop(10);
                                 session.sendMessage(MessageConvetor.to(request, CurrenciesListRequest.class));
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        },
+                        Throwable::printStackTrace);
+
+        Assert.assertTrue(connected.await(3000, TimeUnit.MILLISECONDS));
+        Assert.assertTrue(reply.await(3000, TimeUnit.MILLISECONDS));
+        Assert.assertTrue(isReplyReceived.get());
+    }
+
+    @Test
+    public void testRates() throws Exception {
+        CountDownLatch connected = new CountDownLatch(1);
+        CountDownLatch reply = new CountDownLatch(1);
+        AtomicBoolean isReplyReceived = new AtomicBoolean(false);
+
+        sockJsClient.doHandshake("http://localhost:" + port + API_PATH_V1 + WS_ENDPOINT + CURRENCIES_WS_ENDPOINT,
+                Optional.empty(),
+                new MessageProcessor() {
+                    @Override
+                    public boolean supports(Class<?> payloadClass) {
+                        return payloadClass.equals(HistoricalQuotesResponse.class);
+                    }
+
+                    @Override
+                    public void handle(WebSocketSession session, Object message) throws Exception {
+                        Assert.assertTrue(message instanceof HistoricalQuotesResponse);
+                        HistoricalQuotesResponse response = (HistoricalQuotesResponse) message;
+                        Assert.assertEquals(response.getRates().size(), 2);
+                        Assert.assertTrue(response.getRates().stream().anyMatch(rate -> rate.getBasic().getCode().equals("USD")));
+                        Assert.assertTrue(response.getRates().stream().anyMatch(rate -> rate.getAlternative().getCode().equals("UAH")));
+                        isReplyReceived.compareAndSet(false, true);
+                        session.close();
+                        reply.countDown();
+                    }
+                })
+                .addCallback(
+                        session -> {
+                            connected.countDown();
+                            try {
+                                HistoricalQuotesRequest request = new HistoricalQuotesRequest();
+                                request.setCurrencyCode("USD");
+                                session.sendMessage(MessageConvetor.to(request, HistoricalQuotesRequest.class));
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
