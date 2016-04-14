@@ -1,0 +1,5 @@
+spring:
+  profiles: currencyplay
+curreclyolay:
+  api:
+   accesskey: aaf13c95d3b6669707e8d2af72ac82b5

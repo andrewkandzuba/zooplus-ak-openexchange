@@ -1,4 +1,4 @@
-package com.zooplus.openexchange.tests.protocol.rest.v1;
+package com.zooplus.openexchange.tests.unit;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zooplus.openexchange.protocol.rest.v1.StatusResponse;

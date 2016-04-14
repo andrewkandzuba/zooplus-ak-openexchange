@@ -7,7 +7,6 @@ import org.springframework.integration.annotation.IntegrationComponentScan;
         scanBasePackages = {
                 "com.zooplus.openexchange.integrations",
                 "com.zooplus.openexchange.controllers.v1",
-                "com.zooplus.openexchange.configuration",
                 "com.zooplus.openexchange.stubs"
         })
 @IntegrationComponentScan("com.zooplus.openexchange.integrations")
