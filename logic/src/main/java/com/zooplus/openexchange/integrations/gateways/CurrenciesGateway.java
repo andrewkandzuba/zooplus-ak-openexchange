@@ -13,10 +13,9 @@ import java.util.Optional;
 
 @MessagingGateway
 public interface CurrenciesGateway {
-    String CURRENCIES_INBOUND_CHANNEL = "in.channel.currencies";
     String CURRENCIES_LIST_INBOUND_CHANNEL = "in.channel.currencies.list";
     String CURRENCIES_RATE_INBOUND_CHANNEL = "in.channel.currencies.rates";
-    String RATES_BASIC_CURRENCY_HEADER = "in.channel.currencies.rates.basic.currency";
+    String RATES_BASIC_CURRENCY_HEADER = "x-currency-basic-rates-header";
 
     @Gateway(requestChannel = CURRENCIES_LIST_INBOUND_CHANNEL)
     @Payload("new java.util.Date()")
