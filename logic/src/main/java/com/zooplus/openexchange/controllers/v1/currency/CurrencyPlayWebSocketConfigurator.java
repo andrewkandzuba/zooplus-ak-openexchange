@@ -21,9 +21,7 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.Optional;
 
-import static com.zooplus.openexchange.controllers.v1.Version.API_PATH_V1;
-import static com.zooplus.openexchange.controllers.v1.Version.CURRENCIES_WS_ENDPOINT;
-import static com.zooplus.openexchange.controllers.v1.Version.WS_ENDPOINT;
+import static com.zooplus.openexchange.controllers.v1.Version.*;
 
 @Configuration
 @EnableWebSocket
@@ -45,9 +43,18 @@ public class CurrencyPlayWebSocketConfigurator extends JettyWebSocketConfigurato
 
                             @Override
                             public void handle(WebSocketSession session, Object message) throws Exception {
-                                CurrenciesListResponse response = new CurrenciesListResponse();
-                                response.setCurrencies(currenciesGateway.getCurrenciesList());
-                                session.sendMessage(MessageConvetor.to(response, CurrenciesListResponse.class));
+                                currenciesGateway.getCurrenciesList()
+                                        .addCallback(
+                                                currencies -> {
+                                                    try {
+                                                        CurrenciesListResponse response = new CurrenciesListResponse();
+                                                        response.setCurrencies(currencies);
+                                                        session.sendMessage(MessageConvetor.to(response, CurrenciesListResponse.class));
+                                                    } catch (Exception e) {
+                                                        e.printStackTrace();
+                                                    }
+                                                },
+                                                Throwable::printStackTrace);
                             }
                         },
                         new MessageProcessor() {
@@ -61,9 +68,18 @@ public class CurrencyPlayWebSocketConfigurator extends JettyWebSocketConfigurato
                                 HistoricalQuotesRequest request = (HistoricalQuotesRequest) message;
                                 //@ToDo: The next line to be changed to getting real currency from cache
                                 Currency basicCurrency = new Currency(Optional.ofNullable(request.getCurrencyCode()).orElse("USD"), "");
-                                HistoricalQuotesResponse response = new HistoricalQuotesResponse();
-                                response.setRates(currenciesGateway.getRates(Date.from(Instant.now()), Optional.of(basicCurrency)));
-                                session.sendMessage(MessageConvetor.to(response, HistoricalQuotesResponse.class));
+                                currenciesGateway.getRates(Date.from(Instant.now()), Optional.of(basicCurrency))
+                                        .addCallback(
+                                                rates -> {
+                                                    try {
+                                                        HistoricalQuotesResponse response = new HistoricalQuotesResponse();
+                                                        response.setRates(rates);
+                                                        session.sendMessage(MessageConvetor.to(response, HistoricalQuotesResponse.class));
+                                                    } catch (Exception e) {
+                                                        e.printStackTrace();
+                                                    }
+                                                },
+                                                Throwable::printStackTrace);
                             }
                         }
                 ), API_PATH_V1 + WS_ENDPOINT + CURRENCIES_WS_ENDPOINT)

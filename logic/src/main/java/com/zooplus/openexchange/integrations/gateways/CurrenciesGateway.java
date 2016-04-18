@@ -6,6 +6,7 @@ import org.springframework.integration.annotation.Gateway;
 import org.springframework.integration.annotation.MessagingGateway;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.util.concurrent.ListenableFuture;
 
 import java.util.Date;
 import java.util.List;
@@ -13,14 +14,17 @@ import java.util.Optional;
 
 @MessagingGateway
 public interface CurrenciesGateway {
-    String CURRENCIES_LIST_INBOUND_CHANNEL = "in.channel.currencies.list";
-    String CURRENCIES_RATE_INBOUND_CHANNEL = "in.channel.currencies.rates";
+    String INBOUND_CHANNEL_CURRENCIES_LIST = "in.channel.currencies.list";
+    String OUTBOUND_CHANNEL_CURRENCIES_LIST = "out.channel.currencies.list";
+    String INBOUND_CHANNEL_CURRENCIES_RATE = "in.channel.currencies.rates";
+    String OUTBOUND_CHANNEL_CURRENCIES_RATE = "out.channel.currencies.rates";
+
     String RATES_BASIC_CURRENCY_HEADER = "x-currency-basic-rates-header";
 
-    @Gateway(requestChannel = CURRENCIES_LIST_INBOUND_CHANNEL)
+    @Gateway(requestChannel = INBOUND_CHANNEL_CURRENCIES_LIST)
     @Payload("new java.util.Date()")
-    List<Currency> getCurrenciesList();
+    ListenableFuture<List<Currency>> getCurrenciesList();
 
-    @Gateway(requestChannel = CURRENCIES_RATE_INBOUND_CHANNEL)
-    List<Rate> getRates(@Payload Date date, @Header(CurrenciesGateway.RATES_BASIC_CURRENCY_HEADER) Optional<Currency> basic);
+    @Gateway(requestChannel = INBOUND_CHANNEL_CURRENCIES_RATE)
+    ListenableFuture<List<Rate>> getRates(@Payload Date date, @Header(CurrenciesGateway.RATES_BASIC_CURRENCY_HEADER) Optional<Currency> basic);
 }

@@ -11,11 +11,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.util.concurrent.ListenableFuture;
 
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
+
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(LogicStarter.class)
@@ -25,17 +31,57 @@ public class TestIntegrationFramework {
     CurrenciesGateway gateway;
 
     @Test
-    public void testSupportedCadencesList() {
-        List<Currency> currencies = gateway.getCurrenciesList();
-        Assert.assertNotNull(currencies);
-        Assert.assertTrue(currencies.size() > 0);
+    public void testSupportedCurrenciesList() throws Exception {
+        CountDownLatch latch = new CountDownLatch(1);
+        AtomicBoolean stateSuccess = new AtomicBoolean(false);
+        AtomicBoolean stateError = new AtomicBoolean(false);
+        ListenableFuture<List<Currency>> reply = gateway.getCurrenciesList();
+        reply.addCallback(currencies1 -> {
+            try {
+                List<Currency> currencyList = reply.get();
+                Assert.assertNotNull(currencyList);
+                Assert.assertTrue(currencyList.size() > 0);
+                stateSuccess.compareAndSet(false, true);
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+                stateError.compareAndSet(false, true);
+            }
+            latch.countDown();
+        }, throwable -> {
+            throwable.printStackTrace();
+            stateError.compareAndSet(false, true);
+            latch.countDown();
+        });
+        latch.await(3000, TimeUnit.MILLISECONDS);
+        Assert.assertTrue(stateSuccess.get());
+        Assert.assertFalse(stateError.get());
     }
 
     @Test
     public void testRates() throws Exception {
-        List<Rate> rates = gateway.getRates(Date.from(Instant.now()), Optional.of(new Currency("USD", "United States Dollar")));
-        Assert.assertNotNull(rates);
-        Assert.assertTrue(rates.size() > 0);
-        Assert.assertEquals(rates.get(0).getAlternative().getCode(), "EUR");
+        CountDownLatch latch = new CountDownLatch(1);
+        AtomicBoolean stateSuccess = new AtomicBoolean(false);
+        AtomicBoolean stateError = new AtomicBoolean(false);
+        ListenableFuture<List<Rate>> reply = gateway.getRates(Date.from(Instant.now()), Optional.of(new Currency("USD", "United States Dollar")));
+        reply.addCallback(currencies1 -> {
+            try {
+                List<Rate> rates = reply.get();
+                Assert.assertNotNull(rates);
+                Assert.assertEquals(rates.get(0).getAlternative().getCode(), "EUR");
+                stateSuccess.compareAndSet(false, true);
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+                stateError.compareAndSet(false, true);
+            }
+            latch.countDown();
+        }, throwable -> {
+            throwable.printStackTrace();
+            stateError.compareAndSet(false, true);
+            latch.countDown();
+        });
+        ;
+        latch.await(3000, TimeUnit.MILLISECONDS);
+        Assert.assertTrue(stateSuccess.get());
+        Assert.assertFalse(stateError.get());
     }
 }

@@ -1,4 +1,4 @@
-package com.zooplus.openexchange.stubs;
+package com.zooplus.openexchange.integrations.stubs;
 
 import com.zooplus.openexchange.database.domain.Currency;
 import com.zooplus.openexchange.database.domain.Rate;
@@ -16,13 +16,13 @@ import static com.zooplus.openexchange.integrations.gateways.CurrenciesGateway.*
 @Component
 public class CurrenciesPlayServiceStub implements CurrenciesService {
     @Override
-    @ServiceActivator(inputChannel = CURRENCIES_LIST_INBOUND_CHANNEL)
+    @ServiceActivator(inputChannel = INBOUND_CHANNEL_CURRENCIES_LIST)
     public List<Currency> getCurrencies() {
         return Collections.singletonList(new Currency("USD", "United States Dollar"));
     }
 
     @Override
-    @ServiceActivator(inputChannel = CURRENCIES_RATE_INBOUND_CHANNEL)
+    @ServiceActivator(inputChannel = INBOUND_CHANNEL_CURRENCIES_RATE)
     public List<Rate> getRates(@Payload Date date, @Header(RATES_BASIC_CURRENCY_HEADER) Optional<Currency> basic) {
         return Arrays.asList(
                 new Rate(
