@@ -21,7 +21,7 @@
       "required": false
     },
     "currencies": {
-      "javaType" : "java.util.Map",
+      "javaType" : "java.util.Map<String, String>",
       "type" : "object",
       "required": false
     }

@@ -4,7 +4,8 @@ import com.zooplus.openexchange.configurations.JettyWebSocketConfigurator;
 import com.zooplus.openexchange.controllers.JettyWebSocketHandler;
 import com.zooplus.openexchange.controllers.MessageProcessor;
 import com.zooplus.openexchange.database.domain.Currency;
-import com.zooplus.openexchange.integrations.gateways.CurrenciesGateway;
+import com.zooplus.openexchange.integrations.gateways.CurrencyListGateway;
+import com.zooplus.openexchange.integrations.gateways.CurrencyRatesGateway;
 import com.zooplus.openexchange.protocol.ws.v1.CurrenciesListRequest;
 import com.zooplus.openexchange.protocol.ws.v1.CurrenciesListResponse;
 import com.zooplus.openexchange.protocol.ws.v1.HistoricalQuotesRequest;
@@ -17,10 +18,6 @@ import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 import org.springframework.web.socket.server.support.DefaultHandshakeHandler;
 
-import java.time.Instant;
-import java.util.Date;
-import java.util.Optional;
-
 import static com.zooplus.openexchange.controllers.v1.Version.*;
 
 @Configuration
@@ -29,7 +26,9 @@ public class CurrencyPlayWebSocketConfigurator extends JettyWebSocketConfigurato
     @Autowired
     private DefaultHandshakeHandler defaultHandshakeHandler;
     @Autowired
-    CurrenciesGateway currenciesGateway;
+    private CurrencyListGateway currencyListGateway;
+    @Autowired
+    private CurrencyRatesGateway currencyRatesGateway;
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
@@ -43,7 +42,7 @@ public class CurrencyPlayWebSocketConfigurator extends JettyWebSocketConfigurato
 
                             @Override
                             public void handle(WebSocketSession session, Object message) throws Exception {
-                                currenciesGateway.getCurrenciesList()
+                                currencyListGateway.getCurrenciesList()
                                         .addCallback(
                                                 currencies -> {
                                                     try {
@@ -67,8 +66,11 @@ public class CurrencyPlayWebSocketConfigurator extends JettyWebSocketConfigurato
                             public void handle(WebSocketSession session, Object message) throws Exception {
                                 HistoricalQuotesRequest request = (HistoricalQuotesRequest) message;
                                 //@ToDo: The next line to be changed to getting real currency from cache
-                                Currency basicCurrency = new Currency(Optional.ofNullable(request.getCurrencyCode()).orElse("USD"), "");
-                                currenciesGateway.getRates(Date.from(Instant.now()), Optional.of(basicCurrency))
+                                if(request.getCurrencyCode() == null){
+                                   throw new Exception("HistoricalQuotesRequest: currency code is empty!");
+                                }
+                                Currency basicCurrency = new Currency(request.getCurrencyCode(), "");
+                                currencyRatesGateway.getRates(basicCurrency)
                                         .addCallback(
                                                 rates -> {
                                                     try {

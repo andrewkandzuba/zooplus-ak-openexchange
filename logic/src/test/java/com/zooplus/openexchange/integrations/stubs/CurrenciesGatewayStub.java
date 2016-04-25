@@ -2,28 +2,27 @@ package com.zooplus.openexchange.integrations.stubs;
 
 import com.zooplus.openexchange.database.domain.Currency;
 import com.zooplus.openexchange.database.domain.Rate;
-import com.zooplus.openexchange.integrations.services.CurrenciesService;
 import org.springframework.integration.annotation.ServiceActivator;
-import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
-import static com.zooplus.openexchange.integrations.gateways.CurrenciesGateway.*;
+import static com.zooplus.openexchange.integrations.configurations.CurrencyListIntegrationConfiguration.IN_DIRECT_CURRENCIES_LIST;
+import static com.zooplus.openexchange.integrations.configurations.CurrencyRatesIntegrationConfiguration.IN_DIRECT_CURRENCIES_RATES;
 
 @Component
-public class CurrenciesPlayServiceStub implements CurrenciesService {
-    @Override
-    @ServiceActivator(inputChannel = INBOUND_CHANNEL_CURRENCIES_LIST)
+public class CurrenciesGatewayStub {
+    @ServiceActivator(inputChannel = IN_DIRECT_CURRENCIES_LIST)
     public List<Currency> getCurrencies() {
         return Collections.singletonList(new Currency("USD", "United States Dollar"));
     }
 
-    @Override
-    @ServiceActivator(inputChannel = INBOUND_CHANNEL_CURRENCIES_RATE)
-    public List<Rate> getRates(@Payload Date date, @Header(RATES_BASIC_CURRENCY_HEADER) Optional<Currency> basic) {
+    @ServiceActivator(inputChannel = IN_DIRECT_CURRENCIES_RATES)
+    public List<Rate> getRates(@Payload Currency basic) {
         return Arrays.asList(
                 new Rate(
                         new Currency("USD", "United States Dollar"),

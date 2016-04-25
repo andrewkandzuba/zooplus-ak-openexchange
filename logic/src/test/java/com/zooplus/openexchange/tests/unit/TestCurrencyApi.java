@@ -7,7 +7,7 @@ import com.zooplus.openexchange.protocol.ws.v1.CurrenciesListRequest;
 import com.zooplus.openexchange.protocol.ws.v1.CurrenciesListResponse;
 import com.zooplus.openexchange.protocol.ws.v1.HistoricalQuotesRequest;
 import com.zooplus.openexchange.protocol.ws.v1.HistoricalQuotesResponse;
-import com.zooplus.openexchange.starters.ApiStarter;
+import com.zooplus.openexchange.starters.UnitTestStarter;
 import com.zooplus.openexchange.utils.MessageConvetor;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -29,7 +29,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static com.zooplus.openexchange.controllers.v1.Version.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(ApiStarter.class)
+@SpringApplicationConfiguration(UnitTestStarter.class)
 @WebIntegrationTest("server.port:0")
 @ActiveProfiles("api")
 public class TestCurrencyApi {

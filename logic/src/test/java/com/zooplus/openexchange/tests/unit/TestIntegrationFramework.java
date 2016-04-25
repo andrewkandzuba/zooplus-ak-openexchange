@@ -2,8 +2,9 @@ package com.zooplus.openexchange.tests.unit;
 
 import com.zooplus.openexchange.database.domain.Currency;
 import com.zooplus.openexchange.database.domain.Rate;
-import com.zooplus.openexchange.integrations.gateways.CurrenciesGateway;
-import com.zooplus.openexchange.starters.LogicStarter;
+import com.zooplus.openexchange.integrations.gateways.CurrencyListGateway;
+import com.zooplus.openexchange.integrations.gateways.CurrencyRatesGateway;
+import com.zooplus.openexchange.starters.UnitTestStarter;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,10 +14,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.util.concurrent.ListenableFuture;
 
-import java.time.Instant;
-import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -24,18 +22,20 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringApplicationConfiguration(LogicStarter.class)
-@ActiveProfiles("logic")
+@SpringApplicationConfiguration(UnitTestStarter.class)
+@ActiveProfiles("api")
 public class TestIntegrationFramework {
     @Autowired
-    CurrenciesGateway gateway;
+    private CurrencyListGateway currencyListGateway;
+    @Autowired
+    private CurrencyRatesGateway currencyRatesGateway;
 
     @Test
     public void testSupportedCurrenciesList() throws Exception {
         CountDownLatch latch = new CountDownLatch(1);
         AtomicBoolean stateSuccess = new AtomicBoolean(false);
         AtomicBoolean stateError = new AtomicBoolean(false);
-        ListenableFuture<List<Currency>> reply = gateway.getCurrenciesList();
+        ListenableFuture<List<Currency>> reply = currencyListGateway.getCurrenciesList();
         reply.addCallback(currencies1 -> {
             try {
                 List<Currency> currencyList = reply.get();
@@ -62,7 +62,7 @@ public class TestIntegrationFramework {
         CountDownLatch latch = new CountDownLatch(1);
         AtomicBoolean stateSuccess = new AtomicBoolean(false);
         AtomicBoolean stateError = new AtomicBoolean(false);
-        ListenableFuture<List<Rate>> reply = gateway.getRates(Date.from(Instant.now()), Optional.of(new Currency("USD", "United States Dollar")));
+        ListenableFuture<List<Rate>> reply = currencyRatesGateway.getRates(new Currency("USD", "United States Dollar"));
         reply.addCallback(currencies1 -> {
             try {
                 List<Rate> rates = reply.get();

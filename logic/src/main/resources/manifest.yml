@@ -1,6 +1,6 @@
 ---
 applications:
-- nameName:  ${project.groupId}:${project.artifactId}:${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}
+- name:  ${project.groupId}:${project.artifactId}:${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}
   host:  ${project.artifactId}-${parsedVersion.majorVersion}-${parsedVersion.minorVersion}-${parsedVersion.incrementalVersion}
   memory: 512M
   disk_quota: 1G
