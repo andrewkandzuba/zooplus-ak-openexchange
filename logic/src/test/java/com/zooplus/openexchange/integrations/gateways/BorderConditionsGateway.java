@@ -1,9 +1,6 @@
 package com.zooplus.openexchange.integrations.gateways;
 
-import com.zooplus.openexchange.protocol.ws.v1.CurrencyListRequest;
-import com.zooplus.openexchange.protocol.ws.v1.CurrencyListResponse;
-import com.zooplus.openexchange.protocol.ws.v1.HistoricalQuotesRequest;
-import com.zooplus.openexchange.protocol.ws.v1.HistoricalQuotesResponse;
+import com.zooplus.openexchange.protocol.v1.NullPointerExceptionMessage;
 import org.springframework.integration.annotation.GatewayHeader;
 import org.springframework.integration.annotation.MessagingGateway;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -15,8 +12,6 @@ import static com.zooplus.openexchange.integrations.configurations.CurrencyLayer
         defaultRequestChannel = IN_DIRECT_CURRENCYLAYER,
         defaultHeaders = @GatewayHeader(name = "calledMethod", expression = "#gatewayMethod.name")
 )
-public interface CurrencyLayerApiGateway {
-    ListenableFuture<CurrencyListResponse> getCurrenciesList(@Payload CurrencyListRequest request);
-
-    ListenableFuture<HistoricalQuotesResponse> getHistoricalQuotes(@Payload HistoricalQuotesRequest request);
+public interface BorderConditionsGateway {
+    ListenableFuture<Void> throwNullPointerException(@Payload NullPointerExceptionMessage message);
 }

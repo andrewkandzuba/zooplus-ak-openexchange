@@ -77,6 +77,6 @@ public class JettyWebSocketHandler extends TextWebSocketHandler {
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-        LOGGER.info(String.format("Session %s closed because of %s", session.getId(), status.getReason()));
+        LOGGER.info(String.format("Session: %s has been closed due to: %s", session.getId(), status.getReason()));
     }
 }
