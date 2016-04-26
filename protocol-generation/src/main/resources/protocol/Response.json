@@ -1,0 +1,10 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "description": "Base protocol response",
+  "type": "object",
+  "id": "Response",
+  "extends": {
+    "$ref": "Message.json"
+  },
+  "additionalProperties": false
+}

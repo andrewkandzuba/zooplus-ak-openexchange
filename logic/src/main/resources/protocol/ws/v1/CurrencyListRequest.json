@@ -2,11 +2,16 @@
   "$schema": "http://json-schema.org/draft-04/schema",
   "description": "Currency list request",
   "type": "object",
+  "extends" : {
+    "type" : "object",
+    "javaType" : "com.zooplus.openexchange.protocol.Request"
+  },
   "id": "CurrencyListRequest",
   "properties": {
     "top": {
       "type": "integer",
       "required": true
     }
-  }
+  },
+  "additionalProperties": false
 }

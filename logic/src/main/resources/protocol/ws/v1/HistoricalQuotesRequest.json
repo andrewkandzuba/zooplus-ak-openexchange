@@ -2,11 +2,16 @@
   "$schema": "http://json-schema.org/draft-04/schema",
   "description": "Historical quotes request",
   "type": "object",
+  "extends" : {
+    "type" : "object",
+    "javaType" : "com.zooplus.openexchange.protocol.Request"
+  },
   "id": "HistoricalQuotesRequest",
   "properties": {
     "currencyCode": {
       "type": "string",
       "required": false
     }
-  }
+  },
+  "additionalProperties": false
 }

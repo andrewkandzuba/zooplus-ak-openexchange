@@ -2,6 +2,10 @@
   "$schema": "http://json-schema.org/draft-04/schema",
   "description": "Historical quotes response",
   "type": "object",
+  "extends" : {
+    "type" : "object",
+    "javaType" : "com.zooplus.openexchange.protocol.Response"
+  },
   "id": "HistoricalQuotesResponse",
   "properties": {
     "rates": {
@@ -10,5 +14,6 @@
         "javaType": "com.zooplus.openexchange.database.domain.Rate"
       }
     }
-  }
+  },
+  "additionalProperties": false
 }

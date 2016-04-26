@@ -2,6 +2,10 @@
   "$schema": "http://json-schema.org/draft-04/schema",
   "description": "User registration request",
   "type": "object",
+  "extends" : {
+    "type" : "object",
+    "javaType" : "com.zooplus.openexchange.protocol.Request"
+  },
   "id": "RegistrationRequest",
   "properties": {
     "name": {
