@@ -32,10 +32,9 @@ public class JettyWebSocketHandler extends TextWebSocketHandler {
             return;
         }
         AtomicBoolean handled = new AtomicBoolean(false);
-        Arrays.stream(processors).filter(p -> p.supports(clazz)).forEach(mp -> {
+        Arrays.stream(processors).forEach(mp -> {
             try {
-                mp.handle(session, origin);
-                handled.compareAndSet(false, true);
+                handled.compareAndSet(false, mp.onMessage(session, origin, clazz));
             } catch (Exception e) {
                 LOGGER.error("Error has occurred during message handling process {}  {}  ", session.getId(), e.getMessage());
                 ErrorMessage errorMessage = new ErrorMessage();

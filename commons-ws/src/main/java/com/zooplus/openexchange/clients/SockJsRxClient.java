@@ -14,11 +14,11 @@ import org.springframework.web.socket.sockjs.client.WebSocketTransport;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Consumer;
 
 public class SockJsRxClient {
     private final WebSocketClient sockJsClient;
+
     public static Builder builder() {
         return new SockJsRxClient().new Builder();
     }
@@ -31,14 +31,12 @@ public class SockJsRxClient {
     }
 
     public ListenableFuture<WebSocketSession> doHandshake(String endpoint,
-                                                          Optional<Consumer<ErrorMessage>> errorMessageHandler,
+                                                          Consumer<ErrorMessage> errorMessageHandler,
                                                           MessageProcessor... processors) {
         return sockJsClient.doHandshake(new JettyWebSocketHandler(processors) {
             @Override
             public void handleClientErrorMessage(WebSocketSession session, ErrorMessage e) {
-                if (errorMessageHandler.isPresent()) {
-                    errorMessageHandler.get().accept(e);
-                }
+                errorMessageHandler.accept(e);
             }
         }, endpoint);
     }
@@ -47,7 +45,7 @@ public class SockJsRxClient {
         private Builder() {
         }
 
-        public SockJsRxClient get(){
+        public SockJsRxClient get() {
             return SockJsRxClient.this;
         }
     }

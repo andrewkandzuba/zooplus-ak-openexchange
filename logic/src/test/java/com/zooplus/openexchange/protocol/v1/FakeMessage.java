@@ -1,4 +1,6 @@
 package com.zooplus.openexchange.protocol.v1;
 
-public class FakeMessage {
+import com.zooplus.openexchange.protocol.Request;
+
+public class FakeMessage extends Request {
 }
