@@ -2,6 +2,7 @@ package com.zooplus.openexchange.integrations.stubs;
 
 import com.zooplus.openexchange.database.domain.Currency;
 import com.zooplus.openexchange.database.domain.Rate;
+import com.zooplus.openexchange.protocol.v1.NullPointerExceptionMessage;
 import com.zooplus.openexchange.protocol.ws.v1.CurrencyListRequest;
 import com.zooplus.openexchange.protocol.ws.v1.CurrencyListResponse;
 import com.zooplus.openexchange.protocol.ws.v1.HistoricalQuotesRequest;
@@ -39,4 +40,10 @@ public class CurrenciesGatewayStub {
                                 BigDecimal.valueOf(26.3))));
         return response;
     }
+
+    @ServiceActivator(inputChannel = IN_DIRECT_CURRENCYLAYER)
+    public Void throwNullPointerException(NullPointerExceptionMessage message){
+        throw new NullPointerException("The methods always throws NullPointerException");
+    }
+
 }

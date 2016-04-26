@@ -2,6 +2,7 @@ package com.zooplus.openexchange.tests.unit;
 
 import com.zooplus.openexchange.integrations.gateways.BorderConditionsGateway;
 import com.zooplus.openexchange.integrations.gateways.CurrencyLayerApiGateway;
+import com.zooplus.openexchange.protocol.v1.NullPointerExceptionMessage;
 import com.zooplus.openexchange.protocol.ws.v1.CurrencyListRequest;
 import com.zooplus.openexchange.protocol.ws.v1.HistoricalQuotesRequest;
 import com.zooplus.openexchange.starters.UnitTestStarter;
@@ -69,6 +70,24 @@ public class TestIntegrationFramework {
         ;
         latch.await(3000, TimeUnit.MILLISECONDS);
         Assert.assertTrue(stateSuccess.get());
+        Assert.assertFalse(stateError.get());
+    }
+
+    @Test
+    public void testExceptionHandling() throws Exception {
+        CountDownLatch latch = new CountDownLatch(1);
+        AtomicBoolean stateError = new AtomicBoolean(false);
+        borderConditionsGateway.throwNullPointerException(new NullPointerExceptionMessage())
+                .addCallback(
+                        aVoid -> {
+                        },
+                        throwable -> {
+                            throwable.printStackTrace();
+                            stateError.compareAndSet(false, true);
+                            latch.countDown();
+                        });
+        ;
+        latch.await(3000, TimeUnit.MILLISECONDS);
         Assert.assertFalse(stateError.get());
     }
 }
