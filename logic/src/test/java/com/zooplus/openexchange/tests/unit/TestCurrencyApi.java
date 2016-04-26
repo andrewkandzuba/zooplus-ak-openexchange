@@ -3,10 +3,7 @@ package com.zooplus.openexchange.tests.unit;
 import com.zooplus.openexchange.clients.SockJsRxClient;
 import com.zooplus.openexchange.controllers.MessageProcessor;
 import com.zooplus.openexchange.protocol.v1.FakeMessage;
-import com.zooplus.openexchange.protocol.ws.v1.CurrenciesListRequest;
-import com.zooplus.openexchange.protocol.ws.v1.CurrenciesListResponse;
-import com.zooplus.openexchange.protocol.ws.v1.HistoricalQuotesRequest;
-import com.zooplus.openexchange.protocol.ws.v1.HistoricalQuotesResponse;
+import com.zooplus.openexchange.protocol.ws.v1.*;
 import com.zooplus.openexchange.starters.UnitTestStarter;
 import com.zooplus.openexchange.utils.MessageConvetor;
 import org.junit.AfterClass;
@@ -53,13 +50,13 @@ public class TestCurrencyApi {
                 new MessageProcessor() {
                     @Override
                     public boolean supports(Class<?> payloadClass) {
-                        return payloadClass.equals(CurrenciesListResponse.class);
+                        return payloadClass.equals(CurrencyListResponse.class);
                     }
 
                     @Override
                     public void handle(WebSocketSession session, Object message) throws Exception {
-                        Assert.assertTrue(message instanceof CurrenciesListResponse);
-                        CurrenciesListResponse response = (CurrenciesListResponse) message;
+                        Assert.assertTrue(message instanceof CurrencyListResponse);
+                        CurrencyListResponse response = (CurrencyListResponse) message;
                         Assert.assertEquals(response.getCurrencies().size(), 1);
                         Assert.assertTrue(response.getCurrencies().stream().anyMatch(currency -> currency.getCode().equals("USD")));
                         isReplyReceived.compareAndSet(false, true);
@@ -71,9 +68,9 @@ public class TestCurrencyApi {
                         session -> {
                             connected.countDown();
                             try {
-                                CurrenciesListRequest request = new CurrenciesListRequest();
+                                CurrencyListRequest request = new CurrencyListRequest();
                                 request.setTop(10);
-                                session.sendMessage(MessageConvetor.to(request, CurrenciesListRequest.class));
+                                session.sendMessage(MessageConvetor.to(request, CurrencyListRequest.class));
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }

@@ -3,11 +3,9 @@ package com.zooplus.openexchange.controllers.v1.currency;
 import com.zooplus.openexchange.configurations.JettyWebSocketConfigurator;
 import com.zooplus.openexchange.controllers.JettyWebSocketHandler;
 import com.zooplus.openexchange.controllers.MessageProcessor;
-import com.zooplus.openexchange.database.domain.Currency;
-import com.zooplus.openexchange.integrations.gateways.CurrencyListGateway;
-import com.zooplus.openexchange.integrations.gateways.CurrencyRatesGateway;
-import com.zooplus.openexchange.protocol.ws.v1.CurrenciesListRequest;
-import com.zooplus.openexchange.protocol.ws.v1.CurrenciesListResponse;
+import com.zooplus.openexchange.integrations.gateways.CurrencyLayerApiGateway;
+import com.zooplus.openexchange.protocol.ws.v1.CurrencyListRequest;
+import com.zooplus.openexchange.protocol.ws.v1.CurrencyListResponse;
 import com.zooplus.openexchange.protocol.ws.v1.HistoricalQuotesRequest;
 import com.zooplus.openexchange.protocol.ws.v1.HistoricalQuotesResponse;
 import com.zooplus.openexchange.utils.MessageConvetor;
@@ -26,9 +24,7 @@ public class CurrencyPlayWebSocketConfigurator extends JettyWebSocketConfigurato
     @Autowired
     private DefaultHandshakeHandler defaultHandshakeHandler;
     @Autowired
-    private CurrencyListGateway currencyListGateway;
-    @Autowired
-    private CurrencyRatesGateway currencyRatesGateway;
+    private CurrencyLayerApiGateway currencyLayerApiGateway;
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
@@ -37,18 +33,17 @@ public class CurrencyPlayWebSocketConfigurator extends JettyWebSocketConfigurato
                         new MessageProcessor() {
                             @Override
                             public boolean supports(Class<?> payloadClass) {
-                                return payloadClass.equals(CurrenciesListRequest.class);
+                                return payloadClass.equals(CurrencyListRequest.class);
                             }
 
                             @Override
                             public void handle(WebSocketSession session, Object message) throws Exception {
-                                currencyListGateway.getCurrenciesList()
+                                CurrencyListRequest request = (CurrencyListRequest) message;
+                                currencyLayerApiGateway.getCurrenciesList(request)
                                         .addCallback(
                                                 currencies -> {
                                                     try {
-                                                        CurrenciesListResponse response = new CurrenciesListResponse();
-                                                        response.setCurrencies(currencies);
-                                                        session.sendMessage(MessageConvetor.to(response, CurrenciesListResponse.class));
+                                                        session.sendMessage(MessageConvetor.to(currencies, CurrencyListResponse.class));
                                                     } catch (Exception e) {
                                                         e.printStackTrace();
                                                     }
@@ -69,14 +64,11 @@ public class CurrencyPlayWebSocketConfigurator extends JettyWebSocketConfigurato
                                 if(request.getCurrencyCode() == null){
                                    throw new Exception("HistoricalQuotesRequest: currency code is empty!");
                                 }
-                                Currency basicCurrency = new Currency(request.getCurrencyCode(), "");
-                                currencyRatesGateway.getRates(basicCurrency)
+                                currencyLayerApiGateway.getHistoricalQuotes(request)
                                         .addCallback(
                                                 rates -> {
                                                     try {
-                                                        HistoricalQuotesResponse response = new HistoricalQuotesResponse();
-                                                        response.setRates(rates);
-                                                        session.sendMessage(MessageConvetor.to(response, HistoricalQuotesResponse.class));
+                                                        session.sendMessage(MessageConvetor.to(rates, HistoricalQuotesResponse.class));
                                                     } catch (Exception e) {
                                                         e.printStackTrace();
                                                     }

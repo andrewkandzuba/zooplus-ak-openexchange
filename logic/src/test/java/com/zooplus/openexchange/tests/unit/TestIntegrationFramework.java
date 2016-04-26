@@ -1,9 +1,10 @@
 package com.zooplus.openexchange.tests.unit;
 
-import com.zooplus.openexchange.database.domain.Currency;
-import com.zooplus.openexchange.database.domain.Rate;
-import com.zooplus.openexchange.integrations.gateways.CurrencyListGateway;
-import com.zooplus.openexchange.integrations.gateways.CurrencyRatesGateway;
+import com.zooplus.openexchange.integrations.gateways.CurrencyLayerApiGateway;
+import com.zooplus.openexchange.protocol.ws.v1.CurrencyListRequest;
+import com.zooplus.openexchange.protocol.ws.v1.CurrencyListResponse;
+import com.zooplus.openexchange.protocol.ws.v1.HistoricalQuotesRequest;
+import com.zooplus.openexchange.protocol.ws.v1.HistoricalQuotesResponse;
 import com.zooplus.openexchange.starters.UnitTestStarter;
 import org.junit.Assert;
 import org.junit.Test;
@@ -14,7 +15,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.util.concurrent.ListenableFuture;
 
-import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -26,21 +26,19 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @ActiveProfiles("api")
 public class TestIntegrationFramework {
     @Autowired
-    private CurrencyListGateway currencyListGateway;
-    @Autowired
-    private CurrencyRatesGateway currencyRatesGateway;
+    private CurrencyLayerApiGateway currencyLayerApiGateway;
 
     @Test
     public void testSupportedCurrenciesList() throws Exception {
         CountDownLatch latch = new CountDownLatch(1);
         AtomicBoolean stateSuccess = new AtomicBoolean(false);
         AtomicBoolean stateError = new AtomicBoolean(false);
-        ListenableFuture<List<Currency>> reply = currencyListGateway.getCurrenciesList();
-        reply.addCallback(currencies1 -> {
+        ListenableFuture<CurrencyListResponse> reply = currencyLayerApiGateway.getCurrenciesList(new CurrencyListRequest());
+        reply.addCallback(currencies -> {
             try {
-                List<Currency> currencyList = reply.get();
-                Assert.assertNotNull(currencyList);
-                Assert.assertTrue(currencyList.size() > 0);
+                CurrencyListResponse response = reply.get();
+                Assert.assertNotNull(response);
+                Assert.assertTrue(response.getCurrencies().size() > 0);
                 stateSuccess.compareAndSet(false, true);
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();
@@ -62,12 +60,14 @@ public class TestIntegrationFramework {
         CountDownLatch latch = new CountDownLatch(1);
         AtomicBoolean stateSuccess = new AtomicBoolean(false);
         AtomicBoolean stateError = new AtomicBoolean(false);
-        ListenableFuture<List<Rate>> reply = currencyRatesGateway.getRates(new Currency("USD", "United States Dollar"));
-        reply.addCallback(currencies1 -> {
+        HistoricalQuotesRequest request = new HistoricalQuotesRequest();
+        request.setCurrencyCode("USD");
+        ListenableFuture<HistoricalQuotesResponse> reply = currencyLayerApiGateway.getHistoricalQuotes(request);
+        reply.addCallback(historicalQuotes -> {
             try {
-                List<Rate> rates = reply.get();
-                Assert.assertNotNull(rates);
-                Assert.assertEquals(rates.get(0).getAlternative().getCode(), "EUR");
+                HistoricalQuotesResponse historicalQuotesResponse = reply.get();
+                Assert.assertNotNull(historicalQuotesResponse);
+                Assert.assertEquals(historicalQuotesResponse.getRates().get(0).getAlternative().getCode(), "EUR");
                 stateSuccess.compareAndSet(false, true);
             } catch (InterruptedException | ExecutionException e) {
                 e.printStackTrace();

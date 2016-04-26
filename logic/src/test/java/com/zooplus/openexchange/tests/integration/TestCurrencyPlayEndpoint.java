@@ -1,6 +1,7 @@
 package com.zooplus.openexchange.tests.integration;
 
-import com.zooplus.openexchange.integrations.gateways.CurrencyListGateway;
+import com.zooplus.openexchange.integrations.gateways.CurrencyLayerApiGateway;
+import com.zooplus.openexchange.protocol.ws.v1.CurrencyListRequest;
 import com.zooplus.openexchange.starters.IntegrationTestStarter;
 import org.junit.Assert;
 import org.junit.Test;
@@ -21,15 +22,15 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @ActiveProfiles("integration")
 public class TestCurrencyPlayEndpoint {
     @Autowired
-    private CurrencyListGateway gateway;
+    private CurrencyLayerApiGateway gateway;
 
     @Test
     public void testCurrencyPlayerIntegration() throws Exception {
         CountDownLatch latch = new CountDownLatch(1);
         AtomicBoolean replied = new AtomicBoolean(false);
-        gateway.getCurrenciesList().addCallback(
+        gateway.getCurrenciesList(new CurrencyListRequest()).addCallback(
                 currencies -> {
-                    Assert.assertTrue(currencies.size() > 0);
+                    Assert.assertTrue(currencies.getCurrencies().size() > 0);
                     replied.compareAndSet(false, true);
                     latch.countDown();
                 }, Throwable::printStackTrace);
