@@ -16,7 +16,9 @@ public class CurrencyLayerChannelsConfiguration {
 
     public static final String IN_API_CURRENCYLAYER_LIST = "in.api.currencylayer.list";
     public static final String IN_API_CURRENCYLAYER_HISTORICALQUOTES = "in.api.currencylayer.historicalquotes";
-    public static final String OUT_SUCCESS_PUBSUB_CURRENCYLAYER = "out.success.pubsub.currencylayer";
+
+    public static final String OUT_SUCCESS_PUBSUB_CURRENCYLAYER_LIST = "out.success.pubsub.currencylayer.list";
+    public static final String OUT_SUCCESS_PUBSUB_CURRENCYLAYER_HISTORICALQUOTES = "out.success.pubsub.currencylayer.historicalquotes";
 
     @Bean(name = IN_DIRECT_CURRENCYLAYER_LIST)
     public MessageChannel directListChannel() {
@@ -38,8 +40,13 @@ public class CurrencyLayerChannelsConfiguration {
         return MessageChannels.direct(IN_API_CURRENCYLAYER_HISTORICALQUOTES).get();
     }
 
-    @Bean(name = OUT_SUCCESS_PUBSUB_CURRENCYLAYER)
-    public MessageChannel responseChannel() {
-        return MessageChannels.publishSubscribe(OUT_SUCCESS_PUBSUB_CURRENCYLAYER).get();
+    @Bean(name = OUT_SUCCESS_PUBSUB_CURRENCYLAYER_LIST)
+    public MessageChannel pubSubListResponseChannel() {
+        return MessageChannels.publishSubscribe(OUT_SUCCESS_PUBSUB_CURRENCYLAYER_LIST).get();
+    }
+
+    @Bean(name = OUT_SUCCESS_PUBSUB_CURRENCYLAYER_HISTORICALQUOTES)
+    public MessageChannel pubSubHistoricalQuotesResponseChannel() {
+        return MessageChannels.publishSubscribe(OUT_SUCCESS_PUBSUB_CURRENCYLAYER_HISTORICALQUOTES).get();
     }
 }

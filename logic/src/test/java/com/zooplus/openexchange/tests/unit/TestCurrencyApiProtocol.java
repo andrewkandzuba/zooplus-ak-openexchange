@@ -37,7 +37,7 @@ public class TestCurrencyApiProtocol {
         Assert.assertEquals(ob.getTimestamp().longValue(), 1458216671L);
         Assert.assertEquals(ob.getSource(), "USD");
         Assert.assertEquals(ob.getQuotes().size(), 168);
-        Assert.assertEquals(ob.getQuotes().get("USDAUD"), 1.313802);
+        Assert.assertEquals(ob.getQuotes().get("USDAUD").compareTo(1.313802), 0);
     }
 
     @Test
@@ -55,7 +55,7 @@ public class TestCurrencyApiProtocol {
         Assert.assertEquals(ob.getTimestamp().longValue(), 1456876799L);
         Assert.assertEquals(ob.getSource(), "USD");
         Assert.assertEquals(ob.getQuotes().size(), 168);
-        Assert.assertEquals(ob.getQuotes().get("USDAUD"), 1.392835);
+        Assert.assertEquals(ob.getQuotes().get("USDAUD").compareTo(1.392835), 0);
     }
 
     @Test

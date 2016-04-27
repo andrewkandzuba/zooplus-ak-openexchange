@@ -1,6 +1,7 @@
 package com.zooplus.openexchange.integrations.api;
 
 import com.zooplus.openexchange.protocol.integration.v1.Currencies;
+import com.zooplus.openexchange.protocol.integration.v1.Quotes;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,7 +35,7 @@ public class CurrencyLayerApiIntegrationConfiguration {
         handler.setExpectedResponseType(Currencies.class);
         handler.setMessageConverters(Collections.singletonList(new MappingJackson2HttpMessageConverter()));
         handler.setCharset("UTF-8");
-        handler.setOutputChannelName(OUT_SUCCESS_PUBSUB_CURRENCYLAYER);
+        handler.setOutputChannelName(OUT_SUCCESS_PUBSUB_CURRENCYLAYER_LIST);
         return handler;
     }
 
@@ -42,7 +43,7 @@ public class CurrencyLayerApiIntegrationConfiguration {
     @ServiceActivator(inputChannel = IN_API_CURRENCYLAYER_HISTORICALQUOTES)
     public HttpRequestExecutingMessageHandler restCurrencyLayerHistoricalQuotesListHandler() {
         SpelExpressionParser expressionParser = new SpelExpressionParser();
-        Map<String, Expression> uriVariableExpressions = new HashMap<>(1);
+        Map<String, Expression> uriVariableExpressions = new HashMap<>(2);
         uriVariableExpressions.put("currencies", expressionParser.parseExpression("payload.currencyCode"));
         uriVariableExpressions.put("exchangeDate", expressionParser.parseExpression("payload.exchangeDate"));
         HttpRequestExecutingMessageHandler handler = new HttpRequestExecutingMessageHandler(
@@ -53,10 +54,10 @@ public class CurrencyLayerApiIntegrationConfiguration {
                         + FORMAT_PARAM + "=1");
         handler.setHttpMethod(HttpMethod.GET);
         handler.setUriVariableExpressions(uriVariableExpressions);
-        handler.setExpectedResponseType(Currencies.class);
+        handler.setExpectedResponseType(Quotes.class);
         handler.setMessageConverters(Collections.singletonList(new MappingJackson2HttpMessageConverter()));
         handler.setCharset("UTF-8");
-        handler.setOutputChannelName(OUT_SUCCESS_PUBSUB_CURRENCYLAYER);
+        handler.setOutputChannelName(OUT_SUCCESS_PUBSUB_CURRENCYLAYER_HISTORICALQUOTES);
         return handler;
     }
 }

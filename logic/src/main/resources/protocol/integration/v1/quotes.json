@@ -37,12 +37,12 @@
     },
     "source": {
       "type": "string",
-      "required": false
+      "required": true
     },
     "quotes": {
-      "javaType": "java.util.Map",
+      "javaType": "java.util.Map<String, Double>",
       "type": "object",
-      "required": false
+      "required": true
     }
   }
 }

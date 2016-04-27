@@ -110,7 +110,7 @@ public class TestCurrencyApi {
                             try {
                                 HistoricalQuotesRequest request = new HistoricalQuotesRequest();
                                 request.setCurrencyCode("USD");
-                                request.setExchangeDate(DateFormatUtils.format(System.currentTimeMillis(), "yyyy-mm-dd"));
+                                request.setExchangeDate(DateFormatUtils.format(System.currentTimeMillis(), "yyyy-MM-dd"));
                                 session.sendMessage(MessageConvetor.to(request, HistoricalQuotesRequest.class));
                             } catch (Exception e) {
                                 e.printStackTrace();

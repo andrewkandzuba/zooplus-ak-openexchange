@@ -10,7 +10,6 @@ import com.zooplus.openexchange.protocol.ws.v1.HistoricalQuotesResponse;
 import org.springframework.integration.annotation.MessageEndpoint;
 import org.springframework.integration.annotation.ServiceActivator;
 
-import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collections;
 
@@ -35,11 +34,11 @@ public class CurrencyLayerApiIntegrationConfigurationStub {
                         new Rate(
                                 new Currency("USD", "United States Dollar"),
                                 new Currency("EUR", "European euro"),
-                                BigDecimal.valueOf(1.222)),
+                                1.222),
                         new Rate(
                                 new Currency("USD", "United States Dollar"),
                                 new Currency("UAH", "Ukrainian hryvna"),
-                                BigDecimal.valueOf(26.3))));
+                                26.3)));
         return response;
     }
 

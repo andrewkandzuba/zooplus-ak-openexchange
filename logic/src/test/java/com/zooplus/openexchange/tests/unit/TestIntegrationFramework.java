@@ -57,7 +57,7 @@ public class TestIntegrationFramework {
         AtomicBoolean stateError = new AtomicBoolean(false);
         HistoricalQuotesRequest request = new HistoricalQuotesRequest();
         request.setCurrencyCode("USD");
-        request.setExchangeDate(DateFormatUtils.format(System.currentTimeMillis(), "yyyy-mm-dd"));
+        request.setExchangeDate(DateFormatUtils.format(System.currentTimeMillis(), "yyyy-MM-dd"));
         currencyLayerApiGateway.getHistoricalQuotes(request)
                 .addCallback(
                         historicalQuotes -> {

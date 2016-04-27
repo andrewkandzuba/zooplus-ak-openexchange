@@ -46,8 +46,8 @@ public class TestCurrencyPlayEndpoint {
         CountDownLatch latch = new CountDownLatch(1);
         AtomicBoolean replied = new AtomicBoolean(false);
         HistoricalQuotesRequest request = new HistoricalQuotesRequest();
-        request.setCurrencyCode("USD");
-        request.setExchangeDate(DateFormatUtils.format(System.currentTimeMillis(), "yyyy-mm-dd"));
+        request.setCurrencyCode("USD,EUR");
+        request.setExchangeDate(DateFormatUtils.format(System.currentTimeMillis(), "yyyy-MM-dd"));
         gateway.getHistoricalQuotes(request)
                 .addCallback(
                         historicalQuotesResponse -> {

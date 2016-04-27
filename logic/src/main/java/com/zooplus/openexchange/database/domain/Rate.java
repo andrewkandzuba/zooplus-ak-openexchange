@@ -1,16 +1,14 @@
 package com.zooplus.openexchange.database.domain;
 
-import java.math.BigDecimal;
-
 public class Rate {
     private Currency basic;
     private Currency alternative;
-    private BigDecimal rate;
+    private Double rate;
 
     public Rate() {
     }
 
-    public Rate(Currency base, Currency alternative, BigDecimal rate) {
+    public Rate(Currency base, Currency alternative, Double rate) {
         this.basic = base;
         this.alternative = alternative;
         this.rate = rate;
@@ -32,11 +30,11 @@ public class Rate {
         this.alternative = alternative;
     }
 
-    public BigDecimal getRate() {
+    public Double getRate() {
         return rate;
     }
 
-    public void setRate(BigDecimal rate) {
+    public void setRate(Double rate) {
         this.rate = rate;
     }
 }
