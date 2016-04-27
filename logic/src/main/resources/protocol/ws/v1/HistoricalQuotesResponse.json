@@ -15,5 +15,6 @@
       }
     }
   },
-  "additionalProperties": false
+  "additionalProperties": false,
+  "generate-builders": true
 }

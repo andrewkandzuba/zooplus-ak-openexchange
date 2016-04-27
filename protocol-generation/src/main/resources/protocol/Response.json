@@ -6,5 +6,6 @@
   "extends": {
     "$ref": "Message.json"
   },
-  "additionalProperties": false
+  "additionalProperties": false,
+  "generate-builders": true
 }

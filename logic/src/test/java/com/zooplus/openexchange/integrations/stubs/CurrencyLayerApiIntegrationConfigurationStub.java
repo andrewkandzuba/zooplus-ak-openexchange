@@ -7,26 +7,28 @@ import com.zooplus.openexchange.protocol.ws.v1.CurrencyListRequest;
 import com.zooplus.openexchange.protocol.ws.v1.CurrencyListResponse;
 import com.zooplus.openexchange.protocol.ws.v1.HistoricalQuotesRequest;
 import com.zooplus.openexchange.protocol.ws.v1.HistoricalQuotesResponse;
+import org.springframework.integration.annotation.MessageEndpoint;
 import org.springframework.integration.annotation.ServiceActivator;
-import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.Collections;
 
-import static com.zooplus.openexchange.integrations.configurations.CurrencyLayerApiIntegrationConfiguration.IN_DIRECT_CURRENCYLAYER;
+import static com.zooplus.openexchange.integrations.configurations.CurrencyLayerChannelsConfiguration.IN_API_CURRENCYLAYER_HISTORICALQUOTES;
+import static com.zooplus.openexchange.integrations.configurations.CurrencyLayerChannelsConfiguration.IN_API_CURRENCYLAYER_LIST;
+import static com.zooplus.openexchange.integrations.gateways.BorderConditionsGateway.IN_DIRECT_CURRENCYLAYER;
 
-@Component
-public class CurrenciesGatewayStub {
-    @ServiceActivator(inputChannel = IN_DIRECT_CURRENCYLAYER)
-    public CurrencyListResponse getCurrencies(CurrencyListRequest request) {
+@MessageEndpoint
+public class CurrencyLayerApiIntegrationConfigurationStub {
+    @ServiceActivator(inputChannel = IN_API_CURRENCYLAYER_LIST)
+    public CurrencyListResponse getCurrencyList(CurrencyListRequest request) {
         CurrencyListResponse response = new CurrencyListResponse();
         response.setCurrencies(Collections.singletonList(new Currency("USD", "United States Dollar")));
         return response;
     }
 
-    @ServiceActivator(inputChannel = IN_DIRECT_CURRENCYLAYER)
-    public HistoricalQuotesResponse getRates(HistoricalQuotesRequest request) {
+    @ServiceActivator(inputChannel = IN_API_CURRENCYLAYER_HISTORICALQUOTES)
+    public HistoricalQuotesResponse getHistoricalQuotes(HistoricalQuotesRequest request) {
         HistoricalQuotesResponse response = new HistoricalQuotesResponse();
         response.setRates(
                 Arrays.asList(
@@ -45,5 +47,4 @@ public class CurrenciesGatewayStub {
     public Void throwNullPointerException(NullPointerExceptionMessage message){
         throw new NullPointerException("The methods always throws NullPointerException");
     }
-
 }

@@ -11,7 +11,12 @@
     "currencyCode": {
       "type": "string",
       "required": false
+    },
+    "exchangeDate": {
+      "type": "string",
+      "required": false
     }
   },
-  "additionalProperties": false
+  "additionalProperties": false,
+  "generate-builders": true
 }

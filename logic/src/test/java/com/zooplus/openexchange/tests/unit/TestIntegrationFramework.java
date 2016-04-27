@@ -6,6 +6,7 @@ import com.zooplus.openexchange.protocol.v1.NullPointerExceptionMessage;
 import com.zooplus.openexchange.protocol.ws.v1.CurrencyListRequest;
 import com.zooplus.openexchange.protocol.ws.v1.HistoricalQuotesRequest;
 import com.zooplus.openexchange.starters.UnitTestStarter;
+import org.apache.commons.lang.time.DateFormatUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,7 +30,7 @@ public class TestIntegrationFramework {
     private BorderConditionsGateway borderConditionsGateway;
 
     @Test
-    public void testSupportedCurrenciesList() throws Exception {
+    public void testCurrencyList() throws Exception {
         CountDownLatch latch = new CountDownLatch(1);
         AtomicBoolean stateSuccess = new AtomicBoolean(false);
         AtomicBoolean stateError = new AtomicBoolean(false);
@@ -44,18 +45,19 @@ public class TestIntegrationFramework {
                             stateError.compareAndSet(false, true);
                             latch.countDown();
                         });
-        latch.await(3000, TimeUnit.MILLISECONDS);
+        latch.await(5000, TimeUnit.MILLISECONDS);
         Assert.assertTrue(stateSuccess.get());
         Assert.assertFalse(stateError.get());
     }
 
     @Test
-    public void testRates() throws Exception {
+    public void testHistoricalQuotes() throws Exception {
         CountDownLatch latch = new CountDownLatch(1);
         AtomicBoolean stateSuccess = new AtomicBoolean(false);
         AtomicBoolean stateError = new AtomicBoolean(false);
         HistoricalQuotesRequest request = new HistoricalQuotesRequest();
         request.setCurrencyCode("USD");
+        request.setExchangeDate(DateFormatUtils.format(System.currentTimeMillis(), "yyyy-mm-dd"));
         currencyLayerApiGateway.getHistoricalQuotes(request)
                 .addCallback(
                         historicalQuotes -> {
@@ -68,7 +70,7 @@ public class TestIntegrationFramework {
                             latch.countDown();
                         });
         ;
-        latch.await(3000, TimeUnit.MILLISECONDS);
+        latch.await(5000, TimeUnit.MILLISECONDS);
         Assert.assertTrue(stateSuccess.get());
         Assert.assertFalse(stateError.get());
     }
@@ -87,7 +89,7 @@ public class TestIntegrationFramework {
                             latch.countDown();
                         });
         ;
-        latch.await(3000, TimeUnit.MILLISECONDS);
-        Assert.assertFalse(stateError.get());
+        latch.await(5000, TimeUnit.MILLISECONDS);
+        Assert.assertTrue(stateError.get());
     }
 }

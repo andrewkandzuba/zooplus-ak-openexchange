@@ -2,7 +2,9 @@ package com.zooplus.openexchange.tests.integration;
 
 import com.zooplus.openexchange.integrations.gateways.CurrencyLayerApiGateway;
 import com.zooplus.openexchange.protocol.ws.v1.CurrencyListRequest;
+import com.zooplus.openexchange.protocol.ws.v1.HistoricalQuotesRequest;
 import com.zooplus.openexchange.starters.IntegrationTestStarter;
+import org.apache.commons.lang.time.DateFormatUtils;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,7 +27,7 @@ public class TestCurrencyPlayEndpoint {
     private CurrencyLayerApiGateway gateway;
 
     @Test
-    public void testCurrencyPlayerIntegration() throws Exception {
+    public void testCurrencyLayerCurrenciesList() throws Exception {
         CountDownLatch latch = new CountDownLatch(1);
         AtomicBoolean replied = new AtomicBoolean(false);
         gateway.getCurrenciesList(new CurrencyListRequest()).addCallback(
@@ -35,6 +37,25 @@ public class TestCurrencyPlayEndpoint {
                     latch.countDown();
                 }, Throwable::printStackTrace);
 
+        latch.await(3000, TimeUnit.MILLISECONDS);
+        Assert.assertTrue(replied.get());
+    }
+
+    @Test
+    public void testCurrencyLayerHistoricalQuotes() throws Exception {
+        CountDownLatch latch = new CountDownLatch(1);
+        AtomicBoolean replied = new AtomicBoolean(false);
+        HistoricalQuotesRequest request = new HistoricalQuotesRequest();
+        request.setCurrencyCode("USD");
+        request.setExchangeDate(DateFormatUtils.format(System.currentTimeMillis(), "yyyy-mm-dd"));
+        gateway.getHistoricalQuotes(request)
+                .addCallback(
+                        historicalQuotesResponse -> {
+                            Assert.assertTrue(historicalQuotesResponse.getRates().size() > 0);
+                            replied.compareAndSet(false, true);
+                            latch.countDown();
+                        },
+                        Throwable::printStackTrace);
         latch.await(3000, TimeUnit.MILLISECONDS);
         Assert.assertTrue(replied.get());
     }

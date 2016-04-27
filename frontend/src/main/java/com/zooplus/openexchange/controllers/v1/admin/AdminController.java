@@ -2,7 +2,7 @@ package com.zooplus.openexchange.controllers.v1.admin;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.zooplus.openexchange.controllers.v1.Version;
-import com.zooplus.openexchange.protocol.rest.v1.StatusResponse;
+import com.zooplus.openexchange.protocol.integration.v1.StatusResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;

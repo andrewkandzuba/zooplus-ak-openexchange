@@ -13,5 +13,7 @@
       "format":"utc-millisec",
       "required": true
     }
-  }
+  },
+  "additionalProperties": false,
+  "generate-builders": true
 }

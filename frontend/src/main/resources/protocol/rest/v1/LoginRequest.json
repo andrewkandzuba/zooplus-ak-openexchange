@@ -8,5 +8,7 @@
   },
   "id": "LoginRequest",
   "properties": {
-  }
+  },
+  "additionalProperties": false,
+  "generate-builders": true
 }

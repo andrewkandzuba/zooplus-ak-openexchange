@@ -7,5 +7,7 @@
     "javaType" : "com.zooplus.openexchange.protocol.Request"
   },
   "id": "SessionDetailsRequest",
-  "properties": {}
+  "properties": {},
+  "additionalProperties": false,
+  "generate-builders": true
 }

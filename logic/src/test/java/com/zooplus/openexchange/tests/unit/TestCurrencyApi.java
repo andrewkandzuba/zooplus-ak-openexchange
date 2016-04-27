@@ -9,6 +9,7 @@ import com.zooplus.openexchange.protocol.ws.v1.HistoricalQuotesRequest;
 import com.zooplus.openexchange.protocol.ws.v1.HistoricalQuotesResponse;
 import com.zooplus.openexchange.starters.UnitTestStarter;
 import com.zooplus.openexchange.utils.MessageConvetor;
+import org.apache.commons.lang.time.DateFormatUtils;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -83,7 +84,7 @@ public class TestCurrencyApi {
     }
 
     @Test
-    public void testRates() throws Exception {
+    public void testHistoricalQuotes() throws Exception {
         CountDownLatch connected = new CountDownLatch(1);
         CountDownLatch reply = new CountDownLatch(1);
         AtomicBoolean isReplyReceived = new AtomicBoolean(false);
@@ -109,6 +110,7 @@ public class TestCurrencyApi {
                             try {
                                 HistoricalQuotesRequest request = new HistoricalQuotesRequest();
                                 request.setCurrencyCode("USD");
+                                request.setExchangeDate(DateFormatUtils.format(System.currentTimeMillis(), "yyyy-mm-dd"));
                                 session.sendMessage(MessageConvetor.to(request, HistoricalQuotesRequest.class));
                             } catch (Exception e) {
                                 e.printStackTrace();

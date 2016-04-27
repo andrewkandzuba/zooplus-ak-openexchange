@@ -5,4 +5,7 @@ public interface CurrencyLayerApiConstants {
     String LIST_METHOD = "list";
     String HISTORICAL_METHOD = "historical";
     String DATE_PARAM = "date";
+    String CURRENCIES_PARAM = "currencies";
+    String ACCESS_KEY_PARAM = "access_key";
+    String FORMAT_PARAM = "format";
 }

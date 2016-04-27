@@ -1,7 +1,7 @@
 package com.zooplus.openexchange.tests.unit;
 
 import com.zooplus.openexchange.clients.RestClient;
-import com.zooplus.openexchange.protocol.rest.v1.StatusResponse;
+import com.zooplus.openexchange.protocol.integration.v1.StatusResponse;
 import com.zooplus.openexchange.starters.ControllersStarter;
 import javafx.util.Pair;
 import org.junit.Assert;
