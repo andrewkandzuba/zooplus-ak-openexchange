@@ -13,8 +13,8 @@ import org.springframework.integration.annotation.ServiceActivator;
 import java.util.Arrays;
 import java.util.Collections;
 
-import static com.zooplus.openexchange.integrations.configurations.CurrencyLayerChannelsConfiguration.IN_API_CURRENCYLAYER_HISTORICALQUOTES;
-import static com.zooplus.openexchange.integrations.configurations.CurrencyLayerChannelsConfiguration.IN_API_CURRENCYLAYER_LIST;
+import static com.zooplus.openexchange.integrations.endpoints.CurrencyLayerRequestBuilder.IN_API_CURRENCYLAYER_HISTORICALQUOTES;
+import static com.zooplus.openexchange.integrations.endpoints.CurrencyLayerRequestBuilder.IN_API_CURRENCYLAYER_LIST;
 import static com.zooplus.openexchange.integrations.gateways.BorderConditionsGateway.IN_DIRECT_CURRENCYLAYER;
 
 @MessageEndpoint

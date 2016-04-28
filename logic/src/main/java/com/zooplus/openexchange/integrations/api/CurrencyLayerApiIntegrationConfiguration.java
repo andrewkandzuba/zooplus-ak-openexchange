@@ -1,5 +1,7 @@
 package com.zooplus.openexchange.integrations.api;
 
+import com.zooplus.openexchange.integrations.endpoints.CurrencyLayerRequestBuilder;
+import com.zooplus.openexchange.integrations.endpoints.CurrencyLayerResponseHandler;
 import com.zooplus.openexchange.protocol.integration.v1.Currencies;
 import com.zooplus.openexchange.protocol.integration.v1.Quotes;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,7 +19,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.zooplus.openexchange.integrations.api.CurrencyLayerApiConstants.*;
-import static com.zooplus.openexchange.integrations.configurations.CurrencyLayerChannelsConfiguration.*;
 
 @Configuration
 public class CurrencyLayerApiIntegrationConfiguration {
@@ -25,7 +26,7 @@ public class CurrencyLayerApiIntegrationConfiguration {
     private String accessKey;
 
     @Bean(name = "restCurrencyLayerListHandler")
-    @ServiceActivator(inputChannel = IN_API_CURRENCYLAYER_LIST)
+    @ServiceActivator(inputChannel = CurrencyLayerRequestBuilder.IN_API_CURRENCYLAYER_LIST)
     public HttpRequestExecutingMessageHandler restCurrencyLayerListHandler() {
         HttpRequestExecutingMessageHandler handler = new HttpRequestExecutingMessageHandler(
                 BASE_URL + LIST_METHOD + "?"
@@ -35,12 +36,12 @@ public class CurrencyLayerApiIntegrationConfiguration {
         handler.setExpectedResponseType(Currencies.class);
         handler.setMessageConverters(Collections.singletonList(new MappingJackson2HttpMessageConverter()));
         handler.setCharset("UTF-8");
-        handler.setOutputChannelName(OUT_SUCCESS_PUBSUB_CURRENCYLAYER_LIST);
+        handler.setOutputChannelName(CurrencyLayerResponseHandler.OUT_SUCCESS_PUBSUB_CURRENCYLAYER_LIST);
         return handler;
     }
 
     @Bean(name = "restCurrencyLayerHistoricalQuotesListHandler")
-    @ServiceActivator(inputChannel = IN_API_CURRENCYLAYER_HISTORICALQUOTES)
+    @ServiceActivator(inputChannel = CurrencyLayerRequestBuilder.IN_API_CURRENCYLAYER_HISTORICALQUOTES)
     public HttpRequestExecutingMessageHandler restCurrencyLayerHistoricalQuotesListHandler() {
         SpelExpressionParser expressionParser = new SpelExpressionParser();
         Map<String, Expression> uriVariableExpressions = new HashMap<>(2);
@@ -57,7 +58,7 @@ public class CurrencyLayerApiIntegrationConfiguration {
         handler.setExpectedResponseType(Quotes.class);
         handler.setMessageConverters(Collections.singletonList(new MappingJackson2HttpMessageConverter()));
         handler.setCharset("UTF-8");
-        handler.setOutputChannelName(OUT_SUCCESS_PUBSUB_CURRENCYLAYER_HISTORICALQUOTES);
+        handler.setOutputChannelName(CurrencyLayerResponseHandler.OUT_SUCCESS_PUBSUB_CURRENCYLAYER_HISTORICALQUOTES);
         return handler;
     }
 }

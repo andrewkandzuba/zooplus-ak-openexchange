@@ -14,11 +14,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.zooplus.openexchange.integrations.configurations.CurrencyLayerChannelsConfiguration.OUT_SUCCESS_PUBSUB_CURRENCYLAYER_HISTORICALQUOTES;
-import static com.zooplus.openexchange.integrations.configurations.CurrencyLayerChannelsConfiguration.OUT_SUCCESS_PUBSUB_CURRENCYLAYER_LIST;
-
 @MessageEndpoint
 public class CurrencyLayerResponseHandler {
+
+    public static final String OUT_SUCCESS_PUBSUB_CURRENCYLAYER_LIST = "out.success.pubsub.currencylayer.list";
+    public static final String OUT_SUCCESS_PUBSUB_CURRENCYLAYER_HISTORICALQUOTES = "out.success.pubsub.currencylayer.historicalquotes";
 
     @ServiceActivator(inputChannel = OUT_SUCCESS_PUBSUB_CURRENCYLAYER_LIST)
     public CurrencyListResponse getCurrencyList(Message<Currencies> msg) {
