@@ -51,7 +51,8 @@ public class TestCurrencyPlayEndpoint {
         gateway.getHistoricalQuotes(request)
                 .addCallback(
                         historicalQuotesResponse -> {
-                            Assert.assertTrue(historicalQuotesResponse.getRates().size() > 0);
+                            Assert.assertTrue(historicalQuotesResponse.getExchangeRates().size() > 0);
+                            Assert.assertNotNull(historicalQuotesResponse.getExchangeDate());
                             replied.compareAndSet(false, true);
                             latch.countDown();
                         },

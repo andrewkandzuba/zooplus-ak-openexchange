@@ -1,10 +1,10 @@
 package com.zooplus.openexchange.integrations.endpoints;
 
-import com.zooplus.openexchange.database.domain.Currency;
-import com.zooplus.openexchange.database.domain.Rate;
 import com.zooplus.openexchange.protocol.integration.v1.Currencies;
 import com.zooplus.openexchange.protocol.integration.v1.Quotes;
+import com.zooplus.openexchange.protocol.ws.v1.Currency;
 import com.zooplus.openexchange.protocol.ws.v1.CurrencyListResponse;
+import com.zooplus.openexchange.protocol.ws.v1.ExchangeRate;
 import com.zooplus.openexchange.protocol.ws.v1.HistoricalQuotesResponse;
 import org.springframework.integration.annotation.MessageEndpoint;
 import org.springframework.integration.annotation.ServiceActivator;
@@ -26,7 +26,12 @@ public class CurrencyLayerResponseHandler {
                 .getCurrencies()
                 .entrySet()
                 .stream()
-                .map(entry -> new Currency(entry.getKey(), entry.getValue()))
+                .map(entry -> {
+                    Currency currency = new Currency();
+                    currency.setCode(entry.getKey());
+                    currency.setDescription(entry.getValue());
+                    return currency;
+                })
                 .collect(Collectors.toCollection(LinkedList::new));
         CurrencyListResponse response = new CurrencyListResponse();
         response.setCurrencies(list);
@@ -37,16 +42,20 @@ public class CurrencyLayerResponseHandler {
     public HistoricalQuotesResponse getHistoricalQuotes(Message<Quotes> msg) {
         Quotes quotes = msg.getPayload();
         quotes.getSource();
-        List<Rate> list = quotes.getQuotes()
+        List<ExchangeRate> list = quotes.getQuotes()
                 .entrySet()
                 .stream()
-                .map(entry -> new Rate(
-                        new Currency(quotes.getSource(), ""),
-                        new Currency(entry.getKey(), ""),
-                        entry.getValue()))
+                .map(entry -> {
+                    ExchangeRate exchangeRate = new ExchangeRate();
+                    exchangeRate.setFrom(quotes.getSource());
+                    exchangeRate.setTo(entry.getKey());
+                    exchangeRate.setRate(entry.getValue());
+                    return exchangeRate;
+                })
                 .collect(Collectors.toCollection(LinkedList::new));
         HistoricalQuotesResponse response = new HistoricalQuotesResponse();
-        response.setRates(list);
+        response.setExchangeDate(quotes.getDate());
+        response.setExchangeRates(list);
         return response;
     }
 }

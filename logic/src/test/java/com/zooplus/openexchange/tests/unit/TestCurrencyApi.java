@@ -96,9 +96,9 @@ public class TestCurrencyApi {
                     Assert.assertTrue(payloadClass.equals(HistoricalQuotesResponse.class));
                     Assert.assertTrue(message instanceof HistoricalQuotesResponse);
                     HistoricalQuotesResponse response = (HistoricalQuotesResponse) message;
-                    Assert.assertEquals(response.getRates().size(), 2);
-                    Assert.assertTrue(response.getRates().stream().anyMatch(rate -> rate.getBasic().getCode().equals("USD")));
-                    Assert.assertTrue(response.getRates().stream().anyMatch(rate -> rate.getAlternative().getCode().equals("UAH")));
+                    Assert.assertEquals(response.getExchangeRates().size(), 2);
+                    Assert.assertTrue(response.getExchangeRates().stream().anyMatch(rate -> rate.getFrom().equals("USD")));
+                    Assert.assertTrue(response.getExchangeRates().stream().anyMatch(rate -> rate.getTo().equals("UAH")));
                     isReplyReceived.compareAndSet(false, true);
                     session.close();
                     reply.countDown();

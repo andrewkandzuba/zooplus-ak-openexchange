@@ -2,6 +2,8 @@
   "$schema": "http://json-schema.org/draft-04/schema",
   "description": "Historical quotes request",
   "type": "object",
+  "additionalProperties" : false,
+  "generate-builders": true,
   "extends" : {
     "type" : "object",
     "javaType" : "com.zooplus.openexchange.protocol.Request"
@@ -10,13 +12,11 @@
   "properties": {
     "currencyCode": {
       "type": "string",
-      "required": false
+      "required": true
     },
     "exchangeDate": {
       "type": "string",
-      "required": false
+      "required": true
     }
-  },
-  "additionalProperties": false,
-  "generate-builders": true
+  }
 }

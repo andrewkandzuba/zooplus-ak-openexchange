@@ -61,7 +61,8 @@ public class TestIntegrationFramework {
         currencyLayerApiGateway.getHistoricalQuotes(request)
                 .addCallback(
                         historicalQuotes -> {
-                            Assert.assertEquals(historicalQuotes.getRates().get(0).getAlternative().getCode(), "EUR");
+                            Assert.assertEquals(historicalQuotes.getExchangeRates().get(0).getTo(), "EUR");
+                            Assert.assertEquals(historicalQuotes.getExchangeDate(), "2016-04-28");
                             stateSuccess.compareAndSet(false, true);
                             latch.countDown();
                         }, throwable -> {

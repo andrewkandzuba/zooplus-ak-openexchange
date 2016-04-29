@@ -2,19 +2,24 @@
   "$schema": "http://json-schema.org/draft-04/schema",
   "description": "Historical quotes response",
   "type": "object",
+  "additionalProperties" : false,
+  "generate-builders": true,
   "extends" : {
     "type" : "object",
     "javaType" : "com.zooplus.openexchange.protocol.Response"
   },
   "id": "HistoricalQuotesResponse",
   "properties": {
-    "rates": {
+    "exchangeDate": {
+      "type": "string",
+      "required": true
+    },
+    "exchangeRates": {
       "type": "array",
       "items": {
-        "javaType": "com.zooplus.openexchange.database.domain.Rate"
-      }
+        "$ref": "ExchangeRate.json"
+      },
+      "required": true
     }
-  },
-  "additionalProperties": false,
-  "generate-builders": true
+  }
 }
