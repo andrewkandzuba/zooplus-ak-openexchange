@@ -233,8 +233,9 @@
         <module>commons-rest</module>
         <module>commons-ws</module>
         <module>frontend</module>
-        <module>logic</module>
+        <module>integration-impl</module>
         <module>protocol-generation</module>
+        <module>integration-protocol</module>
     </modules>
 
     <build>

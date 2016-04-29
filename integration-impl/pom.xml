@@ -9,7 +9,7 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>logic</artifactId>
+    <artifactId>integration-impl</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <name>openexchange ::: ${project.artifactId}</name>
     <packaging>jar</packaging>
