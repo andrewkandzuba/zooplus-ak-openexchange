@@ -137,6 +137,12 @@
                 <artifactId>spring-expression</artifactId>
                 <version>${spring.version}</version>
             </dependency>
+            <!-- spring context support -->
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-context-support</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
             <!-- apache commons pool2 -->
             <dependency>
                 <groupId>org.apache.commons</groupId>

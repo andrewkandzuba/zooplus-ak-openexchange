@@ -15,6 +15,8 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -92,5 +94,15 @@ public class TestIntegrationFramework {
         ;
         latch.await(5000, TimeUnit.MILLISECONDS);
         Assert.assertTrue(stateError.get());
+    }
+
+    @Test
+    public void testCachableInvocations() throws Exception {
+        String id = "message1";
+        List<String> responses = new ArrayList<>();
+        responses.add(borderConditionsGateway.cachableInvocations(id).get());
+        responses.add(borderConditionsGateway.cachableInvocations(id).get());
+        Assert.assertTrue(responses.size() == 2);
+        Assert.assertTrue(responses.get(0).equals(responses.get(1)));
     }
 }

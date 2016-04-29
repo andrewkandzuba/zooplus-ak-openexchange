@@ -7,10 +7,12 @@ import org.springframework.integration.annotation.ServiceActivator;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.UUID;
 
 import static com.zooplus.openexchange.integrations.endpoints.CurrencyLayerRequestBuilder.IN_API_CURRENCYLAYER_HISTORICALQUOTES;
 import static com.zooplus.openexchange.integrations.endpoints.CurrencyLayerRequestBuilder.IN_API_CURRENCYLAYER_LIST;
-import static com.zooplus.openexchange.integrations.gateways.BorderConditionsGateway.IN_DIRECT_CURRENCYLAYER;
+import static com.zooplus.openexchange.integrations.gateways.BorderConditionsGateway.IN_DIRECT_CURRENCYLAYER_CACHE;
+import static com.zooplus.openexchange.integrations.gateways.BorderConditionsGateway.IN_DIRECT_CURRENCYLAYER_EXCEPTIONS;
 
 @MessageEndpoint
 public class CurrencyLayerApiIntegrationConfigurationStub {
@@ -43,8 +45,13 @@ public class CurrencyLayerApiIntegrationConfigurationStub {
         return response;
     }
 
-    @ServiceActivator(inputChannel = IN_DIRECT_CURRENCYLAYER)
-    public Void throwNullPointerException(NullPointerExceptionMessage message){
+    @ServiceActivator(inputChannel = IN_DIRECT_CURRENCYLAYER_EXCEPTIONS)
+    public Void throwNullPointerException(NullPointerExceptionMessage message) {
         throw new NullPointerException("The methods always throws NullPointerException");
+    }
+
+    @ServiceActivator(inputChannel = IN_DIRECT_CURRENCYLAYER_CACHE)
+    public String cachableInvocations(String message) {
+        return UUID.randomUUID().toString();
     }
 }
