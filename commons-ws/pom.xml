@@ -18,7 +18,7 @@
         <!-- common ws protocol -->
         <dependency>
             <groupId>com.zooplus.openexchange.ak.samples</groupId>
-            <artifactId>common-ws-protocol</artifactId>
+            <artifactId>commons-ws-protocol</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
         <!-- spring boot ws -->

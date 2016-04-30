@@ -9,7 +9,7 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>common-ws-protocol</artifactId>
+    <artifactId>commons-ws-protocol</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <name>openexchange ::: ${project.artifactId}</name>
     <packaging>jar</packaging>

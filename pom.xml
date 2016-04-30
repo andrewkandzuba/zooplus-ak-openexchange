@@ -230,11 +230,11 @@
     </dependencyManagement>
 
     <modules>
+        <module>protocol-generation</module>
+        <module>commons-ws-protocol</module>
         <module>commons-rest</module>
         <module>commons-ws</module>
         <module>frontend</module>
-        <module>protocol-generation</module>
-        <module>common-ws-protocol</module>
         <module>integration-impl</module>
         <module>integration-protocol</module>
     </modules>
