@@ -20,7 +20,13 @@
         <dependency>
             <groupId>com.zooplus.openexchange.ak.samples</groupId>
             <artifactId>commons-ws</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <!-- integration protocol -->
+        <dependency>
+            <groupId>com.zooplus.openexchange.ak.samples</groupId>
+            <artifactId>integration-protocol</artifactId>
+            <version>${project.parent.version}</version>
         </dependency>
         <!-- spring integration -->
         <dependency>

@@ -15,11 +15,11 @@
     <packaging>jar</packaging>
 
     <dependencies>
-        <!-- protocol -->
+        <!-- protocol generator -->
         <dependency>
             <groupId>com.zooplus.openexchange.ak.samples</groupId>
             <artifactId>protocol-generation</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
         <!-- spring boot ws -->
         <dependency>
