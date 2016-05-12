@@ -24,6 +24,7 @@
         <spring.security.version>4.0.4.RELEASE</spring.security.version>
         <spring.session>1.1.1.RELEASE</spring.session>
         <spring-data-redis.version>1.6.4.RELEASE</spring-data-redis.version>
+        <spring.cloud-starter-eureka.version>1.0.6.RELEASE</spring.cloud-starter-eureka.version>
         <!-- utilities -->
         <commons-pool2.version>2.4.2</commons-pool2.version>
         <jedis.client.version>2.8.1</jedis.client.version>
@@ -143,6 +144,12 @@
                 <artifactId>spring-context-support</artifactId>
                 <version>${spring.version}</version>
             </dependency>
+            <!-- spring eureka server starter -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-eureka-server</artifactId>
+                <version>${spring.cloud-starter-eureka.version}</version>
+            </dependency>
             <!-- apache commons pool2 -->
             <dependency>
                 <groupId>org.apache.commons</groupId>
@@ -237,6 +244,7 @@
         <module>frontend</module>
         <module>integration-impl</module>
         <module>integration-protocol</module>
+        <module>service-registry-eureka</module>
     </modules>
 
     <build>
