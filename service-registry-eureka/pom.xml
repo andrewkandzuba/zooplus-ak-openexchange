@@ -16,16 +16,31 @@
     <packaging>jar</packaging>
 
     <dependencies>
-        <!-- protocol -->
+        <!-- spring boot -->
         <dependency>
-            <groupId>com.zooplus.openexchange.ak.samples</groupId>
-            <artifactId>commons-rest</artifactId>
-            <version>${parent.version}</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-tomcat</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- spring jetty -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jetty</artifactId>
         </dependency>
         <!-- spring cloud eureka server -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-eureka-server</artifactId>
+        </dependency>
+        <!-- Netflix archaius -->
+        <dependency>
+            <groupId>com.netflix.archaius</groupId>
+            <artifactId>archaius-core</artifactId>
         </dependency>
     </dependencies>
 
