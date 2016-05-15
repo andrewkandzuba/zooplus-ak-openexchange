@@ -1,4 +1,4 @@
-package com.zooplus.openexchange.eureka;
+package com.zooplus.openexchange;
 
 import org.springframework.boot.Banner;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
