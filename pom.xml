@@ -265,6 +265,9 @@
                     <configuration>
                         <source>${compile.source}</source>
                         <target>${compile.target}</target>
+                        <fork>true</fork>
+                        <meminitial>1024m</meminitial>
+                        <maxmem>4096m</maxmem>
                     </configuration>
                 </plugin>
                 <plugin>
