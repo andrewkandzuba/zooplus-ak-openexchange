@@ -5,3 +5,9 @@ spring:
       ddl-auto: none
   datasource:
     platform: mysql
+  eureka:
+    client:
+      serviceUrl:
+        defaultZone: http://localhost:8761/eureka/
+
+

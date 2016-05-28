@@ -21,6 +21,11 @@
             <artifactId>protocol-generation</artifactId>
             <version>${parent.version}</version>
         </dependency>
+        <!-- spring cloud starter eureka -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-eureka</artifactId>
+        </dependency>
         <!-- spring boot -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
