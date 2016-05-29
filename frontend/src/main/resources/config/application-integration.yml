@@ -1,4 +1,5 @@
 spring:
+  profiles: integration
   application:
     name: ${project.groupId}:${project.artifactId}:${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}
   jpa:
@@ -7,4 +8,13 @@ spring:
       ddl-auto: none
   datasource:
     platform: mysql
-
+    url: jdbc:mysql://localhost/frontend?serverTimezone=UTC
+    username: dev
+    password: changeit
+  redis:
+    host: 127.0.0.1
+    port: 6379
+  eureka:
+    client:
+      serviceUrl:
+        defaultZone: http://localhost:8761/eureka/

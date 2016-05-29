@@ -236,11 +236,12 @@
                 <version>${h2.version}</version>
                 <scope>test</scope>
             </dependency>
+            <!-- mysql connector for integration tests -->
             <dependency>
                 <groupId>mysql</groupId>
                 <artifactId>mysql-connector-java</artifactId>
                 <version>${mysql.version}</version>
-                <scope>test</scope>
+                <scope>runtime</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>

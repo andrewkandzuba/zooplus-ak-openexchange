@@ -69,11 +69,11 @@
             <groupId>com.netflix.archaius</groupId>
             <artifactId>archaius-core</artifactId>
         </dependency>
-        <!-- test database stores -->
+        <!-- mysql connector for integration tests -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <scope>test</scope>
+            <scope>runtime</scope>
         </dependency>
         <!-- test database stores -->
         <dependency>
