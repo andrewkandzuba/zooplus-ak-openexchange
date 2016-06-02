@@ -55,7 +55,7 @@ public class TestUserAndSessionControllers extends TestMockedClient {
         User user = new User(userName, passwordEncoder.encode(userPassword), userEmail, Collections.singleton(new Role(getNextId(), "USER")));
         user.setId(getNextId());
         user.setCreatedAt(Timestamp.valueOf(LocalDateTime.now()));
-        user.setEnabled(true);
+        user .setEnabled(true);
         Mockito.when(userRepository.findByName(user.getName())).thenReturn(null);
         Mockito.when(userRepository.saveAndFlush(Mockito.any(User.class))).thenReturn(user);
 

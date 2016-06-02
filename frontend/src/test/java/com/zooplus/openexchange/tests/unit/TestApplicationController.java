@@ -3,7 +3,6 @@ package com.zooplus.openexchange.tests.unit;
 import com.zooplus.openexchange.clients.RestClient;
 import com.zooplus.openexchange.protocol.rest.v1.StatusResponse;
 import com.zooplus.openexchange.starters.ControllersStarter;
-import javafx.util.Pair;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,7 +10,6 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -34,9 +32,7 @@ public class TestApplicationController extends TestMockedClient {
                         .exchange(
                                 API_PATH_V1 + HEALTH_CHECK_RESOURCE,
                                 HttpMethod.GET,
-                                RestClient.build(
-                                        new Pair<>("Content-Type", MediaType.TEXT_PLAIN_VALUE)
-                                ),
+                                RestClient.build(),
                                 Optional.empty(),
                                 StatusResponse.class);
 

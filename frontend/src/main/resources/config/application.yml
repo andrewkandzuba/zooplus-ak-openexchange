@@ -8,4 +8,7 @@ spring:
       ddl-auto: update
   datasource:
     platform: mysql
-
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${vcap.services.zooplus-eureka.credentials.uri:http://127.0.0.1:8761}/eureka/

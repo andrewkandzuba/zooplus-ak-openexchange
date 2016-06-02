@@ -25,7 +25,6 @@ class ApplicationController {
     private Environment environment;
 
     @RequestMapping(method = RequestMethod.GET,
-            consumes = MediaType.TEXT_PLAIN_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE,
             path = HEALTH_CHECK_RESOURCE)
     @ResponseBody
