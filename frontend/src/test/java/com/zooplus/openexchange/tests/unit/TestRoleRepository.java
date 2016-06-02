@@ -25,7 +25,7 @@ public class TestRoleRepository {
         Role role = roleRepository.findByName("ADMIN");
         Assert.assertNotNull(role);
         Assert.assertNotNull(role.getId());
-        Assert.assertEquals(role.getAuthority(), "ROLE_ADMIN");
+        Assert.assertEquals("ROLE_ADMIN", role.getAuthority());
 
         role = roleRepository.findByName("NONE");
         Assert.assertNull(role);

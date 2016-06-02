@@ -15,10 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -57,9 +54,10 @@ public class TestHttpSessionCache extends TestLocalRestClient {
         // Login for the first time
         ResponseEntity<LoginResponse> loginResponse = getRestClient()
                 .exchange(
-                        USERS_ENDPOINT + USER_LOGIN_PATH,
+                        API_PATH_V1 + LOGIN_RESOURCE,
                         HttpMethod.POST,
                         RestClient.build(
+                                new Pair<>("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE),
                                 new Pair<>(X_AUTH_USERNAME_HEADER, user.getName()),
                                 new Pair<>(X_AUTH_PASSWORD_HEADER, user.getPassword())
                         ),
@@ -74,23 +72,24 @@ public class TestHttpSessionCache extends TestLocalRestClient {
         // Try to access user resource
         ResponseEntity<SessionDetailsResponse> sessionDetailsResponse = getRestClient()
                 .exchange(
-                        USERS_ENDPOINT + USER_SESSION_DETAILS_PATH,
+                        API_PATH_V1 + SESSION_RESOURCE,
                         HttpMethod.GET,
                         firstSessionHeader,
                         Optional.empty(),
                         SessionDetailsResponse.class
                 );
         Assert.assertNotNull(sessionDetailsResponse);
-        Assert.assertEquals(sessionDetailsResponse.getStatusCode(), HttpStatus.OK);
+        Assert.assertEquals(HttpStatus.OK, sessionDetailsResponse.getStatusCode());
         Assert.assertNotNull(sessionDetailsResponse.hasBody());
         Assert.assertEquals(sessionDetailsResponse.getBody().getSessionId(), firstSessionToken);
 
         //  Login with a same user again => second session
         loginResponse = getRestClient()
                 .exchange(
-                        USERS_ENDPOINT + USER_LOGIN_PATH,
+                        API_PATH_V1 + LOGIN_RESOURCE,
                         HttpMethod.POST,
                         RestClient.build(
+                                new Pair<>("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE),
                                 new Pair<>(X_AUTH_USERNAME_HEADER, user.getName()),
                                 new Pair<>(X_AUTH_PASSWORD_HEADER, user.getPassword())),
                         Optional.empty(),
@@ -107,7 +106,7 @@ public class TestHttpSessionCache extends TestLocalRestClient {
         // Try to access user resource on behalf on second session
         sessionDetailsResponse = getRestClient()
                 .exchange(
-                        USERS_ENDPOINT + USER_SESSION_DETAILS_PATH,
+                        API_PATH_V1 + SESSION_RESOURCE,
                         HttpMethod.GET,
                         secondSessionHeader,
                         Optional.empty(),
@@ -121,7 +120,7 @@ public class TestHttpSessionCache extends TestLocalRestClient {
         // Logout from the second session
         ResponseEntity<LogoutResponse> logoutResponse = getRestClient()
                 .exchange(
-                        USERS_ENDPOINT + USER_LOGOUT_PATH,
+                        API_PATH_V1 + LOGOUT_RESOURCE,
                         HttpMethod.POST,
                         secondSessionHeader,
                         Optional.empty(),
@@ -134,7 +133,7 @@ public class TestHttpSessionCache extends TestLocalRestClient {
         // Not able to access API with invalidated token
         sessionDetailsResponse = getRestClient()
                 .exchange(
-                        USERS_ENDPOINT + USER_SESSION_DETAILS_PATH,
+                        API_PATH_V1 + SESSION_RESOURCE,
                         HttpMethod.GET,
                         secondSessionHeader,
                         Optional.empty(),
@@ -146,7 +145,7 @@ public class TestHttpSessionCache extends TestLocalRestClient {
         // But still can do it with valid token
         sessionDetailsResponse = getRestClient()
                 .exchange(
-                        USERS_ENDPOINT + USER_SESSION_DETAILS_PATH,
+                        API_PATH_V1 + SESSION_RESOURCE,
                         HttpMethod.GET,
                         firstSessionHeader,
                         Optional.empty(),

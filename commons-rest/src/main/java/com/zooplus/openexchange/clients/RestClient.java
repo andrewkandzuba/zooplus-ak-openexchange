@@ -60,7 +60,6 @@ public class RestClient {
         for(Pair pair : pairs){
             newHeaders.add((String) pair.getKey(), (String) pair.getValue());
         }
-        newHeaders.setContentType(MediaType.APPLICATION_JSON);
         return HttpHeaders.readOnlyHttpHeaders(newHeaders);
     }
 }

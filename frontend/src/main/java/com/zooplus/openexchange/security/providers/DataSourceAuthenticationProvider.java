@@ -18,6 +18,7 @@ public class DataSourceAuthenticationProvider implements AuthenticationProvider 
     private UserRepository userRepository;
 
     @Override
+    @SuppressWarnings("unchecked")
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         Optional<String> username = (Optional) authentication.getPrincipal();
         Optional<String> password = (Optional) authentication.getCredentials();

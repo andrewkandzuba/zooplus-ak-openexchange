@@ -23,8 +23,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
 
-import static com.zooplus.openexchange.controllers.v1.Version.USERS_ENDPOINT;
-import static com.zooplus.openexchange.controllers.v1.Version.USER_LOGIN_PATH;
+import static com.zooplus.openexchange.controllers.v1.Version.API_PATH_V1;
+import static com.zooplus.openexchange.controllers.v1.Version.LOGIN_RESOURCE;
 
 @Component
 public class DataSourceAuthenticationFilter extends OncePerRequestFilter {
@@ -84,6 +84,6 @@ public class DataSourceAuthenticationFilter extends OncePerRequestFilter {
 
     private boolean postToAuthenticate(HttpServletRequest httpRequest) {
         String resourcePath = new UrlPathHelper().getPathWithinApplication(httpRequest);
-        return resourcePath.equalsIgnoreCase(USERS_ENDPOINT + USER_LOGIN_PATH) && HttpMethod.POST.matches(httpRequest.getMethod());
+        return resourcePath.equalsIgnoreCase(API_PATH_V1 + LOGIN_RESOURCE) && HttpMethod.POST.matches(httpRequest.getMethod());
     }
 }

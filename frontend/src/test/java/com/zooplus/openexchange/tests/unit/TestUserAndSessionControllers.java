@@ -17,6 +17,7 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
@@ -36,7 +37,7 @@ import static com.zooplus.openexchange.security.filters.DataSourceAuthentication
 @SpringApplicationConfiguration(ControllersStarter.class)
 @WebIntegrationTest("server.port:0")
 @ActiveProfiles("controllers")
-public class TestUserRegistrationFlows extends TestMockedClient {
+public class TestUserAndSessionControllers extends TestMockedClient {
     @Autowired
     private CsrfTokenRepository csrfTokenRepository;
 
@@ -71,9 +72,10 @@ public class TestUserRegistrationFlows extends TestMockedClient {
         ResponseEntity<RegistrationResponse> resp =
                 getRestClient()
                         .exchange(
-                                USERS_ENDPOINT + USER_REGISTRATION_PATH,
-                                HttpMethod.POST,
+                                API_PATH_V1 + USER_RESOURCE,
+                                HttpMethod.PUT,
                                 RestClient.build(
+                                        new Pair<>("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE),
                                         new Pair<>(X_AUTH_TOKEN_HEADER, getAdminSessionToken()),
                                         new Pair<>("X-CSRF-HEADER", CSRF_TOKEN_HEADER),
                                         new Pair<>(CSRF_TOKEN_HEADER, csrfToken.getToken())
@@ -83,7 +85,7 @@ public class TestUserRegistrationFlows extends TestMockedClient {
 
         // Analyze response
         Assert.assertNotNull(resp);
-        Assert.assertEquals(resp.getStatusCode(), HttpStatus.OK);
+        Assert.assertEquals(HttpStatus.OK, resp.getStatusCode());
         Assert.assertNotNull(resp.getBody().getId());
 
         // Mock new user in db
@@ -95,10 +97,12 @@ public class TestUserRegistrationFlows extends TestMockedClient {
         resp =
                 getRestClient()
                         .exchange(
-                                USERS_ENDPOINT + USER_REGISTRATION_PATH,
-                                HttpMethod.POST,
+                                API_PATH_V1 + USER_RESOURCE,
+                                HttpMethod.PUT,
                                 RestClient.build(
+                                        new Pair<>("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE),
                                         new Pair<>(X_AUTH_TOKEN_HEADER, getAdminSessionToken()),
+                                        new Pair<>("X-CSRF-HEADER", CSRF_TOKEN_HEADER),
                                         new Pair<>(CSRF_TOKEN_HEADER, csrfToken.getToken())
                                 ),
                                 Optional.of(req),
@@ -106,18 +110,18 @@ public class TestUserRegistrationFlows extends TestMockedClient {
 
         // Analyze response
         Assert.assertNotNull(resp);
-        Assert.assertEquals(resp.getStatusCode(), HttpStatus.CONFLICT);
+        Assert.assertEquals(HttpStatus.CONFLICT, resp.getStatusCode());
 
         // Fetch user directly from repository by Id
         User existedUser = userRepository.findOne(newUserId);
         Assert.assertNotNull(existedUser);
-        Assert.assertEquals(existedUser.getName(), userName);
+        Assert.assertEquals(userName, existedUser.getName());
         Assert.assertTrue(passwordEncoder.matches(userPassword, existedUser.getPassword()));
-        Assert.assertEquals(existedUser.getEmail(), userEmail);
+        Assert.assertEquals(userEmail, existedUser.getEmail());
         Assert.assertNotNull(existedUser.getCreatedAt());
         Assert.assertTrue(preUserCreationTimeStamp < existedUser.getCreatedAt().getTime());
         Assert.assertTrue(existedUser.getEnabled());
-        Assert.assertEquals(existedUser.getRoles().size(), 1);
+        Assert.assertEquals(1, existedUser.getRoles().size());
         Assert.assertTrue(existedUser.getRoles().stream().anyMatch(role -> role.getName().equalsIgnoreCase("USER")));
 
         // Mock db for login
@@ -127,9 +131,10 @@ public class TestUserRegistrationFlows extends TestMockedClient {
         ResponseEntity<LoginResponse> loginResp =
                 getRestClient()
                         .exchange(
-                                USERS_ENDPOINT + USER_LOGIN_PATH,
+                                API_PATH_V1 + LOGIN_RESOURCE,
                                 HttpMethod.POST,
                                 RestClient.build(
+                                        new Pair<>("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE),
                                         new Pair<>(X_AUTH_USERNAME_HEADER, user.getName()),
                                         new Pair<>(X_AUTH_PASSWORD_HEADER, user.getPassword())
                                 ),
@@ -138,13 +143,32 @@ public class TestUserRegistrationFlows extends TestMockedClient {
 
         // Analyze login response
         Assert.assertNotNull(loginResp);
-        Assert.assertEquals(loginResp.getStatusCode(), HttpStatus.OK);
+        Assert.assertEquals(HttpStatus.OK, loginResp.getStatusCode());
         Assert.assertTrue(loginResp.hasBody());
         String newUserToken = loginResp.getHeaders().toSingleValueMap().getOrDefault(X_AUTH_TOKEN_HEADER, "");
         Assert.assertNotNull(newUserToken);
-        Assert.assertNotEquals(loginResp, getAdminSessionToken());
+        Assert.assertNotEquals(getAdminSessionToken(), loginResp);
 
         // Switch user session
         mockUserRedisSession(user, newUserToken);
+
+        // Try to add new user with regular user role
+        resp =
+                getRestClient()
+                        .exchange(
+                                API_PATH_V1 + USER_RESOURCE,
+                                HttpMethod.PUT,
+                                RestClient.build(
+                                        new Pair<>("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE),
+                                        new Pair<>(X_AUTH_TOKEN_HEADER, newUserToken),
+                                        new Pair<>("X-CSRF-HEADER", CSRF_TOKEN_HEADER),
+                                        new Pair<>(CSRF_TOKEN_HEADER, csrfToken.getToken())
+                                ),
+                                Optional.of(req),
+                                RegistrationResponse.class);
+
+        // Analyze response
+        Assert.assertNotNull(resp);
+        Assert.assertEquals(HttpStatus.FORBIDDEN, resp.getStatusCode());
     }
 }

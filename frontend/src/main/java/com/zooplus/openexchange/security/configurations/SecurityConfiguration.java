@@ -32,13 +32,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http
                 .csrf()
                 .csrfTokenRepository(csrfTokenRepository())
-                .ignoringAntMatchers(USERS_ENDPOINT + USER_LOGIN_PATH);
+                .ignoringAntMatchers(API_PATH_V1 + LOGIN_RESOURCE, API_PATH_V1 + HEALTH_CHECK_RESOURCE);
 
         http
                 .authenticationProvider(authenticationProvider())
-                .authorizeRequests().anyRequest().authenticated()
-                .antMatchers(ADMIN_ENDPOINT, USERS_ENDPOINT + USER_REGISTRATION_PATH).hasRole("ADMIN")
-                .antMatchers(USERS_ENDPOINT + USER_LOGIN_PATH).permitAll()
+                .authorizeRequests()
+                    .antMatchers(API_PATH_V1 + USER_RESOURCE).hasRole("ADMIN")
+                    .antMatchers(API_PATH_V1 + SESSION_RESOURCE).hasRole("USER")
+                    .antMatchers(API_PATH_V1 + LOGIN_RESOURCE, API_PATH_V1 + HEALTH_CHECK_RESOURCE).permitAll()
+                    .anyRequest().authenticated()
                 .and()
                 .addFilterAfter(
                         new CsrfTokenReflectionFilter(),

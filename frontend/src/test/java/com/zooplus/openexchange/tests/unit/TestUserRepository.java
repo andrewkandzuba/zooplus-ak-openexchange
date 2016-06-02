@@ -51,14 +51,14 @@ public class TestUserRepository {
         Assert.assertNotNull(saved.getId());
         Assert.assertNotNull(saved.getCreatedAt());
         Assert.assertTrue(saved.getEnabled());
-        Assert.assertEquals(saved.getPassword(), user.getPassword());
-        Assert.assertEquals(userRepository.findAll().size(), 2);
+        Assert.assertEquals(user.getPassword(), saved.getPassword());
+        Assert.assertEquals(2, userRepository.findAll().size());
     }
 
     @Test
     public void testContextCleanUp() throws Exception {
         List<User> users =  userRepository.findAll();
-        Assert.assertEquals(users.size(), 1);
+        Assert.assertEquals(1, users.size());
     }
 
     @Test
@@ -69,9 +69,9 @@ public class TestUserRepository {
         executorService.submit(() -> {
             try {
                 beforeCommit.await(5000L, TimeUnit.MILLISECONDS);
-                Assert.assertEquals(userRepository.findAll().size(), 1);
+                Assert.assertEquals(1, userRepository.findAll().size());
                 beforeCommit.await(5000L, TimeUnit.MILLISECONDS);
-                Assert.assertEquals(userRepository.findAll().size(), 2);
+                Assert.assertEquals(2, userRepository.findAll().size());
             } catch (InterruptedException e) {
                 e.printStackTrace();
                 Assert.assertTrue(false);

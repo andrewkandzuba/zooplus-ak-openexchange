@@ -27,11 +27,16 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
-public class TestMockedClient extends TestLocalRestClient {
+abstract class TestMockedClient extends TestLocalRestClient {
     private static final String PRINCIPAL_NAME_INDEX_NAME = "org.springframework.session.FindByIndexNameSessionRepository.PRINCIPAL_NAME_INDEX_NAME";
     private static final String SPRING_SECURITY_CONTEXT = "SPRING_SECURITY_CONTEXT";
     private static final String SESSION_ATTRIBUTE_PREFIX = "sessionAttr:";
-
+    @Autowired
+    protected CsrfTokenRepository csrfTokenRepository;
+    @Autowired
+    UserRepository userRepository;
+    @Autowired
+    PasswordEncoder passwordEncoder;
     @Value("${admin.name}")
     private String adminName;
     @Value("${admin.password}")
@@ -40,7 +45,6 @@ public class TestMockedClient extends TestLocalRestClient {
     private String adminEmail;
     @Value("${admin.session.token}")
     private String adminSessionToken;
-
     @Autowired
     private RedisOperations<Object, Object> redisOperations;
     @Autowired
@@ -49,31 +53,23 @@ public class TestMockedClient extends TestLocalRestClient {
     private BoundSetOperations<Object, Object> boundSetOperations;
     @Autowired
     private BoundValueOperations<Object, Object> boundValueOperations;
-
     private volatile long nextId = 0;
     @Autowired
-    protected UserRepository userRepository;
-    @Autowired
-    protected RoleRepository roleRepository;
-    @Autowired
-    protected PasswordEncoder passwordEncoder;
+    private RoleRepository roleRepository;
 
-    public String getAdminSessionToken() {
+    String getAdminSessionToken() {
         return adminSessionToken;
     }
 
-    public String getAdminName() {
+    private String getAdminName() {
         return adminName;
     }
 
-    protected long getNextId() {
+    long getNextId() {
         return ++nextId;
     }
 
-    @Autowired
-    protected CsrfTokenRepository csrfTokenRepository;
-
-    protected User mockUser(String userName, String userPassword, String userEmail, Set<Role> roles) {
+    private User mockUser(String userName, String userPassword, String userEmail, Set<Role> roles) {
         User user = new User(userName, passwordEncoder.encode(userPassword), userEmail, roles);
         user.setId(getNextId());
         Mockito.when(userRepository.findByName(user.getName())).thenReturn(user);
@@ -82,7 +78,7 @@ public class TestMockedClient extends TestLocalRestClient {
         return user;
     }
 
-    protected void mockUserRedisSession(User user, String sessionToken) {
+    void mockUserRedisSession(User user, String sessionToken) {
         // Mock user authentication
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(user.getName(), null, user.getRoles());
 
