@@ -57,7 +57,6 @@ public class TestHttpSessionCache extends TestLocalRestClient {
                         API_PATH_V1 + LOGIN_RESOURCE,
                         HttpMethod.POST,
                         RestClient.build(
-                                new Pair<>("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE),
                                 new Pair<>(X_AUTH_USERNAME_HEADER, user.getName()),
                                 new Pair<>(X_AUTH_PASSWORD_HEADER, user.getPassword())
                         ),
@@ -89,7 +88,6 @@ public class TestHttpSessionCache extends TestLocalRestClient {
                         API_PATH_V1 + LOGIN_RESOURCE,
                         HttpMethod.POST,
                         RestClient.build(
-                                new Pair<>("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE),
                                 new Pair<>(X_AUTH_USERNAME_HEADER, user.getName()),
                                 new Pair<>(X_AUTH_PASSWORD_HEADER, user.getPassword())),
                         Optional.empty(),

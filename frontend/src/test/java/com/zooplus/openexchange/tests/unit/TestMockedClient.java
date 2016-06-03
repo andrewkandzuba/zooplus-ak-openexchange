@@ -17,7 +17,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.session.MapSession;
 
 import javax.annotation.PostConstruct;
@@ -31,8 +30,8 @@ abstract class TestMockedClient extends TestLocalRestClient {
     private static final String PRINCIPAL_NAME_INDEX_NAME = "org.springframework.session.FindByIndexNameSessionRepository.PRINCIPAL_NAME_INDEX_NAME";
     private static final String SPRING_SECURITY_CONTEXT = "SPRING_SECURITY_CONTEXT";
     private static final String SESSION_ATTRIBUTE_PREFIX = "sessionAttr:";
-    @Autowired
-    protected CsrfTokenRepository csrfTokenRepository;
+    //@Autowired
+    //protected CsrfTokenRepository csrfTokenRepository;
     @Autowired
     UserRepository userRepository;
     @Autowired

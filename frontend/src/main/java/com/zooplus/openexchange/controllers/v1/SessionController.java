@@ -21,7 +21,6 @@ import static com.zooplus.openexchange.controllers.v1.Version.SESSION_RESOURCE;
 public class SessionController {
 
     @RequestMapping(method = RequestMethod.GET,
-            consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE,
             path = SESSION_RESOURCE)
     ResponseEntity<SessionDetailsResponse> get(HttpSession session) throws IOException {
@@ -31,7 +30,6 @@ public class SessionController {
     }
 
     @RequestMapping(method = RequestMethod.POST,
-            consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE,
             path = LOGOUT_RESOURCE)
     ResponseEntity<LogoutResponse> logout(HttpSession session) throws IOException {

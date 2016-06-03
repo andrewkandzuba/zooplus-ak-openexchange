@@ -1,6 +1,5 @@
 package com.zooplus.openexchange.security.configurations;
 
-import com.zooplus.openexchange.security.filters.CsrfTokenReflectionFilter;
 import com.zooplus.openexchange.security.filters.DataSourceAuthenticationFilter;
 import com.zooplus.openexchange.security.providers.DataSourceAuthenticationProvider;
 import org.springframework.context.annotation.Bean;
@@ -12,7 +11,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
-import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
@@ -23,16 +21,14 @@ import javax.servlet.http.HttpServletResponse;
 import static com.zooplus.openexchange.controllers.v1.Version.*;
 
 @EnableWebSecurity
-@EnableRedisHttpSession
+@EnableRedisHttpSession(maxInactiveIntervalInSeconds = 60)
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .csrf()
-                .csrfTokenRepository(csrfTokenRepository())
-                .ignoringAntMatchers(API_PATH_V1 + LOGIN_RESOURCE, API_PATH_V1 + HEALTH_CHECK_RESOURCE);
+                .csrf().disable();
 
         http
                 .authenticationProvider(authenticationProvider())
@@ -42,9 +38,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .antMatchers(API_PATH_V1 + LOGIN_RESOURCE, API_PATH_V1 + HEALTH_CHECK_RESOURCE).permitAll()
                     .anyRequest().authenticated()
                 .and()
-                .addFilterAfter(
-                        new CsrfTokenReflectionFilter(),
-                        CsrfFilter.class)
                 .addFilterBefore(
                         authenticationFilter(),
                         BasicAuthenticationFilter.class)

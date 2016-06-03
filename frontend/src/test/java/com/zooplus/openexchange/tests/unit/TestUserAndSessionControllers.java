@@ -19,7 +19,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -30,7 +29,6 @@ import java.util.Collections;
 import java.util.Optional;
 
 import static com.zooplus.openexchange.controllers.v1.Version.*;
-import static com.zooplus.openexchange.security.filters.CsrfTokenReflectionFilter.CSRF_TOKEN_HEADER;
 import static com.zooplus.openexchange.security.filters.DataSourceAuthenticationFilter.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -65,9 +63,6 @@ public class TestUserAndSessionControllers extends TestMockedClient {
         req.setPassword(userPassword);
         req.setEmail(userEmail);
 
-        // Mock csrf token
-        CsrfToken csrfToken = csrfTokenRepository.generateToken(null);
-
         // Send request
         ResponseEntity<RegistrationResponse> resp =
                 getRestClient()
@@ -76,9 +71,7 @@ public class TestUserAndSessionControllers extends TestMockedClient {
                                 HttpMethod.PUT,
                                 RestClient.build(
                                         new Pair<>("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE),
-                                        new Pair<>(X_AUTH_TOKEN_HEADER, getAdminSessionToken()),
-                                        new Pair<>("X-CSRF-HEADER", CSRF_TOKEN_HEADER),
-                                        new Pair<>(CSRF_TOKEN_HEADER, csrfToken.getToken())
+                                        new Pair<>(X_AUTH_TOKEN_HEADER, getAdminSessionToken())
                                 ),
                                 Optional.of(req),
                                 RegistrationResponse.class);
@@ -101,9 +94,7 @@ public class TestUserAndSessionControllers extends TestMockedClient {
                                 HttpMethod.PUT,
                                 RestClient.build(
                                         new Pair<>("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE),
-                                        new Pair<>(X_AUTH_TOKEN_HEADER, getAdminSessionToken()),
-                                        new Pair<>("X-CSRF-HEADER", CSRF_TOKEN_HEADER),
-                                        new Pair<>(CSRF_TOKEN_HEADER, csrfToken.getToken())
+                                        new Pair<>(X_AUTH_TOKEN_HEADER, getAdminSessionToken())
                                 ),
                                 Optional.of(req),
                                 RegistrationResponse.class);
@@ -160,9 +151,7 @@ public class TestUserAndSessionControllers extends TestMockedClient {
                                 HttpMethod.PUT,
                                 RestClient.build(
                                         new Pair<>("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE),
-                                        new Pair<>(X_AUTH_TOKEN_HEADER, newUserToken),
-                                        new Pair<>("X-CSRF-HEADER", CSRF_TOKEN_HEADER),
-                                        new Pair<>(CSRF_TOKEN_HEADER, csrfToken.getToken())
+                                        new Pair<>(X_AUTH_TOKEN_HEADER, newUserToken)
                                 ),
                                 Optional.of(req),
                                 RegistrationResponse.class);
