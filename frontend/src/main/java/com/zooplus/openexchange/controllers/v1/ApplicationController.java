@@ -12,8 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
-import static com.zooplus.openexchange.controllers.v1.Version.API_PATH_V1;
-import static com.zooplus.openexchange.controllers.v1.Version.HEALTH_CHECK_RESOURCE;
+import static com.zooplus.openexchange.controllers.v1.Version.*;
 
 @RestController
 @RequestMapping(API_PATH_V1)
@@ -26,15 +25,23 @@ class ApplicationController {
 
     @RequestMapping(method = RequestMethod.GET,
             produces = MediaType.APPLICATION_JSON_VALUE,
-            path = HEALTH_CHECK_RESOURCE)
+            path = INFO_RESOURCE)
     @ResponseBody
-    ResponseEntity<StatusResponse> get() throws IOException {
+    ResponseEntity<StatusResponse> info() throws IOException {
         return new ResponseEntity<>(
                 new ObjectMapper()
                         .readValue(environment.getProperty(VCAP_APPLICATION),
                         StatusResponse.class),
                 HttpStatus.OK);
     }
+
+    @RequestMapping(method = RequestMethod.GET,
+            path = HEALTH_RESOURCE)
+    @ResponseBody
+    ResponseEntity<?> health() throws IOException {
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 
     @ResponseStatus(value= HttpStatus.INTERNAL_SERVER_ERROR, reason="Error occurred!")
     @ExceptionHandler({IOException.class, NullPointerException.class})

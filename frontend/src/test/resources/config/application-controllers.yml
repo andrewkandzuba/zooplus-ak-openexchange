@@ -1,8 +1,4 @@
 spring:
   profiles: controllers
-#  jpa:
-#    show_sql: false
-#    hibernate:
-#      ddl-auto: none
   datasource:
     platform: none

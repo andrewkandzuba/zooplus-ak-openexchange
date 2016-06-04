@@ -11,7 +11,7 @@
 
     <artifactId>cas-protocol</artifactId>
     <version>1.0.0-SNAPSHOT</version>
-    <name>com.zooplus.openexchange ::: ${project.artifactId}</name>
+    <name>openexchange ::: ${project.artifactId}</name>
     <packaging>jar</packaging>
 
     <dependencies>

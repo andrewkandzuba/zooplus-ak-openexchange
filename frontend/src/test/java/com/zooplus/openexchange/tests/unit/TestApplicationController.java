@@ -16,8 +16,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Optional;
 
-import static com.zooplus.openexchange.controllers.v1.Version.API_PATH_V1;
-import static com.zooplus.openexchange.controllers.v1.Version.HEALTH_CHECK_RESOURCE;
+import static com.zooplus.openexchange.controllers.v1.Version.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(ControllersStarter.class)
@@ -25,12 +24,12 @@ import static com.zooplus.openexchange.controllers.v1.Version.HEALTH_CHECK_RESOU
 @ActiveProfiles("controllers")
 public class TestApplicationController extends TestMockedClient {
     @Test
-    public void testStatusPath() throws Throwable {
+    public void testInfoPath() throws Throwable {
         // Make a request
         ResponseEntity<StatusResponse> response =
                 getRestClient()
                         .exchange(
-                                API_PATH_V1 + HEALTH_CHECK_RESOURCE,
+                                API_PATH_V1 + INFO_RESOURCE,
                                 HttpMethod.GET,
                                 RestClient.build(),
                                 Optional.empty(),
@@ -40,5 +39,21 @@ public class TestApplicationController extends TestMockedClient {
         Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assert.assertNotNull(response.getBody());
         Assert.assertEquals("7935a0789a204973ab70b6f01458b4f3", response.getBody().getInstanceId());
+    }
+
+    @Test
+    public void testHealthPath() throws Throwable {
+        // Make a request
+        ResponseEntity<?> response =
+                getRestClient()
+                        .exchange(
+                                API_PATH_V1 + HEALTH_RESOURCE,
+                                HttpMethod.GET,
+                                RestClient.build(),
+                                Optional.empty(),
+                                StatusResponse.class);
+
+        Assert.assertNotNull(response);
+        Assert.assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 }
