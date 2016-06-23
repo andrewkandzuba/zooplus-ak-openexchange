@@ -1,6 +1,6 @@
 spring:
   application:
-    name: integration-service
+    name: ${project.artifactId}-service
 currencyplayer:
   api:
    accesskey: aaf13c95d3b6669707e8d2af72ac82b5

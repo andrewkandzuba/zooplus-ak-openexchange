@@ -7,5 +7,6 @@ applications:
   instances: 1
 services:
   - zooplus-redis
+  - zooplus-eureka
 env:
   JBP_CONFIG_OPEN_JDK_JRE: '[jre: {version: 1.8.0_+}, memory_calculator: {memory_heuristics: {heap: 85, stack: 10}}]'
