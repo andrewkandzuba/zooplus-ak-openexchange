@@ -1,3 +1,22 @@
+spring:
+  application:
+    name: integration-service
 currencyplayer:
   api:
    accesskey: aaf13c95d3b6669707e8d2af72ac82b5
+eureka:
+  instance:
+    statusPageUrl: ${vcap.application.uris[0]:localhost}/info
+    healthCheckUrl: ${vcap.application.uris[0]:localhost}/health
+    hostname: ${vcap.application.uris[0]:localhost}
+    nonSecurePort: ${vcap.application.port:8080}
+    preferIpAddress: true
+    leaseRenewalIntervalInSeconds: 10
+    metadataMap:
+      instanceId: ${vcap.application.instance_id:${project.artifactId:8080}}
+      version: ${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}
+  client:
+    healthcheck:
+      enabled: true
+    serviceUrl:
+      defaultZone: ${vcap.services.zooplus-eureka.credentials.uri:http://127.0.0.1:8761}/eureka/

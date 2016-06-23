@@ -16,6 +16,12 @@
     <packaging>jar</packaging>
 
     <dependencies>
+        <!-- commons-dependencies -->
+        <dependency>
+            <groupId>com.zooplus.openexchange.ak.samples</groupId>
+            <artifactId>commons-dependencies</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
         <!-- spring cloud starter eureka server -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -26,11 +32,6 @@
                     <artifactId>spring-boot-starter-tomcat</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>
-        <!-- spring jetty -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-jetty</artifactId>
         </dependency>
         <!-- spring cloud starter config -->
         <dependency>

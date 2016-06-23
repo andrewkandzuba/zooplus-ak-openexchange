@@ -19,15 +19,26 @@
         <dependency>
             <groupId>com.zooplus.openexchange.ak.samples</groupId>
             <artifactId>commons-rest</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
         <!-- protocol -->
         <dependency>
             <groupId>com.zooplus.com.zooplus.openexchange.ak.samples</groupId>
             <artifactId>cas-protocol</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
-
+        <!-- spring boot test -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-tomcat</artifactId>
+                </exclusion>
+            </exclusions>
+            <scope>test</scope>
+        </dependency>
         <!-- spring persistence -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -48,18 +59,12 @@
             <groupId>redis.clients</groupId>
             <artifactId>jedis</artifactId>
         </dependency>
-        <!-- spring boot test -->
+        <!-- archaius configuration -->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-tomcat</artifactId>
-                </exclusion>
-            </exclusions>
-            <scope>test</scope>
+            <groupId>com.netflix.archaius</groupId>
+            <artifactId>archaius-core</artifactId>
         </dependency>
+
         <!-- junit framework  -->
         <dependency>
             <groupId>junit</groupId>
@@ -70,11 +75,7 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-all</artifactId>
-        </dependency>
-        <!-- archaius configuration -->
-        <dependency>
-            <groupId>com.netflix.archaius</groupId>
-            <artifactId>archaius-core</artifactId>
+            <scope>test</scope>
         </dependency>
         <!-- mysql connector for integration tests -->
         <dependency>

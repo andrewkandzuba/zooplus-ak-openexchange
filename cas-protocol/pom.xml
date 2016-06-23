@@ -19,7 +19,7 @@
         <dependency>
             <groupId>com.zooplus.openexchange.ak.samples</groupId>
             <artifactId>protocol-generation</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
     </dependencies>
 

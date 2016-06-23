@@ -15,16 +15,11 @@
     <packaging>jar</packaging>
 
     <dependencies>
-        <!-- protocol -->
+        <!-- commons-dependencies -->
         <dependency>
             <groupId>com.zooplus.openexchange.ak.samples</groupId>
-            <artifactId>protocol-generation</artifactId>
-            <version>${parent.version}</version>
-        </dependency>
-        <!-- spring cloud starter eureka -->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-eureka</artifactId>
+            <artifactId>commons-dependencies</artifactId>
+            <version>${project.parent.version}</version>
         </dependency>
         <!-- spring boot -->
         <dependency>
@@ -36,11 +31,6 @@
                     <artifactId>spring-boot-starter-tomcat</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>
-        <!-- spring jetty -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-jetty</artifactId>
         </dependency>
         <!-- spring security -->
         <dependency>
@@ -71,6 +61,5 @@
                 <directory>src/test/resources</directory>
             </testResource>
         </testResources>
-
     </build>
 </project>

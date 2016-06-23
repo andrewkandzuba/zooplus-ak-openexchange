@@ -15,14 +15,13 @@
     <packaging>jar</packaging>
 
     <dependencies>
-        <!-- protocol generator -->
+        <!-- protocol-generation -->
         <dependency>
             <groupId>com.zooplus.openexchange.ak.samples</groupId>
             <artifactId>protocol-generation</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
     </dependencies>
-
     <build>
         <resources>
             <resource>
