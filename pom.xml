@@ -258,6 +258,8 @@
         <module>integration-protocol</module>
         <module>service-registry-eureka</module>
         <module>cas-protocol</module>
+        <module>benchmark</module>
+        <module>service-simple-websocket</module>
     </modules>
 
     <build>

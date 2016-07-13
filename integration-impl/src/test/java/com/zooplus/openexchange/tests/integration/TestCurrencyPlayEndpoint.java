@@ -15,7 +15,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -37,7 +36,7 @@ public class TestCurrencyPlayEndpoint {
                     latch.countDown();
                 }, Throwable::printStackTrace);
 
-        latch.await(3000, TimeUnit.MILLISECONDS);
+        latch.await();
         Assert.assertTrue(replied.get());
     }
 
@@ -57,7 +56,7 @@ public class TestCurrencyPlayEndpoint {
                             latch.countDown();
                         },
                         Throwable::printStackTrace);
-        latch.await(3000, TimeUnit.MILLISECONDS);
+        latch.await();
         Assert.assertTrue(replied.get());
     }
 }
