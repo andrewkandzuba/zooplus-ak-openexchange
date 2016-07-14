@@ -16,16 +16,16 @@
 
 
     <dependencies>
-        <!-- commons-ws -->
-        <dependency>
-            <groupId>com.zooplus.openexchange.ak.samples</groupId>
-            <artifactId>commons-ws</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
         <!-- integration protocol -->
         <dependency>
             <groupId>com.zooplus.openexchange.ak.samples</groupId>
             <artifactId>integration-protocol</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <!-- commons-ws -->
+        <dependency>
+            <groupId>com.zooplus.openexchange.ak.samples</groupId>
+            <artifactId>commons-ws</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
         <!-- spring integration -->
@@ -38,22 +38,31 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-expression</artifactId>
         </dependency>
-        <!-- spring context support -->
-        <!-- dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context-support</artifactId>
-        </dependency -->
+        <!-- spring boot starter actuator -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
         <!-- testing -->
+        <!-- spring boot starter test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-tomcat</artifactId>
+                </exclusion>
+            </exclusions>
             <scope>test</scope>
         </dependency>
+        <!-- junit -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
+        <!-- mockito -->
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-all</artifactId>
