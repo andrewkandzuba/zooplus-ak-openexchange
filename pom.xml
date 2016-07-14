@@ -59,7 +59,7 @@
 
         <compile.source>1.8</compile.source>
         <compile.target>1.8</compile.target>
-        <start-class>com.zooplus.com.zooplus.openexchange.Starter</start-class>
+        <start-class>com.zooplus.openexchange.Starter</start-class>
     </properties>
 
     <dependencyManagement>
