@@ -5,6 +5,7 @@ import com.zooplus.openexchange.integrations.endpoints.CurrencyLayerResponseHand
 import com.zooplus.openexchange.protocol.integration.v1.Currencies;
 import com.zooplus.openexchange.protocol.integration.v1.Quotes;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.expression.Expression;
@@ -21,6 +22,7 @@ import java.util.Map;
 import static com.zooplus.openexchange.integrations.api.CurrencyLayerApiConstants.*;
 
 @Configuration
+@EnableConfigurationProperties
 public class CurrencyLayerApiIntegrationConfiguration {
     @Value("${currencyplayer.api.accesskey}")
     private String accessKey;

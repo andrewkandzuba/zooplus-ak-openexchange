@@ -29,6 +29,9 @@
             <resource>
                 <filtering>true</filtering>
                 <directory>src/main/resources</directory>
+                <excludes>
+                    <exclude>**/*.json</exclude>
+                </excludes>
             </resource>
         </resources>
         <testResources>

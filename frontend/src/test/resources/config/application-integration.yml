@@ -1,7 +1,9 @@
+server:
+  port: 8081
 spring:
+  application:
+    name: ${project.artifactId}-service
   profiles: integration
-#  application:
-#    name: ${project.artifactId}-service
   jpa:
     show_sql: false
     hibernate:
@@ -14,17 +16,3 @@ spring:
   redis:
     host: 127.0.0.1
     port: 6379
-#eureka:
-#  instance:
-#    hostname: localhost
-#    nonSecurePort: 8080
-#    preferIpAddress: true
-#    leaseRenewalIntervalInSeconds: 10
-#    metadataMap:
-#        instanceId: ${project.artifactId}:8080
-#        version: ${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}
-#  client:
-#    healthcheck:
-#      enabled: true
-#    serviceUrl:
-#      defaultZone: http://localhost:8761/eureka/
