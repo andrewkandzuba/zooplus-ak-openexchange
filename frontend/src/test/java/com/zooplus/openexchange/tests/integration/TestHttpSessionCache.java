@@ -60,7 +60,6 @@ public class TestHttpSessionCache extends TestLocalRestClient {
                                 new Pair<>(X_AUTH_USERNAME_HEADER, user.getName()),
                                 new Pair<>(X_AUTH_PASSWORD_HEADER, user.getPassword())
                         ),
-                        Optional.empty(),
                         LoginResponse.class);
         Assert.assertNotNull(loginResponse);
         Assert.assertNotNull(loginResponse.getHeaders());
@@ -74,7 +73,6 @@ public class TestHttpSessionCache extends TestLocalRestClient {
                         API_PATH_V1 + SESSION_RESOURCE,
                         HttpMethod.GET,
                         firstSessionHeader,
-                        Optional.empty(),
                         SessionDetailsResponse.class
                 );
         Assert.assertNotNull(sessionDetailsResponse);
@@ -90,7 +88,6 @@ public class TestHttpSessionCache extends TestLocalRestClient {
                         RestClient.build(
                                 new Pair<>(X_AUTH_USERNAME_HEADER, user.getName()),
                                 new Pair<>(X_AUTH_PASSWORD_HEADER, user.getPassword())),
-                        Optional.empty(),
                         LoginResponse.class);
         Assert.assertNotNull(loginResponse);
         Assert.assertNotNull(loginResponse.getHeaders());
@@ -121,7 +118,6 @@ public class TestHttpSessionCache extends TestLocalRestClient {
                         API_PATH_V1 + LOGOUT_RESOURCE,
                         HttpMethod.POST,
                         secondSessionHeader,
-                        Optional.empty(),
                         LogoutResponse.class
                 );
         Assert.assertNotNull(logoutResponse);
@@ -134,7 +130,6 @@ public class TestHttpSessionCache extends TestLocalRestClient {
                         API_PATH_V1 + SESSION_RESOURCE,
                         HttpMethod.GET,
                         secondSessionHeader,
-                        Optional.empty(),
                         SessionDetailsResponse.class
                 );
         Assert.assertNotNull(sessionDetailsResponse);
@@ -146,7 +141,6 @@ public class TestHttpSessionCache extends TestLocalRestClient {
                         API_PATH_V1 + SESSION_RESOURCE,
                         HttpMethod.GET,
                         firstSessionHeader,
-                        Optional.empty(),
                         SessionDetailsResponse.class
                 );
         Assert.assertNotNull(sessionDetailsResponse);

@@ -4,11 +4,11 @@ import javafx.util.Pair;
 import org.springframework.http.*;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.ResponseErrorHandler;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.util.Map;
-import java.util.Optional;
 
 public class RestClient {
 
@@ -31,13 +31,21 @@ public class RestClient {
         });
     }
 
+
+    public <T, K> ResponseEntity<T> exchange(String path,
+                                             HttpMethod method,
+                                             HttpHeaders headers,
+                                             Class<T> responseClazz) throws RestClientException {
+       return exchange(path, method, headers, null, responseClazz);
+    }
+
     public <T, K> ResponseEntity<T> exchange(String path,
                                           HttpMethod method,
                                           HttpHeaders headers,
-                                          Optional<K> body,
-                                          Class<T> responseClazz) {
+                                          K body,
+                                          Class<T> responseClazz) throws RestClientException {
         // Make entity
-        HttpEntity<K> entity = body.isPresent() ? new HttpEntity<>(body.get(), headers) : new HttpEntity<>(headers);
+        HttpEntity<K> entity = new HttpEntity<>(body, headers);
         // Send request
         return restTemplate.exchange(
                 endPoint + "/" + path,

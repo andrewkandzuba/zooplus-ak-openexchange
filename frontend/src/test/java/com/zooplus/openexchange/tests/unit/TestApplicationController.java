@@ -14,8 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.Optional;
-
 import static com.zooplus.openexchange.controllers.v1.Version.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -32,7 +30,6 @@ public class TestApplicationController extends TestMockedClient {
                                 API_PATH_V1 + INFO_RESOURCE,
                                 HttpMethod.GET,
                                 RestClient.build(),
-                                Optional.empty(),
                                 StatusResponse.class);
 
         Assert.assertNotNull(response);
@@ -50,7 +47,6 @@ public class TestApplicationController extends TestMockedClient {
                                 API_PATH_V1 + HEALTH_RESOURCE,
                                 HttpMethod.GET,
                                 RestClient.build(),
-                                Optional.empty(),
                                 StatusResponse.class);
 
         Assert.assertNotNull(response);

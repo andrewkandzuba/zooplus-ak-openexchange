@@ -15,22 +15,21 @@
     <packaging>jar</packaging>
 
     <dependencies>
-        <!-- commons-dependencies -->
+        <!-- spring cloud starter eureka -->
         <dependency>
-            <groupId>com.zooplus.openexchange.ak.samples</groupId>
-            <artifactId>commons-dependencies</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
-        <!-- spring boot -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-eureka</artifactId>
             <exclusions>
                 <exclusion>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-starter-tomcat</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <!-- spring jetty -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jetty</artifactId>
         </dependency>
         <!-- spring security -->
         <dependency>
@@ -46,20 +45,13 @@
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-redis</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.data</groupId>
+                    <artifactId>spring-data-keyvalue</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
-    <build>
-        <resources>
-            <resource>
-                <filtering>true</filtering>
-                <directory>src/main/resources</directory>
-            </resource>
-        </resources>
-        <testResources>
-            <testResource>
-                <filtering>true</filtering>
-                <directory>src/test/resources</directory>
-            </testResource>
-        </testResources>
-    </build>
+    <build/>
 </project>

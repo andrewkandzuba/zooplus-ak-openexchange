@@ -23,31 +23,14 @@
         </dependency>
         <!-- protocol -->
         <dependency>
-            <groupId>com.zooplus.com.zooplus.openexchange.ak.samples</groupId>
+            <groupId>com.zooplus.openexchange.ak.samples</groupId>
             <artifactId>cas-protocol</artifactId>
             <version>${project.parent.version}</version>
-        </dependency>
-        <!-- spring boot test -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-tomcat</artifactId>
-                </exclusion>
-            </exclusions>
-            <scope>test</scope>
         </dependency>
         <!-- spring persistence -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
-        <!-- spring context -->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context</artifactId>
         </dependency>
         <!-- apache commons utils -->
         <dependency>
@@ -64,7 +47,6 @@
             <groupId>com.netflix.archaius</groupId>
             <artifactId>archaius-core</artifactId>
         </dependency>
-
         <!-- junit framework  -->
         <dependency>
             <groupId>junit</groupId>
@@ -91,20 +73,33 @@
         </dependency>
         <!-- apache commons-io -->
         <dependency>
-            <groupId>org.apache.commons</groupId>
+            <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!-- spring boot test -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-tomcat</artifactId>
+                </exclusion>
+            </exclusions>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
     <build>
         <resources>
             <resource>
+                <directory>${basedir}/src/main/resources</directory>
                 <filtering>true</filtering>
-                <directory>src/main/resources</directory>
-            </resource>
-            <resource>
-                <filtering>true</filtering>
-                <directory>src/main/resources</directory>
                 <includes>
                     <include>**/*.yml</include>
                 </includes>
@@ -113,8 +108,8 @@
         </resources>
         <testResources>
             <testResource>
+                <directory>${basedir}/src/test/resources</directory>
                 <filtering>true</filtering>
-                <directory>src/test/resources</directory>
             </testResource>
         </testResources>
         <plugins>
@@ -137,6 +132,10 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
             </plugin>
         </plugins>
     </build>

@@ -26,7 +26,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Collections;
-import java.util.Optional;
 
 import static com.zooplus.openexchange.controllers.v1.Version.*;
 import static com.zooplus.openexchange.security.filters.DataSourceAuthenticationFilter.*;
@@ -73,7 +72,7 @@ public class TestUserAndSessionControllers extends TestMockedClient {
                                         new Pair<>("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE),
                                         new Pair<>(X_AUTH_TOKEN_HEADER, getAdminSessionToken())
                                 ),
-                                Optional.of(req),
+                                req,
                                 RegistrationResponse.class);
 
         // Analyze response
@@ -96,7 +95,7 @@ public class TestUserAndSessionControllers extends TestMockedClient {
                                         new Pair<>("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE),
                                         new Pair<>(X_AUTH_TOKEN_HEADER, getAdminSessionToken())
                                 ),
-                                Optional.of(req),
+                                req,
                                 RegistrationResponse.class);
 
         // Analyze response
@@ -129,7 +128,6 @@ public class TestUserAndSessionControllers extends TestMockedClient {
                                         new Pair<>(X_AUTH_USERNAME_HEADER, user.getName()),
                                         new Pair<>(X_AUTH_PASSWORD_HEADER, user.getPassword())
                                 ),
-                                Optional.empty(),
                                 LoginResponse.class);
 
         // Analyze login response
@@ -153,7 +151,7 @@ public class TestUserAndSessionControllers extends TestMockedClient {
                                         new Pair<>("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE),
                                         new Pair<>(X_AUTH_TOKEN_HEADER, newUserToken)
                                 ),
-                                Optional.of(req),
+                                req,
                                 RegistrationResponse.class);
 
         // Analyze response
