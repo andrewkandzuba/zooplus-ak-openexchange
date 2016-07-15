@@ -52,7 +52,7 @@ public class TestCurrencyApi {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("x-auth-token", "some-test-value");
         sockJsClient.doHandshake("http://localhost:" + port + API_PATH_V1 + WS_ENDPOINT + CURRENCIES_WS_ENDPOINT,
-                new WebSocketHttpHeaders(),
+                new WebSocketHttpHeaders(httpHeaders),
                 errorMessage -> {
                 },
                 (MessageProcessor) (session, message, payloadClass) -> {

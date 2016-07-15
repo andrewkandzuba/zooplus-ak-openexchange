@@ -3,6 +3,7 @@ package com.zooplus.openexchange.controllers.v1.currency;
 import com.zooplus.openexchange.configurations.JettyWebSocketConfigurator;
 import com.zooplus.openexchange.controllers.JettyWebSocketHandler;
 import com.zooplus.openexchange.controllers.SecurityJettyWebSocketHandler;
+import com.zooplus.openexchange.integrations.gateways.CurrencyLayerApi;
 import com.zooplus.openexchange.integrations.gateways.CurrencyLayerApiGateway;
 import com.zooplus.openexchange.protocol.ws.v1.CurrencyListRequest;
 import com.zooplus.openexchange.protocol.ws.v1.CurrencyListResponse;
@@ -25,7 +26,7 @@ public class CurrencyPlayWebSocketConfigurator extends JettyWebSocketConfigurato
     @Autowired
     private DefaultHandshakeHandler defaultHandshakeHandler;
     @Autowired
-    private CurrencyLayerApiGateway currencyLayerApiGateway;
+    private CurrencyLayerApi currencyLayerApiGateway;
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
