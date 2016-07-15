@@ -16,3 +16,20 @@ spring:
   redis:
     host: 127.0.0.1
     port: 6379
+eureka:
+  instance:
+    statusPageUrl: http://127.0.0.1/info
+    healthCheckUrl: http://127.0.0.1/health
+    hostname: localhost
+    nonSecurePort: 8081
+    preferIpAddress: true
+    leaseRenewalIntervalInSeconds: 2
+    leaseExpirationDurationInSeconds: 5
+    metadataMap:
+      instanceId: ${project.artifactId}
+      version: ${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}
+  client:
+    healthcheck:
+      enabled: true
+    serviceUrl:
+      defaultZone: http://127.0.0.1:8761/eureka/

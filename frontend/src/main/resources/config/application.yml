@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: ${project.artifactId}-service
+  jpa:
+    show_sql: false
+    hibernate:
+      dialect: org.hibernate.dialect.MySQL5Dialect
+      ddl-auto: update
+  datasource:
+    platform: mysql
+eureka:
+  instance:
+    statusPageUrl: ${vcap.application.uris[0]:localhost}/api/v1/info
+    healthCheckUrl: ${vcap.application.uris[0]:localhost}/api/v1/health
+    hostname: ${vcap.application.uris[0]:localhost}
+    nonSecurePort: ${vcap.application.port:8080}
+    preferIpAddress: true
+    leaseRenewalIntervalInSeconds: 10
+    metadataMap:
+      instanceId: ${vcap.application.instance_id:${project.artifactId:8080}}
+      version: ${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}
+  client:
+    healthcheck:
+      enabled: true
+    serviceUrl:
+      defaultZone: ${vcap.services.zooplus-eureka.credentials.uri:http://127.0.0.1:8761}/eureka/

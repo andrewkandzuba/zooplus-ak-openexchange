@@ -80,12 +80,15 @@
             <resource>
                 <filtering>true</filtering>
                 <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/application.yml</include>
+                </includes>
             </resource>
             <resource>
                 <filtering>true</filtering>
                 <directory>src/main/resources</directory>
                 <includes>
-                    <include>**/*.yml</include>
+                    <include>**/mainifest.yml</include>
                 </includes>
                 <targetPath>${project.build.directory}</targetPath>
             </resource>
