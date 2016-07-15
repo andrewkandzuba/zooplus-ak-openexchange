@@ -18,9 +18,10 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
+import org.springframework.http.HttpHeaders;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.web.socket.WebSocketSession;
+import org.springframework.web.socket.WebSocketHttpHeaders;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -48,22 +49,22 @@ public class TestCurrencyApi {
         CountDownLatch reply = new CountDownLatch(1);
         AtomicBoolean isReplyReceived = new AtomicBoolean(false);
 
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("x-auth-token", "some-test-value");
         sockJsClient.doHandshake("http://localhost:" + port + API_PATH_V1 + WS_ENDPOINT + CURRENCIES_WS_ENDPOINT,
+                new WebSocketHttpHeaders(),
                 errorMessage -> {
                 },
-                new MessageProcessor() {
-                    @Override
-                    public boolean onMessage(WebSocketSession session, Object message, Class<?> payloadClass) throws Exception {
-                        Assert.assertTrue(payloadClass.equals(CurrencyListResponse.class));
-                        Assert.assertTrue(message instanceof CurrencyListResponse);
-                        CurrencyListResponse response = (CurrencyListResponse) message;
-                        Assert.assertEquals(response.getCurrencies().size(), 1);
-                        Assert.assertTrue(response.getCurrencies().stream().anyMatch(currency -> currency.getCode().equals("USD")));
-                        isReplyReceived.compareAndSet(false, true);
-                        session.close();
-                        reply.countDown();
-                        return true;
-                    }
+                (MessageProcessor) (session, message, payloadClass) -> {
+                    Assert.assertTrue(payloadClass.equals(CurrencyListResponse.class));
+                    Assert.assertTrue(message instanceof CurrencyListResponse);
+                    CurrencyListResponse response = (CurrencyListResponse) message;
+                    Assert.assertEquals(response.getCurrencies().size(), 1);
+                    Assert.assertTrue(response.getCurrencies().stream().anyMatch(currency -> currency.getCode().equals("USD")));
+                    isReplyReceived.compareAndSet(false, true);
+                    session.close();
+                    reply.countDown();
+                    return true;
                 })
                 .addCallback(
                         session -> {

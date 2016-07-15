@@ -34,11 +34,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authenticationProvider(authenticationProvider())
                 .authorizeRequests()
                     .antMatchers(API_PATH_V1 + USER_RESOURCE).hasRole("ADMIN")
-                    .antMatchers(API_PATH_V1 + SESSION_RESOURCE).hasRole("USER")/*
-                    .antMatchers(
-                            API_PATH_V1 + LOGIN_RESOURCE,
-                            API_PATH_V1 + HEALTH_RESOURCE,
-                            API_PATH_V1 + INFO_RESOURCE).permitAll()*/
+                    .antMatchers(API_PATH_V1 + SESSION_RESOURCE).hasRole("USER")
                     .anyRequest().permitAll()
                 .and()
                 .addFilterBefore(
