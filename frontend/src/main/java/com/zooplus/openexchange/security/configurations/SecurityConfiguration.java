@@ -34,12 +34,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authenticationProvider(authenticationProvider())
                 .authorizeRequests()
                     .antMatchers(API_PATH_V1 + USER_RESOURCE).hasRole("ADMIN")
-                    .antMatchers(API_PATH_V1 + SESSION_RESOURCE).hasRole("USER")
+                    .antMatchers(API_PATH_V1 + SESSION_RESOURCE).hasRole("USER")/*
                     .antMatchers(
                             API_PATH_V1 + LOGIN_RESOURCE,
                             API_PATH_V1 + HEALTH_RESOURCE,
-                            API_PATH_V1 + INFO_RESOURCE).permitAll()
-                    .anyRequest().authenticated()
+                            API_PATH_V1 + INFO_RESOURCE).permitAll()*/
+                    .anyRequest().permitAll()
                 .and()
                 .addFilterBefore(
                         authenticationFilter(),

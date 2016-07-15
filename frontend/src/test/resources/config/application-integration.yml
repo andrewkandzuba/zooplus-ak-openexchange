@@ -18,8 +18,8 @@ spring:
     port: 6379
 eureka:
   instance:
-    statusPageUrl: http://127.0.0.1/info
-    healthCheckUrl: http://127.0.0.1/health
+    statusPageUrl: http://localhost/info
+    healthCheckUrl: http://localhost/health
     hostname: localhost
     nonSecurePort: 8081
     preferIpAddress: true

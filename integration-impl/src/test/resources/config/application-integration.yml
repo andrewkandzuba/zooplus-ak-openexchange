@@ -1,3 +1,5 @@
+server:
+  port: 8082
 spring:
   profiles: integration
 currencyplayer:
@@ -7,3 +9,20 @@ local:
   proxy:
     host: localhost
     port: 0
+eureka:
+  instance:
+    statusPageUrl: http://localhost/info
+    healthCheckUrl: http://localhost/health
+    hostname: localhost
+    nonSecurePort: 8082
+    preferIpAddress: true
+    leaseRenewalIntervalInSeconds: 2
+    leaseExpirationDurationInSeconds: 5
+    metadataMap:
+      instanceId: ${project.artifactId}
+      version: ${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}
+  client:
+    healthcheck:
+      enabled: true
+    serviceUrl:
+      defaultZone: http://127.0.0.1:8761/eureka/
