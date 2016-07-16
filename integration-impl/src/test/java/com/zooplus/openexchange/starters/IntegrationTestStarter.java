@@ -4,10 +4,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication(
         scanBasePackages = {
-                "com.zooplus.openexchange.integrations.configurations",
-                "com.zooplus.openexchange.integrations.api",
-                "com.zooplus.openexchange.integrations.endpoints",
-                "com.zooplus.openexchange.controllers.v1"
+                "com.zooplus.openexchange.controllers.v1",
+                "com.zooplus.openexchange.services.external.currencylayer.api",
+                "com.zooplus.openexchange.services.external.currencylayer.impl",
+                "com.zooplus.openexchange.services.discovery"
         })
 public class IntegrationTestStarter {
 }

@@ -28,15 +28,11 @@
             <artifactId>commons-ws</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
-        <!-- spring integration -->
+        <!-- commons rest  -->
         <dependency>
-            <groupId>org.springframework.integration</groupId>
-            <artifactId>spring-integration-http</artifactId>
-        </dependency>
-        <!-- spring expression -->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-expression</artifactId>
+            <groupId>com.zooplus.openexchange.ak.samples</groupId>
+            <artifactId>commons-rest</artifactId>
+            <version>${project.parent.version}</version>
         </dependency>
         <!-- spring boot starter actuator -->
         <dependency>

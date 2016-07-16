@@ -2,7 +2,7 @@ package com.zooplus.openexchange.tests.unit;
 
 import com.zooplus.openexchange.clients.SockJsRxClient;
 import com.zooplus.openexchange.controllers.MessageProcessor;
-import com.zooplus.openexchange.protocol.v1.FakeMessage;
+import com.zooplus.openexchange.controllers.v1.FakeMessage;
 import com.zooplus.openexchange.protocol.ws.v1.CurrencyListRequest;
 import com.zooplus.openexchange.protocol.ws.v1.CurrencyListResponse;
 import com.zooplus.openexchange.protocol.ws.v1.HistoricalQuotesRequest;

@@ -1,4 +1,4 @@
-package com.zooplus.openexchange.integrations.gateways;
+package com.zooplus.openexchange.services.external.currencylayer.api;
 
 import com.zooplus.openexchange.protocol.ws.v1.CurrencyListRequest;
 import com.zooplus.openexchange.protocol.ws.v1.CurrencyListResponse;

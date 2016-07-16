@@ -1,4 +1,4 @@
-package com.zooplus.openexchange.protocol.v1;
+package com.zooplus.openexchange.controllers.v1;
 
 import com.zooplus.openexchange.protocol.Message;
 

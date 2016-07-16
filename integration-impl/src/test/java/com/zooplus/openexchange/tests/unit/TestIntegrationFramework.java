@@ -1,10 +1,8 @@
 package com.zooplus.openexchange.tests.unit;
 
-import com.zooplus.openexchange.integrations.gateways.BorderConditionsGateway;
-import com.zooplus.openexchange.integrations.gateways.CurrencyLayerApiGateway;
-import com.zooplus.openexchange.protocol.v1.NullPointerExceptionMessage;
 import com.zooplus.openexchange.protocol.ws.v1.CurrencyListRequest;
 import com.zooplus.openexchange.protocol.ws.v1.HistoricalQuotesRequest;
+import com.zooplus.openexchange.services.external.currencylayer.api.CurrencyLayerApi;
 import com.zooplus.openexchange.starters.UnitTestStarter;
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.junit.Assert;
@@ -15,8 +13,6 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -27,9 +23,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @ActiveProfiles("api")
 public class TestIntegrationFramework {
     @Autowired
-    private CurrencyLayerApiGateway currencyLayerApiGateway;
-    @Autowired
-    private BorderConditionsGateway borderConditionsGateway;
+    private CurrencyLayerApi currencyLayerApiGateway;
 
     @Test
     public void testCurrencyList() throws Exception {
@@ -76,33 +70,5 @@ public class TestIntegrationFramework {
         latch.await(5000, TimeUnit.MILLISECONDS);
         Assert.assertTrue(stateSuccess.get());
         Assert.assertFalse(stateError.get());
-    }
-
-    @Test
-    public void testExceptionHandling() throws Exception {
-        CountDownLatch latch = new CountDownLatch(1);
-        AtomicBoolean stateError = new AtomicBoolean(false);
-        borderConditionsGateway.throwNullPointerException(new NullPointerExceptionMessage())
-                .addCallback(
-                        aVoid -> {
-                        },
-                        throwable -> {
-                            throwable.printStackTrace();
-                            stateError.compareAndSet(false, true);
-                            latch.countDown();
-                        });
-        ;
-        latch.await(5000, TimeUnit.MILLISECONDS);
-        Assert.assertTrue(stateError.get());
-    }
-
-    @Test
-    public void testCachableInvocations() throws Exception {
-        String id = "message1";
-        List<String> responses = new ArrayList<>();
-        responses.add(borderConditionsGateway.cachableInvocations(id).get());
-        responses.add(borderConditionsGateway.cachableInvocations(id).get());
-        Assert.assertTrue(responses.size() == 2);
-        Assert.assertTrue(responses.get(0).equals(responses.get(1)));
     }
 }

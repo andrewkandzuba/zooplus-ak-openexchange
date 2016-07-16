@@ -1,4 +1,4 @@
-package com.zooplus.openexchange.discovery;
+package com.zooplus.openexchange.services.discovery;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;

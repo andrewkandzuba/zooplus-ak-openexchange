@@ -1,8 +1,8 @@
 package com.zooplus.openexchange.tests.integration;
 
-import com.zooplus.openexchange.integrations.gateways.CurrencyLayerApiGateway;
 import com.zooplus.openexchange.protocol.ws.v1.CurrencyListRequest;
 import com.zooplus.openexchange.protocol.ws.v1.HistoricalQuotesRequest;
+import com.zooplus.openexchange.services.external.currencylayer.api.CurrencyLayerApi;
 import com.zooplus.openexchange.starters.IntegrationTestStarter;
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.junit.Assert;
@@ -23,7 +23,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @ActiveProfiles("integration")
 public class TestCurrencyPlayEndpoint {
     @Autowired
-    private CurrencyLayerApiGateway gateway;
+    private CurrencyLayerApi gateway;
 
     @Test
     public void testCurrencyLayerCurrenciesList() throws Exception {
@@ -34,7 +34,10 @@ public class TestCurrencyPlayEndpoint {
                     Assert.assertTrue(currencies.getCurrencies().size() > 0);
                     replied.compareAndSet(false, true);
                     latch.countDown();
-                }, Throwable::printStackTrace);
+                }, t -> {
+                    latch.countDown();
+                    t.printStackTrace();
+                });
 
         latch.await();
         Assert.assertTrue(replied.get());
@@ -55,8 +58,10 @@ public class TestCurrencyPlayEndpoint {
                             replied.compareAndSet(false, true);
                             latch.countDown();
                         },
-                        Throwable::printStackTrace);
-        latch.await();
+                        t -> {
+                            latch.countDown();
+                            t.printStackTrace();
+                        });
         Assert.assertTrue(replied.get());
     }
 }

@@ -48,11 +48,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <!-- spring integration java dsl -->
-        <dependency>
-            <groupId>org.springframework.integration</groupId>
-            <artifactId>spring-integration-java-dsl</artifactId>
-        </dependency>
     </dependencies>
     <build>
         <resources>

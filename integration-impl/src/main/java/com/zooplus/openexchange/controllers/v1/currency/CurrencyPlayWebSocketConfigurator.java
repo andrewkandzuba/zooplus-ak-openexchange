@@ -1,14 +1,12 @@
 package com.zooplus.openexchange.controllers.v1.currency;
 
 import com.zooplus.openexchange.configurations.JettyWebSocketConfigurator;
-import com.zooplus.openexchange.controllers.JettyWebSocketHandler;
 import com.zooplus.openexchange.controllers.SecurityJettyWebSocketHandler;
-import com.zooplus.openexchange.integrations.gateways.CurrencyLayerApi;
-import com.zooplus.openexchange.integrations.gateways.CurrencyLayerApiGateway;
 import com.zooplus.openexchange.protocol.ws.v1.CurrencyListRequest;
 import com.zooplus.openexchange.protocol.ws.v1.CurrencyListResponse;
 import com.zooplus.openexchange.protocol.ws.v1.HistoricalQuotesRequest;
 import com.zooplus.openexchange.protocol.ws.v1.HistoricalQuotesResponse;
+import com.zooplus.openexchange.services.external.currencylayer.api.CurrencyLayerApi;
 import com.zooplus.openexchange.utils.MessageConvetor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
