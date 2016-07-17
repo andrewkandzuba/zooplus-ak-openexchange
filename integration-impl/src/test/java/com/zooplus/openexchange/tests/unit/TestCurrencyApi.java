@@ -59,8 +59,9 @@ public class TestCurrencyApi {
                     Assert.assertTrue(payloadClass.equals(CurrencyListResponse.class));
                     Assert.assertTrue(message instanceof CurrencyListResponse);
                     CurrencyListResponse response = (CurrencyListResponse) message;
-                    Assert.assertEquals(response.getCurrencies().size(), 1);
-                    Assert.assertTrue(response.getCurrencies().stream().anyMatch(currency -> currency.getCode().equals("USD")));
+                    Assert.assertEquals(response.getCurrencies().getCurrencies().size(), 1);
+                    Assert.assertTrue(response.getCurrencies().getCurrencies().entrySet()
+                            .stream().anyMatch(currency -> currency.getKey().equals("USD")));
                     isReplyReceived.compareAndSet(false, true);
                     session.close();
                     reply.countDown();
@@ -97,9 +98,11 @@ public class TestCurrencyApi {
                     Assert.assertTrue(payloadClass.equals(HistoricalQuotesResponse.class));
                     Assert.assertTrue(message instanceof HistoricalQuotesResponse);
                     HistoricalQuotesResponse response = (HistoricalQuotesResponse) message;
-                    Assert.assertEquals(response.getExchangeRates().size(), 2);
-                    Assert.assertTrue(response.getExchangeRates().stream().anyMatch(rate -> rate.getFrom().equals("USD")));
-                    Assert.assertTrue(response.getExchangeRates().stream().anyMatch(rate -> rate.getTo().equals("UAH")));
+                    Assert.assertEquals(response.getQuotes().getQuotes().size(), 2);
+                    Assert.assertTrue(response.getQuotes().getQuotes().entrySet()
+                            .stream().anyMatch(rate -> rate.getKey().equals("EUR")));
+                    Assert.assertTrue(response.getQuotes().getQuotes().entrySet()
+                            .stream().anyMatch(rate -> rate.getKey().equals("UAH")));
                     isReplyReceived.compareAndSet(false, true);
                     session.close();
                     reply.countDown();

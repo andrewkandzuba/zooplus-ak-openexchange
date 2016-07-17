@@ -1,8 +1,6 @@
 package com.zooplus.openexchange.services.external.currencylayer.impl;
 
 import com.zooplus.openexchange.clients.RestClient;
-import com.zooplus.openexchange.protocol.integration.v1.Currencies;
-import com.zooplus.openexchange.protocol.integration.v1.Quotes;
 import com.zooplus.openexchange.protocol.ws.v1.*;
 import com.zooplus.openexchange.services.external.currencylayer.api.CurrencyLayerApi;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,9 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.concurrent.ListenableFuture;
 
 import javax.annotation.PostConstruct;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.zooplus.openexchange.services.external.currencylayer.api.CurrencyLayerApiConstants.*;
 
@@ -36,14 +31,7 @@ public class CurrencyLayerApiService implements CurrencyLayerApi {
                 Currencies.class);
 
         CurrencyListResponse currencyListResponse  = new CurrencyListResponse();
-        List<Currency> list = new LinkedList<>();
-        response.getBody().getCurrencies().entrySet().forEach(e -> {
-            Currency c = new Currency();
-            c.setCode(e.getKey());
-            c.setDescription(e.getValue());
-            list.add(c);
-        });
-        currencyListResponse.setCurrencies(list);
+        currencyListResponse.setCurrencies(response.getBody());
 
         return new AsyncResult<>(currencyListResponse);
     }
@@ -60,22 +48,9 @@ public class CurrencyLayerApiService implements CurrencyLayerApi {
                 RestClient.build(),
                 Quotes.class);
 
-        Quotes quotes = response.getBody();
-        quotes.getSource();
-        List<ExchangeRate> list = quotes.getQuotes()
-                .entrySet()
-                .stream()
-                .map(entry -> {
-                    ExchangeRate exchangeRate = new ExchangeRate();
-                    exchangeRate.setFrom(quotes.getSource());
-                    exchangeRate.setTo(entry.getKey());
-                    exchangeRate.setRate(entry.getValue());
-                    return exchangeRate;
-                })
-                .collect(Collectors.toCollection(LinkedList::new));
         HistoricalQuotesResponse historicalQuotesResponse = new HistoricalQuotesResponse();
-        historicalQuotesResponse.setExchangeDate(quotes.getDate());
-        historicalQuotesResponse.setExchangeRates(list);
+        historicalQuotesResponse.setExchangeDate(response.getBody().getDate());
+        historicalQuotesResponse.setQuotes(response.getBody());
 
         return new AsyncResult<>(historicalQuotesResponse);
     }

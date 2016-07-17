@@ -31,7 +31,7 @@ public class TestCurrencyPlayEndpoint {
         AtomicBoolean replied = new AtomicBoolean(false);
         gateway.getCurrenciesList(new CurrencyListRequest()).addCallback(
                 currencies -> {
-                    Assert.assertTrue(currencies.getCurrencies().size() > 0);
+                    Assert.assertTrue(currencies.getCurrencies().getCurrencies().size() > 0);
                     replied.compareAndSet(false, true);
                     latch.countDown();
                 }, t -> {
@@ -53,7 +53,7 @@ public class TestCurrencyPlayEndpoint {
         gateway.getHistoricalQuotes(request)
                 .addCallback(
                         historicalQuotesResponse -> {
-                            Assert.assertTrue(historicalQuotesResponse.getExchangeRates().size() > 0);
+                            Assert.assertTrue(historicalQuotesResponse.getQuotes().getQuotes().size() > 0);
                             Assert.assertNotNull(historicalQuotesResponse.getExchangeDate());
                             replied.compareAndSet(false, true);
                             latch.countDown();

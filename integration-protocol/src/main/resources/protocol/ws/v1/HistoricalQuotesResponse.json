@@ -14,11 +14,8 @@
       "type": "string",
       "required": true
     },
-    "exchangeRates": {
-      "type": "array",
-      "items": {
-        "$ref": "ExchangeRate.json"
-      },
+    "quotes": {
+      "$ref": "Quotes.json",
       "required": true
     }
   }

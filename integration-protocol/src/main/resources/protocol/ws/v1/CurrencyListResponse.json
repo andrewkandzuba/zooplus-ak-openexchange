@@ -11,10 +11,7 @@
   "id": "CurrencyListResponse",
   "properties": {
     "currencies" : {
-      "type" : "array",
-      "items" : {
-        "$ref": "Currency.json"
-      },
+      "$ref": "Currencies.json",
       "required": true
     }
   }

@@ -112,10 +112,10 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
             </plugin>
-            <plugin>
+            <!-- plugin>
                 <groupId>org.jsonschema2pojo</groupId>
                 <artifactId>jsonschema2pojo-maven-plugin</artifactId>
-            </plugin>
+            </plugin -->
         </plugins>
     </build>
     <profiles>

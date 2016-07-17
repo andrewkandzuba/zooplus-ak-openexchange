@@ -33,7 +33,7 @@ public class TestIntegrationFramework {
         currencyLayerApiGateway.getCurrenciesList(new CurrencyListRequest())
                 .addCallback(
                         currencies -> {
-                            Assert.assertTrue(currencies.getCurrencies().size() > 0);
+                            Assert.assertTrue(currencies.getCurrencies().getCurrencies().size() > 0);
                             stateSuccess.compareAndSet(false, true);
                             latch.countDown();
                         }, throwable -> {
@@ -57,7 +57,7 @@ public class TestIntegrationFramework {
         currencyLayerApiGateway.getHistoricalQuotes(request)
                 .addCallback(
                         historicalQuotes -> {
-                            Assert.assertEquals(historicalQuotes.getExchangeRates().get(0).getTo(), "EUR");
+                            Assert.assertTrue(historicalQuotes.getQuotes().getQuotes().containsKey("EUR"));
                             Assert.assertEquals(historicalQuotes.getExchangeDate(), "2016-04-28");
                             stateSuccess.compareAndSet(false, true);
                             latch.countDown();

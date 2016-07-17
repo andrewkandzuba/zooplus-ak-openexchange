@@ -1,8 +1,8 @@
 package com.zooplus.openexchange.tests.unit;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.zooplus.openexchange.protocol.integration.v1.Currencies;
-import com.zooplus.openexchange.protocol.integration.v1.Quotes;
+import com.zooplus.openexchange.protocol.ws.v1.Currencies;
+import com.zooplus.openexchange.protocol.ws.v1.Quotes;
 import org.apache.commons.io.IOUtils;
 import org.junit.Assert;
 import org.junit.Test;
