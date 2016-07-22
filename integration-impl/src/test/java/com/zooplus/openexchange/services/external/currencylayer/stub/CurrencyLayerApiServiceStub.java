@@ -13,24 +13,19 @@ import java.util.Map;
 @Service
 public class CurrencyLayerApiServiceStub implements CurrencyLayerApi {
     @Override
-    public ListenableFuture<CurrencyListResponse> getCurrenciesList(CurrencyListRequest request) {
+    public ListenableFuture<Currencies> getCurrenciesList(int top) {
         Currencies currencies = new Currencies();
         currencies.setCurrencies(Collections.singletonMap("USD", "United States Dollar"));
-        CurrencyListResponse response = new CurrencyListResponse();
-        response.setCurrencies(currencies);
-        return new AsyncResult<>(response);
+        return new AsyncResult<>(currencies);
     }
 
     @Override
-    public ListenableFuture<HistoricalQuotesResponse> getHistoricalQuotes(HistoricalQuotesRequest request) {
+    public ListenableFuture<Quotes> getHistoricalQuotes(String currencyCode, String exchangeDate) {
         Map<String, Double> exchangeRates = new HashMap<>();
         exchangeRates.put("EUR", 1.222);
         exchangeRates.put("UAH", 26.3);
         Quotes quotes = new Quotes();
         quotes.setQuotes(exchangeRates);
-        HistoricalQuotesResponse response = new HistoricalQuotesResponse();
-        response.setExchangeDate("2016-04-28");
-        response.setQuotes(quotes);
-        return new AsyncResult<>(response);
+        return new AsyncResult<>(quotes);
     }
 }

@@ -34,11 +34,13 @@ public class CurrencyPlayWebSocketConfigurator extends JettyWebSocketConfigurato
                             AtomicBoolean handled = new AtomicBoolean(false);
                             if (payloadClass.equals(CurrencyListRequest.class)) {
                                 CurrencyListRequest request = (CurrencyListRequest) message;
-                                currencyLayerApiGateway.getCurrenciesList(request)
+                                currencyLayerApiGateway.getCurrenciesList(request.getTop())
                                         .addCallback(
                                                 currencies -> {
                                                     try {
-                                                        session.sendMessage(MessageConvetor.to(currencies, CurrencyListResponse.class));
+                                                        CurrencyListResponse response = new CurrencyListResponse();
+                                                        response.setCurrencies(currencies);
+                                                        session.sendMessage(MessageConvetor.to(response, CurrencyListResponse.class));
                                                         handled.compareAndSet(false, true);
                                                     } catch (Exception e) {
                                                         e.printStackTrace();
@@ -56,11 +58,13 @@ public class CurrencyPlayWebSocketConfigurator extends JettyWebSocketConfigurato
                                 if (request.getCurrencyCode() == null) {
                                     throw new Exception("HistoricalQuotesRequest: currency code is empty!");
                                 }
-                                currencyLayerApiGateway.getHistoricalQuotes(request)
+                                currencyLayerApiGateway.getHistoricalQuotes(request.getCurrencyCode(), request.getExchangeDate())
                                         .addCallback(
-                                                rates -> {
+                                                quotes -> {
                                                     try {
-                                                        session.sendMessage(MessageConvetor.to(rates, HistoricalQuotesResponse.class));
+                                                        HistoricalQuotesResponse response = new HistoricalQuotesResponse();
+                                                        response.setQuotes(quotes);
+                                                        session.sendMessage(MessageConvetor.to(response, HistoricalQuotesResponse.class));
                                                         handled.compareAndSet(false, true);
                                                     } catch (Exception e) {
                                                         e.printStackTrace();

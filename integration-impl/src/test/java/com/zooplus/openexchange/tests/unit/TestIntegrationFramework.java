@@ -1,6 +1,5 @@
 package com.zooplus.openexchange.tests.unit;
 
-import com.zooplus.openexchange.protocol.ws.v1.CurrencyListRequest;
 import com.zooplus.openexchange.protocol.ws.v1.HistoricalQuotesRequest;
 import com.zooplus.openexchange.services.external.currencylayer.api.CurrencyLayerApi;
 import com.zooplus.openexchange.starters.UnitTestStarter;
@@ -30,10 +29,10 @@ public class TestIntegrationFramework {
         CountDownLatch latch = new CountDownLatch(1);
         AtomicBoolean stateSuccess = new AtomicBoolean(false);
         AtomicBoolean stateError = new AtomicBoolean(false);
-        currencyLayerApiGateway.getCurrenciesList(new CurrencyListRequest())
+        currencyLayerApiGateway.getCurrenciesList(10)
                 .addCallback(
                         currencies -> {
-                            Assert.assertTrue(currencies.getCurrencies().getCurrencies().size() > 0);
+                            Assert.assertTrue(currencies.getCurrencies().size() > 0);
                             stateSuccess.compareAndSet(false, true);
                             latch.countDown();
                         }, throwable -> {
@@ -54,11 +53,11 @@ public class TestIntegrationFramework {
         HistoricalQuotesRequest request = new HistoricalQuotesRequest();
         request.setCurrencyCode("USD");
         request.setExchangeDate(DateFormatUtils.format(System.currentTimeMillis(), "yyyy-MM-dd"));
-        currencyLayerApiGateway.getHistoricalQuotes(request)
+        currencyLayerApiGateway.getHistoricalQuotes("USD", DateFormatUtils.format(System.currentTimeMillis(), "yyyy-MM-dd"))
                 .addCallback(
                         historicalQuotes -> {
-                            Assert.assertTrue(historicalQuotes.getQuotes().getQuotes().containsKey("EUR"));
-                            Assert.assertEquals(historicalQuotes.getExchangeDate(), "2016-04-28");
+                            Assert.assertTrue(historicalQuotes.getQuotes().containsKey("EUR"));
+                            Assert.assertTrue(historicalQuotes.getQuotes().get("EUR") > 0);
                             stateSuccess.compareAndSet(false, true);
                             latch.countDown();
                         }, throwable -> {

@@ -1,7 +1,5 @@
 package com.zooplus.openexchange.tests.integration;
 
-import com.zooplus.openexchange.protocol.ws.v1.CurrencyListRequest;
-import com.zooplus.openexchange.protocol.ws.v1.HistoricalQuotesRequest;
 import com.zooplus.openexchange.services.external.currencylayer.api.CurrencyLayerApi;
 import com.zooplus.openexchange.starters.IntegrationTestStarter;
 import org.apache.commons.lang.time.DateFormatUtils;
@@ -29,9 +27,9 @@ public class TestCurrencyPlayEndpoint {
     public void testCurrencyLayerCurrenciesList() throws Exception {
         CountDownLatch latch = new CountDownLatch(1);
         AtomicBoolean replied = new AtomicBoolean(false);
-        gateway.getCurrenciesList(new CurrencyListRequest()).addCallback(
+        gateway.getCurrenciesList(10).addCallback(
                 currencies -> {
-                    Assert.assertTrue(currencies.getCurrencies().getCurrencies().size() > 0);
+                    Assert.assertTrue(currencies.getCurrencies().size() > 0);
                     replied.compareAndSet(false, true);
                     latch.countDown();
                 }, t -> {
@@ -47,14 +45,10 @@ public class TestCurrencyPlayEndpoint {
     public void testCurrencyLayerHistoricalQuotes() throws Exception {
         CountDownLatch latch = new CountDownLatch(1);
         AtomicBoolean replied = new AtomicBoolean(false);
-        HistoricalQuotesRequest request = new HistoricalQuotesRequest();
-        request.setCurrencyCode("USD,EUR");
-        request.setExchangeDate(DateFormatUtils.format(System.currentTimeMillis(), "yyyy-MM-dd"));
-        gateway.getHistoricalQuotes(request)
+        gateway.getHistoricalQuotes("USD,EUR", DateFormatUtils.format(System.currentTimeMillis(), "yyyy-MM-dd"))
                 .addCallback(
                         historicalQuotesResponse -> {
-                            Assert.assertTrue(historicalQuotesResponse.getQuotes().getQuotes().size() > 0);
-                            Assert.assertNotNull(historicalQuotesResponse.getExchangeDate());
+                            Assert.assertTrue(historicalQuotesResponse.getQuotes().size() > 0);
                             replied.compareAndSet(false, true);
                             latch.countDown();
                         },
