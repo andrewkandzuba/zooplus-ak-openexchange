@@ -1,22 +1,7 @@
 package com.zooplus.openexchange.services.discovery;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.client.ServiceInstance;
-import org.springframework.cloud.client.discovery.DiscoveryClient;
-import org.springframework.stereotype.Component;
-
-import java.util.Collections;
-import java.util.List;
-
-@Component
+/**
+ * Created by andrew_kandzuba2 on 31.07.16.
+ */
 public class Discovery {
-
-    @Autowired
-    private DiscoveryClient discoveryClient;
-
-    public List<ServiceInstance> discoverOf(String serviceType){
-        List<ServiceInstance> instances = discoveryClient.getInstances(serviceType);
-        Collections.shuffle(instances);
-        return Collections.unmodifiableList(instances);
-    }
 }
