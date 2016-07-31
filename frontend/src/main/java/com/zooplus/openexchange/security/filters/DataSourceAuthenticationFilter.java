@@ -23,8 +23,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
 
-import static com.zooplus.openexchange.controllers.v1.Version.API_PATH_V1;
-import static com.zooplus.openexchange.controllers.v1.Version.LOGIN_RESOURCE;
+import static com.zooplus.openexchange.controllers.v1.CasProtocol.API_PATH_V1;
+import static com.zooplus.openexchange.controllers.v1.CasProtocol.LOGIN_RESOURCE;
 
 @Component
 public class DataSourceAuthenticationFilter extends OncePerRequestFilter {

@@ -36,15 +36,7 @@ public class JettyWebSocketHandler extends TextWebSocketHandler {
             try {
                 handled.compareAndSet(false, mp.onMessage(session, origin, clazz));
             } catch (Exception e) {
-                LOGGER.error("Error has occurred during message handling process {}  {}  ", session.getId(), e.getMessage());
-                ErrorMessage errorMessage = new ErrorMessage();
-                errorMessage.setErrorCode(e.hashCode());
-                errorMessage.setErrorMessage(e.getMessage());
-                try {
-                    session.sendMessage(MessageConvetor.to(errorMessage, ErrorMessage.class));
-                } catch (Exception e1) {
-                    e1.printStackTrace();
-                }
+                sendErrorMessageToSession(session, String.format("Error has occurred during message handling process %s  %s  ", session.getId(), e.getMessage()));
             }
         });
         if (!handled.get()){
@@ -78,5 +70,17 @@ public class JettyWebSocketHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         LOGGER.info(String.format("Session: %s has been closed due to: %s", session.getId(), status.getReason()));
+    }
+
+    protected static void sendErrorMessageToSession(WebSocketSession session, String errorDescription){
+        LOGGER.error(errorDescription);
+        ErrorMessage errorMessage = new ErrorMessage();
+        errorMessage.setErrorCode(0);
+        errorMessage.setErrorMessage(errorDescription);
+        try {
+            session.sendMessage(MessageConvetor.to(errorMessage, ErrorMessage.class));
+        } catch (Exception e1) {
+            e1.printStackTrace();
+        }
     }
 }

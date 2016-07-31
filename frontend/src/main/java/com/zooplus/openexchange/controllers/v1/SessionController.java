@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-import static com.zooplus.openexchange.controllers.v1.Version.API_PATH_V1;
-import static com.zooplus.openexchange.controllers.v1.Version.LOGOUT_RESOURCE;
-import static com.zooplus.openexchange.controllers.v1.Version.SESSION_RESOURCE;
+import static com.zooplus.openexchange.controllers.v1.CasProtocol.API_PATH_V1;
+import static com.zooplus.openexchange.controllers.v1.CasProtocol.LOGOUT_RESOURCE;
+import static com.zooplus.openexchange.controllers.v1.CasProtocol.SESSION_RESOURCE;
 
 @RestController
 @RequestMapping(API_PATH_V1)

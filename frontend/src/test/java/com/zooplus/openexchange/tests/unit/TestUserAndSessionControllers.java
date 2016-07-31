@@ -27,7 +27,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Collections;
 
-import static com.zooplus.openexchange.controllers.v1.Version.*;
+import static com.zooplus.openexchange.controllers.v1.CasProtocol.*;
 import static com.zooplus.openexchange.security.filters.DataSourceAuthenticationFilter.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)

@@ -1,4 +1,4 @@
-package com.zooplus.openexchange.services.external.currencylayer.stub;
+package com.zooplus.openexchange.services.stubs.external.currencylayer;
 
 import com.zooplus.openexchange.protocol.ws.v1.*;
 import com.zooplus.openexchange.services.external.currencylayer.api.CurrencyLayerApi;

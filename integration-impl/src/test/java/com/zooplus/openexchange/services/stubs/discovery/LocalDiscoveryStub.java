@@ -1,7 +1,16 @@
 package com.zooplus.openexchange.services.stubs.discovery;
 
-/**
- * Created by andrew_kandzuba2 on 31.07.16.
- */
-public class LocalDiscoveryStub {
+import com.zooplus.openexchange.services.discovery.Discovery;
+import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.stereotype.Component;
+
+import java.util.Collections;
+import java.util.List;
+
+@Component
+public class LocalDiscoveryStub implements Discovery {
+    @Override
+    public List<ServiceInstance> getInstances() {
+        return Collections.emptyList();
+    }
 }

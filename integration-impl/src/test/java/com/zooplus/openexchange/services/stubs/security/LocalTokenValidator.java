@@ -1,7 +1,12 @@
 package com.zooplus.openexchange.services.stubs.security;
 
-/**
- * Created by andrew_kandzuba2 on 31.07.16.
- */
-public class LocalTokenValidator {
+import com.zooplus.openexchange.services.security.SecurityTokenValidator;
+import org.springframework.stereotype.Component;
+
+@Component
+public class LocalTokenValidator implements SecurityTokenValidator {
+    @Override
+    public boolean isValid(String token) {
+        return true;
+    }
 }

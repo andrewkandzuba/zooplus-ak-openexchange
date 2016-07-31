@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
-import static com.zooplus.openexchange.controllers.v1.Version.*;
+import static com.zooplus.openexchange.controllers.v1.CasProtocol.*;
 
 @RestController
 @RequestMapping(API_PATH_V1)

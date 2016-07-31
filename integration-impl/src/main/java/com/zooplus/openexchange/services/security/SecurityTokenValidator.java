@@ -1,5 +1,5 @@
 package com.zooplus.openexchange.services.security;
 
-public interface CASValidator {
+public interface SecurityTokenValidator {
     boolean isValid(String token);
 }

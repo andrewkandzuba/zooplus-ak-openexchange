@@ -14,7 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import static com.zooplus.openexchange.controllers.v1.Version.*;
+import static com.zooplus.openexchange.controllers.v1.CasProtocol.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(ControllersStarter.class)

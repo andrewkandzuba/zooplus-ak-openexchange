@@ -1,6 +1,6 @@
 package com.zooplus.openexchange.controllers.v1;
 
-public interface Version {
+public interface CasProtocol {
     // Endpoint
     String API_PATH_V1 = "/api/v1/";
     

@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.util.Collections;
 
-import static com.zooplus.openexchange.controllers.v1.Version.API_PATH_V1;
-import static com.zooplus.openexchange.controllers.v1.Version.USER_RESOURCE;
+import static com.zooplus.openexchange.controllers.v1.CasProtocol.API_PATH_V1;
+import static com.zooplus.openexchange.controllers.v1.CasProtocol.USER_RESOURCE;
 
 @RestController
 @RequestMapping(API_PATH_V1)

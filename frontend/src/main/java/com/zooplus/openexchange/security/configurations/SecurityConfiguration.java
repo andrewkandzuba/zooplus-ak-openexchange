@@ -18,7 +18,7 @@ import org.springframework.session.web.http.HeaderHttpSessionStrategy;
 
 import javax.servlet.http.HttpServletResponse;
 
-import static com.zooplus.openexchange.controllers.v1.Version.*;
+import static com.zooplus.openexchange.controllers.v1.CasProtocol.*;
 
 @EnableWebSecurity
 @EnableRedisHttpSession(maxInactiveIntervalInSeconds = 60)

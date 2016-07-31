@@ -17,7 +17,7 @@ import java.util.concurrent.atomic.AtomicReference;
 @Component
 @EnableAsync
 @EnableScheduling
-public class EurekaDiscovery {
+public class EurekaDiscovery implements Discovery {
     private final AtomicReference<List<ServiceInstance>> instances = new AtomicReference<>(new ArrayList<>());
 
     @Autowired

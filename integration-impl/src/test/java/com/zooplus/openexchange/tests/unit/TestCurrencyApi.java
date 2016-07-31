@@ -27,7 +27,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static com.zooplus.openexchange.controllers.v1.Version.*;
+import static com.zooplus.openexchange.controllers.v1.IntegrationProtocol.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(UnitTestStarter.class)
@@ -91,7 +91,10 @@ public class TestCurrencyApi {
         CountDownLatch reply = new CountDownLatch(1);
         AtomicBoolean isReplyReceived = new AtomicBoolean(false);
 
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.add("x-auth-token", "some-test-value");
         sockJsClient.doHandshake("http://localhost:" + port + API_PATH_V1 + WS_ENDPOINT + CURRENCIES_WS_ENDPOINT,
+                new WebSocketHttpHeaders(httpHeaders),
                 errorMessage -> {
                 },
                 (session, message, payloadClass) -> {
