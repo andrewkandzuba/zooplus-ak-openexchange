@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicReference;
 @EnableAsync
 @EnableScheduling
 public class EurekaDiscovery implements Discovery {
-    private final AtomicReference<List<ServiceInstance>> instances = new AtomicReference<>(new ArrayList<>());
+    private final AtomicReference<List<ServiceInstance>> instances = new AtomicReference<>();
 
     @Autowired
     private DiscoveryClient discoveryClient;
@@ -26,18 +26,19 @@ public class EurekaDiscovery implements Discovery {
     @Value("${eureka.client.types}")
     private List<String> types;
 
-    @Scheduled(fixedRate = 5000, initialDelay = 0)
-    public void refresh(){
-        discoverAll();
-    }
-
     public List<ServiceInstance> getInstances() {
+        instances.compareAndSet(null, instances.get());
         return Collections.unmodifiableList(instances.get());
     }
 
-    private void discoverAll() {
+    @Scheduled(fixedRate = 5000)
+    private void refresh(){
+        instances.set(discoverAll());
+    }
+
+    private List<ServiceInstance> discoverAll() {
         List<ServiceInstance> instances = new ArrayList<>();
         types.forEach(type -> instances.addAll(discoveryClient.getInstances(type)));
-        this.instances.set(instances);
+        return instances;
     }
 }
