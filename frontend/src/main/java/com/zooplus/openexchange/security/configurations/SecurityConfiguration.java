@@ -1,5 +1,6 @@
 package com.zooplus.openexchange.security.configurations;
 
+import com.zooplus.openexchange.protocol.cas.MetaInfo;
 import com.zooplus.openexchange.security.filters.DataSourceAuthenticationFilter;
 import com.zooplus.openexchange.security.providers.DataSourceAuthenticationProvider;
 import org.springframework.context.annotation.Bean;
@@ -18,8 +19,6 @@ import org.springframework.session.web.http.HeaderHttpSessionStrategy;
 
 import javax.servlet.http.HttpServletResponse;
 
-import static com.zooplus.openexchange.controllers.v1.CasProtocol.*;
-
 @EnableWebSecurity
 @EnableRedisHttpSession(maxInactiveIntervalInSeconds = 60)
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -33,8 +32,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http
                 .authenticationProvider(authenticationProvider())
                 .authorizeRequests()
-                    .antMatchers(API_PATH_V1 + USER_RESOURCE).hasRole("ADMIN")
-                    .antMatchers(API_PATH_V1 + SESSION_RESOURCE).hasRole("USER")
+                    .antMatchers(MetaInfo.USERS_RESOURCE).hasRole("ADMIN")
+                    .antMatchers(MetaInfo.SESSION_RESOURCE).hasRole("USER")
                     .anyRequest().permitAll()
                 .and()
                 .addFilterBefore(

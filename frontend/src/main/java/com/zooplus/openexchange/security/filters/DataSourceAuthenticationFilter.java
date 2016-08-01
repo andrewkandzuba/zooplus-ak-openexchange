@@ -1,7 +1,8 @@
 package com.zooplus.openexchange.security.filters;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.zooplus.openexchange.protocol.rest.v1.LoginResponse;
+import com.zooplus.openexchange.protocol.cas.LoginResponse;
+import com.zooplus.openexchange.protocol.cas.MetaInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +23,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
-
-import static com.zooplus.openexchange.controllers.v1.CasProtocol.API_PATH_V1;
-import static com.zooplus.openexchange.controllers.v1.CasProtocol.LOGIN_RESOURCE;
 
 @Component
 public class DataSourceAuthenticationFilter extends OncePerRequestFilter {
@@ -84,6 +82,6 @@ public class DataSourceAuthenticationFilter extends OncePerRequestFilter {
 
     private boolean postToAuthenticate(HttpServletRequest httpRequest) {
         String resourcePath = new UrlPathHelper().getPathWithinApplication(httpRequest);
-        return resourcePath.equalsIgnoreCase(API_PATH_V1 + LOGIN_RESOURCE) && HttpMethod.POST.matches(httpRequest.getMethod());
+        return resourcePath.equalsIgnoreCase(MetaInfo.LOGIN_RESOURCE) && HttpMethod.POST.matches(httpRequest.getMethod());
     }
 }

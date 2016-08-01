@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "description": "User logout response",
+  "type": "object",
+  "additionalProperties" : false,
+  "generate-builders": true,
+  "extends" : {
+    "type" : "object",
+    "javaType" : "com.zooplus.openexchange.protocol.Response"
+  },
+  "id": "LogoutResponse",
+  "properties": {
+    "sessionLifeTime": {
+      "type": "integer",
+      "format":"utc-millisec",
+      "required": true
+    }
+  }
+}

@@ -2,15 +2,14 @@ package com.zooplus.openexchange.tests.unit;
 
 import com.zooplus.openexchange.clients.SockJsRxClient;
 import com.zooplus.openexchange.controllers.MessageProcessor;
-import com.zooplus.openexchange.controllers.v1.FakeMessage;
-import com.zooplus.openexchange.protocol.ws.v1.CurrencyListRequest;
-import com.zooplus.openexchange.protocol.ws.v1.CurrencyListResponse;
-import com.zooplus.openexchange.protocol.ws.v1.HistoricalQuotesRequest;
-import com.zooplus.openexchange.protocol.ws.v1.HistoricalQuotesResponse;
+import com.zooplus.openexchange.protocol.integration.FakeMessage;
+import com.zooplus.openexchange.protocol.integration.CurrencyListRequest;
+import com.zooplus.openexchange.protocol.integration.CurrencyListResponse;
+import com.zooplus.openexchange.protocol.integration.HistoricalQuotesRequest;
+import com.zooplus.openexchange.protocol.integration.HistoricalQuotesResponse;
 import com.zooplus.openexchange.starters.UnitTestStarter;
 import com.zooplus.openexchange.utils.MessageConvetor;
 import org.apache.commons.lang.time.DateFormatUtils;
-import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -27,7 +26,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static com.zooplus.openexchange.controllers.v1.IntegrationProtocol.*;
+import static com.zooplus.openexchange.protocol.integration.MetaInfo.CURRENCIES_RESOURCE;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(UnitTestStarter.class)
@@ -51,7 +50,7 @@ public class TestCurrencyApi {
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("x-auth-token", "some-test-value");
-        sockJsClient.doHandshake("http://localhost:" + port + API_PATH_V1 + WS_ENDPOINT + CURRENCIES_WS_ENDPOINT,
+        sockJsClient.doHandshake("http://localhost:" + port + CURRENCIES_RESOURCE,
                 new WebSocketHttpHeaders(httpHeaders),
                 errorMessage -> {
                 },
@@ -93,7 +92,7 @@ public class TestCurrencyApi {
 
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add("x-auth-token", "some-test-value");
-        sockJsClient.doHandshake("http://localhost:" + port + API_PATH_V1 + WS_ENDPOINT + CURRENCIES_WS_ENDPOINT,
+        sockJsClient.doHandshake("http://localhost:" + port + CURRENCIES_RESOURCE,
                 new WebSocketHttpHeaders(httpHeaders),
                 errorMessage -> {
                 },
@@ -137,7 +136,7 @@ public class TestCurrencyApi {
         AtomicBoolean isErrorReceived = new AtomicBoolean(false);
 
         sockJsClient.doHandshake(
-                "http://localhost:" + port + API_PATH_V1 + WS_ENDPOINT + CURRENCIES_WS_ENDPOINT,
+                "http://localhost:" + port + CURRENCIES_RESOURCE,
                 errorMessage -> {
                     isErrorReceived.compareAndSet(false, true);
                     reply.countDown();
@@ -155,9 +154,5 @@ public class TestCurrencyApi {
         Assert.assertTrue(connected.await(3000, TimeUnit.MILLISECONDS));
         Assert.assertTrue(reply.await(3000, TimeUnit.MILLISECONDS));
         Assert.assertTrue(isErrorReceived.get());
-    }
-
-    @AfterClass
-    public static void tearDown() throws Exception {
     }
 }

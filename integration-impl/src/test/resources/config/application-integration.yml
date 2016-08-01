@@ -11,10 +11,10 @@ local:
     port: 0
 eureka:
   instance:
-    statusPageUrl: http://localhost/info
-    healthCheckUrl: http://localhost/health
+    statusPageUrl: http://localhost:${server.port}/info
+    healthCheckUrl: http://localhost${server.port}/health
     hostname: localhost
-    nonSecurePort: 8082
+    nonSecurePort: ${server.port}
     preferIpAddress: true
     leaseRenewalIntervalInSeconds: 2
     leaseExpirationDurationInSeconds: 5

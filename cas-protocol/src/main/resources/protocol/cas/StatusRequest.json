@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "description": "Status request",
+  "type": "object",
+  "additionalProperties" : false,
+  "generate-builders": true,
+  "extends" : {
+    "type" : "object",
+    "javaType" : "com.zooplus.openexchange.protocol.Request"
+  },
+  "id": "StatusRequest",
+  "properties": {
+  }
+}

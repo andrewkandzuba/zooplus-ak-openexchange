@@ -1,7 +1,8 @@
 package com.zooplus.openexchange.services.security;
 
 import com.zooplus.openexchange.clients.RestClient;
-import com.zooplus.openexchange.protocol.rest.v1.SessionDetailsResponse;
+import com.zooplus.openexchange.protocol.cas.MetaInfo;
+import com.zooplus.openexchange.protocol.cas.SessionDetailsResponse;
 import com.zooplus.openexchange.services.discovery.Discovery;
 import javafx.util.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
-
-import static com.zooplus.openexchange.controllers.v1.CasProtocol.API_PATH_V1;
-import static com.zooplus.openexchange.controllers.v1.CasProtocol.SESSION_RESOURCE;
 
 @Component
 public class CASValidator implements SecurityTokenValidator {
@@ -31,7 +29,7 @@ public class CASValidator implements SecurityTokenValidator {
             ResponseEntity<SessionDetailsResponse> sessionDetailsResponse =
                     new RestClient(casInstance.get().getHost(), casInstance.get().getPort())
                             .exchange(
-                                    API_PATH_V1 + SESSION_RESOURCE,
+                                    MetaInfo.SESSION_RESOURCE,
                                     HttpMethod.GET,
                                     RestClient.build(new Pair<>("x-auth-token", token)),
                                     SessionDetailsResponse.class);

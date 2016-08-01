@@ -1,0 +1,18 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "description": "Currency list response",
+  "type": "object",
+  "additionalProperties" : false,
+  "generate-builders": true,
+  "extends" : {
+    "type" : "object",
+    "javaType" : "com.zooplus.openexchange.protocol.Response"
+  },
+  "id": "CurrencyListResponse",
+  "properties": {
+    "currencies" : {
+      "$ref": "Currencies.json",
+      "required": true
+    }
+  }
+}

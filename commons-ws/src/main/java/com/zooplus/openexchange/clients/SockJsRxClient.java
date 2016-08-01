@@ -2,7 +2,7 @@ package com.zooplus.openexchange.clients;
 
 import com.zooplus.openexchange.controllers.JettyWebSocketHandler;
 import com.zooplus.openexchange.controllers.MessageProcessor;
-import com.zooplus.openexchange.protocol.ws.v1.ErrorMessage;
+import com.zooplus.openexchange.protocol.ws.ErrorMessage;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.web.socket.WebSocketHttpHeaders;
 import org.springframework.web.socket.WebSocketSession;

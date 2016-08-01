@@ -2,10 +2,16 @@
   "$schema": "http://json-schema.org/draft-04/schema",
   "description": "Base protocol request",
   "type": "object",
+  "additionalProperties": false,
+  "generate-builders": true,
   "id": "Request",
   "extends": {
     "$ref": "Message.json"
   },
-  "additionalProperties": false,
-  "generate-builders": true
+  "properties": {
+    "resource" : {
+      "type" : "string",
+      "required" : true
+    }
+  }
 }

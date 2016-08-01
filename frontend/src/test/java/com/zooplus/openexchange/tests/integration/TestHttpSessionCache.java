@@ -5,7 +5,9 @@ import com.zooplus.openexchange.database.domain.Role;
 import com.zooplus.openexchange.database.domain.User;
 import com.zooplus.openexchange.database.repositories.RoleRepository;
 import com.zooplus.openexchange.database.repositories.UserRepository;
-import com.zooplus.openexchange.protocol.rest.v1.*;
+import com.zooplus.openexchange.protocol.cas.LoginResponse;
+import com.zooplus.openexchange.protocol.cas.LogoutResponse;
+import com.zooplus.openexchange.protocol.cas.SessionDetailsResponse;
 import com.zooplus.openexchange.starters.IntegrationStarter;
 import javafx.util.Pair;
 import org.junit.Assert;
@@ -15,7 +17,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.boot.test.WebIntegrationTest;
-import org.springframework.http.*;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -23,7 +28,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.util.Collections;
 import java.util.Optional;
 
-import static com.zooplus.openexchange.controllers.v1.CasProtocol.*;
+import static com.zooplus.openexchange.protocol.cas.MetaInfo.LOGIN_RESOURCE;
+import static com.zooplus.openexchange.protocol.cas.MetaInfo.LOGOUT_RESOURCE;
+import static com.zooplus.openexchange.protocol.cas.MetaInfo.SESSION_RESOURCE;
 import static com.zooplus.openexchange.security.filters.DataSourceAuthenticationFilter.*;
 
 
@@ -54,7 +61,7 @@ public class TestHttpSessionCache extends TestLocalRestClient {
         // Login for the first time
         ResponseEntity<LoginResponse> loginResponse = getRestClient()
                 .exchange(
-                        API_PATH_V1 + LOGIN_RESOURCE,
+                        LOGIN_RESOURCE,
                         HttpMethod.POST,
                         RestClient.build(
                                 new Pair<>(X_AUTH_USERNAME_HEADER, user.getName()),
@@ -70,7 +77,7 @@ public class TestHttpSessionCache extends TestLocalRestClient {
         // Try to access user resource
         ResponseEntity<SessionDetailsResponse> sessionDetailsResponse = getRestClient()
                 .exchange(
-                        API_PATH_V1 + SESSION_RESOURCE,
+                        SESSION_RESOURCE,
                         HttpMethod.GET,
                         firstSessionHeader,
                         SessionDetailsResponse.class
@@ -83,7 +90,7 @@ public class TestHttpSessionCache extends TestLocalRestClient {
         //  Login with a same user again => second session
         loginResponse = getRestClient()
                 .exchange(
-                        API_PATH_V1 + LOGIN_RESOURCE,
+                        LOGIN_RESOURCE,
                         HttpMethod.POST,
                         RestClient.build(
                                 new Pair<>(X_AUTH_USERNAME_HEADER, user.getName()),
@@ -101,7 +108,7 @@ public class TestHttpSessionCache extends TestLocalRestClient {
         // Try to access user resource on behalf on second session
         sessionDetailsResponse = getRestClient()
                 .exchange(
-                        API_PATH_V1 + SESSION_RESOURCE,
+                        SESSION_RESOURCE,
                         HttpMethod.GET,
                         secondSessionHeader,
                         Optional.empty(),
@@ -115,7 +122,7 @@ public class TestHttpSessionCache extends TestLocalRestClient {
         // Logout from the second session
         ResponseEntity<LogoutResponse> logoutResponse = getRestClient()
                 .exchange(
-                        API_PATH_V1 + LOGOUT_RESOURCE,
+                        LOGOUT_RESOURCE,
                         HttpMethod.POST,
                         secondSessionHeader,
                         LogoutResponse.class
@@ -127,7 +134,7 @@ public class TestHttpSessionCache extends TestLocalRestClient {
         // Not able to access API with invalidated token
         sessionDetailsResponse = getRestClient()
                 .exchange(
-                        API_PATH_V1 + SESSION_RESOURCE,
+                        SESSION_RESOURCE,
                         HttpMethod.GET,
                         secondSessionHeader,
                         SessionDetailsResponse.class
@@ -138,7 +145,7 @@ public class TestHttpSessionCache extends TestLocalRestClient {
         // But still can do it with valid token
         sessionDetailsResponse = getRestClient()
                 .exchange(
-                        API_PATH_V1 + SESSION_RESOURCE,
+                        SESSION_RESOURCE,
                         HttpMethod.GET,
                         firstSessionHeader,
                         SessionDetailsResponse.class

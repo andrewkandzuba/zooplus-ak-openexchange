@@ -1,6 +1,7 @@
 package com.zooplus.openexchange.services.stubs.external.currencylayer;
 
-import com.zooplus.openexchange.protocol.ws.v1.*;
+import com.zooplus.openexchange.protocol.integration.Currencies;
+import com.zooplus.openexchange.protocol.integration.Quotes;
 import com.zooplus.openexchange.services.external.currencylayer.api.CurrencyLayerApi;
 import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;

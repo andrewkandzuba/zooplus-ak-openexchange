@@ -2,7 +2,7 @@ package com.zooplus.openexchange.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.zooplus.openexchange.protocol.ws.v1.MessageWrapper;
+import com.zooplus.openexchange.protocol.ws.MessageWrapper;
 import org.springframework.web.socket.TextMessage;
 
 public abstract class MessageConvetor {

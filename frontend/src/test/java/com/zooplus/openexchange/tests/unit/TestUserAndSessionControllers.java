@@ -3,9 +3,10 @@ package com.zooplus.openexchange.tests.unit;
 import com.zooplus.openexchange.clients.RestClient;
 import com.zooplus.openexchange.database.domain.Role;
 import com.zooplus.openexchange.database.domain.User;
-import com.zooplus.openexchange.protocol.rest.v1.LoginResponse;
-import com.zooplus.openexchange.protocol.rest.v1.RegistrationRequest;
-import com.zooplus.openexchange.protocol.rest.v1.RegistrationResponse;
+import com.zooplus.openexchange.protocol.cas.LoginResponse;
+import com.zooplus.openexchange.protocol.cas.MetaInfo;
+import com.zooplus.openexchange.protocol.cas.RegistrationRequest;
+import com.zooplus.openexchange.protocol.cas.RegistrationResponse;
 import com.zooplus.openexchange.starters.ControllersStarter;
 import javafx.util.Pair;
 import org.junit.Assert;
@@ -27,7 +28,6 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Collections;
 
-import static com.zooplus.openexchange.controllers.v1.CasProtocol.*;
 import static com.zooplus.openexchange.security.filters.DataSourceAuthenticationFilter.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -66,7 +66,7 @@ public class TestUserAndSessionControllers extends TestMockedClient {
         ResponseEntity<RegistrationResponse> resp =
                 getRestClient()
                         .exchange(
-                                API_PATH_V1 + USER_RESOURCE,
+                                MetaInfo.USERS_RESOURCE,
                                 HttpMethod.PUT,
                                 RestClient.build(
                                         new Pair<>("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE),
@@ -89,7 +89,7 @@ public class TestUserAndSessionControllers extends TestMockedClient {
         resp =
                 getRestClient()
                         .exchange(
-                                API_PATH_V1 + USER_RESOURCE,
+                                MetaInfo.USERS_RESOURCE,
                                 HttpMethod.PUT,
                                 RestClient.build(
                                         new Pair<>("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE),
@@ -121,7 +121,7 @@ public class TestUserAndSessionControllers extends TestMockedClient {
         ResponseEntity<LoginResponse> loginResp =
                 getRestClient()
                         .exchange(
-                                API_PATH_V1 + LOGIN_RESOURCE,
+                                MetaInfo.LOGIN_RESOURCE,
                                 HttpMethod.POST,
                                 RestClient.build(
                                         new Pair<>("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE),
@@ -145,7 +145,7 @@ public class TestUserAndSessionControllers extends TestMockedClient {
         resp =
                 getRestClient()
                         .exchange(
-                                API_PATH_V1 + USER_RESOURCE,
+                                MetaInfo.USERS_RESOURCE,
                                 HttpMethod.PUT,
                                 RestClient.build(
                                         new Pair<>("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE),

@@ -1,0 +1,22 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema",
+  "description": "Historical quotes response",
+  "type": "object",
+  "additionalProperties" : false,
+  "generate-builders": true,
+  "extends" : {
+    "type" : "object",
+    "javaType" : "com.zooplus.openexchange.protocol.Response"
+  },
+  "id": "HistoricalQuotesResponse",
+  "properties": {
+    "exchangeDate": {
+      "type": "string",
+      "required": true
+    },
+    "quotes": {
+      "$ref": "Quotes.json",
+      "required": true
+    }
+  }
+}

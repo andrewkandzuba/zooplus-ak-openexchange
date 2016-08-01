@@ -1,7 +1,7 @@
 package com.zooplus.openexchange.controllers;
 
-import com.zooplus.openexchange.protocol.ws.v1.ErrorMessage;
-import com.zooplus.openexchange.protocol.ws.v1.MessageWrapper;
+import com.zooplus.openexchange.protocol.ws.ErrorMessage;
+import com.zooplus.openexchange.protocol.ws.MessageWrapper;
 import com.zooplus.openexchange.utils.MessageConvetor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

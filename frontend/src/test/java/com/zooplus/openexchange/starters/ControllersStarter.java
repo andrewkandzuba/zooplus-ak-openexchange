@@ -9,7 +9,7 @@ import org.springframework.context.annotation.PropertySource;
 
 @SpringBootApplication(
         scanBasePackages = {
-                "com.zooplus.openexchange.controllers.v1",
+                "com.zooplus.openexchange.controllers",
                 "com.zooplus.openexchange.utils",
                 "com.zooplus.openexchange.security.filters",
                 "com.zooplus.openexchange.security.providers",

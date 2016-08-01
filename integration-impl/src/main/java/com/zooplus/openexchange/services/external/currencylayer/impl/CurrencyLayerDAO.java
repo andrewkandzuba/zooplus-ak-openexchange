@@ -1,8 +1,8 @@
 package com.zooplus.openexchange.services.external.currencylayer.impl;
 
 import com.zooplus.openexchange.clients.RestClient;
-import com.zooplus.openexchange.protocol.ws.v1.Currencies;
-import com.zooplus.openexchange.protocol.ws.v1.Quotes;
+import com.zooplus.openexchange.protocol.integration.Currencies;
+import com.zooplus.openexchange.protocol.integration.Quotes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,16 +13,17 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 
+import static com.zooplus.openexchange.services.cache.CacheConfiguration.*;
 import static com.zooplus.openexchange.services.external.currencylayer.api.CurrencyLayerApiConstants.*;
 
 @Component
 public class CurrencyLayerDAO {
-    private static final Logger logger = LoggerFactory.getLogger("CurrencyLayerApiService");
+    private static final Logger logger = LoggerFactory.getLogger(CurrencyLayerDAO.class.getName());
     @Value("${currencyplayer.api.accesskey}")
     private String accessKey;
     private RestClient restClient;
 
-    @Cacheable(value = "currencies", keyGenerator = "customKeyGenerator")
+    @Cacheable(value = CURRENCIES_CACHE_NAME, keyGenerator = CUSTOM_CACHE_KEY_GENERATOR_NAME)
     public Currencies getCurrenciesListCached(int top) {
         logger.info("Retrieves value from an external service");
         ResponseEntity<Currencies> response = restClient.exchange(
@@ -36,7 +37,7 @@ public class CurrencyLayerDAO {
     }
 
 
-    @Cacheable(value = "quotes", keyGenerator = "customKeyGenerator")
+    @Cacheable(value = QUOTES_CACHE_NAME, keyGenerator = CUSTOM_CACHE_KEY_GENERATOR_NAME)
     public Quotes getHistoricalQuotes(String currencyCode, String exchangeDate) {
         ResponseEntity<Quotes> response = restClient.exchange(
                 String.format(HISTORICAL_METHOD + "?"
@@ -49,7 +50,6 @@ public class CurrencyLayerDAO {
                 Quotes.class);
         return response.getBody();
     }
-
 
     @PostConstruct
     private void init() {

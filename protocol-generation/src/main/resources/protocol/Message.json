@@ -2,13 +2,7 @@
   "$schema": "http://json-schema.org/draft-04/schema",
   "description": "Base protocol message details",
   "type": "object",
-  "id": "BaseMessage",
-  "properties": {
-    "version": {
-      "type": "integer",
-      "required": true
-    }
-  },
   "additionalProperties": false,
-  "generate-builders": true
+  "generate-builders": true,
+  "id": "BaseMessage"
 }

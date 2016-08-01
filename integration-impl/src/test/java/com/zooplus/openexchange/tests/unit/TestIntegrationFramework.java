@@ -1,6 +1,6 @@
 package com.zooplus.openexchange.tests.unit;
 
-import com.zooplus.openexchange.protocol.ws.v1.HistoricalQuotesRequest;
+import com.zooplus.openexchange.protocol.integration.HistoricalQuotesRequest;
 import com.zooplus.openexchange.services.external.currencylayer.api.CurrencyLayerApi;
 import com.zooplus.openexchange.starters.UnitTestStarter;
 import org.apache.commons.lang.time.DateFormatUtils;
