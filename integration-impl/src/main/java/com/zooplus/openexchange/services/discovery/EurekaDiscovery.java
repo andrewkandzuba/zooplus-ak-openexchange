@@ -27,7 +27,7 @@ public class EurekaDiscovery implements Discovery {
     private List<String> types;
 
     public List<ServiceInstance> getInstances() {
-        instances.compareAndSet(null, instances.get());
+        instances.compareAndSet(null, discoverAll());
         return Collections.unmodifiableList(instances.get());
     }
 
@@ -37,8 +37,8 @@ public class EurekaDiscovery implements Discovery {
     }
 
     private List<ServiceInstance> discoverAll() {
-        List<ServiceInstance> instances = new ArrayList<>();
-        types.forEach(type -> instances.addAll(discoveryClient.getInstances(type)));
-        return instances;
+        List<ServiceInstance> newInstances = new ArrayList<>();
+        types.forEach(type -> newInstances.addAll(discoveryClient.getInstances(type)));
+        return newInstances;
     }
 }
