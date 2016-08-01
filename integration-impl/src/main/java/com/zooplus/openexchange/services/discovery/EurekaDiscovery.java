@@ -26,7 +26,7 @@ public class EurekaDiscovery implements Discovery {
     @Value("${eureka.client.types}")
     private List<String> types;
 
-    @Scheduled(fixedRate = 5000)
+    @Scheduled(fixedRate = 5000, initialDelay = 0)
     public void refresh(){
         discoverAll();
     }

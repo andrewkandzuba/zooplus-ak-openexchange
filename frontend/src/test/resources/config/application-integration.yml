@@ -3,7 +3,6 @@ server:
 spring:
   application:
     name: ${project.artifactId}-service
-  profiles: integration
   jpa:
     show_sql: false
     hibernate:
@@ -29,7 +28,5 @@ eureka:
       instanceId: ${project.artifactId}
       version: ${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}
   client:
-    healthcheck:
-      enabled: true
     serviceUrl:
       defaultZone: http://127.0.0.1:8761/eureka/
