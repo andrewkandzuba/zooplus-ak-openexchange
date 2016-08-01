@@ -1,4 +1,4 @@
-package com.zooplus.openexchange.tests.integration;
+package com.zooplus.openexchange.tests.ci;
 
 import com.zooplus.openexchange.clients.SockJsRxClient;
 import com.zooplus.openexchange.controllers.MessageProcessor;

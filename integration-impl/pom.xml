@@ -45,11 +45,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-redis -->
-        <!-- dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-redis</artifactId>
-        </dependency -->
         <!-- spring boot starter test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -88,7 +83,7 @@
                 <filtering>true</filtering>
                 <directory>src/main/resources</directory>
                 <includes>
-                    <include>**/mainifest.yml</include>
+                    <include>**/manifest.yml</include>
                 </includes>
                 <targetPath>${project.build.directory}</targetPath>
             </resource>
@@ -116,10 +111,6 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
             </plugin>
-            <!-- plugin>
-                <groupId>org.jsonschema2pojo</groupId>
-                <artifactId>jsonschema2pojo-maven-plugin</artifactId>
-            </plugin -->
         </plugins>
     </build>
     <profiles>
